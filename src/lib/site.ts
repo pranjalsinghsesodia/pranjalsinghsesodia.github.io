@@ -12,7 +12,7 @@ export const SITE = {
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/pranjalsinghsesodia/' },
     { label: 'Google Scholar', href: 'https://scholar.google.com/citations?hl=en&user=K10pZz0AAAAJ' },
     { label: 'ResearchGate', href: '' },
-    { label: 'Instagram', href: '' },
+    { label: 'Instagram', href: 'https://www.instagram.com/hipranjal_/' },
   ],
 };
 
