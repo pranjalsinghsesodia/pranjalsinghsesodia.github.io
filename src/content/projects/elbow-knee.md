@@ -10,7 +10,7 @@ mentors: [Bavath D., Yogesh Sahu]
 role: CAD of implant and test jig, multi-body dynamics, kinematic redesign
 discipline: biomech
 field: Mechanisms
-tools: SolidWorks, ANSYS Mechanical (MBD)
+tools: SolidWorks, ANSYS Mechanical (MBD, static structural)
 status: Redesign in progress
 state: live
 summary: Multi-body dynamics found a trajectory flaw in a patented elbow implant that the original design missed. A jammed prosthetic knee linkage was redesigned and tested.
@@ -36,7 +36,7 @@ story:
 
 ## Overview
 
-Two mechanism problems from my internship at mPragati, IIT Delhi. One is a patented elbow implant being reviewed before technology transfer. The other is a polycentric four-bar prosthetic knee. The elbow implant is still under technology transfer, so this page describes the method, not the design.
+Two mechanism problems from my internship at mPragati, IIT Delhi. One is a patented elbow implant being reviewed before technology transfer. The other is a polycentric four-bar prosthetic knee.
 
 ## Elbow implant: a review before technology transfer
 
@@ -45,7 +45,56 @@ Two mechanism problems from my internship at mPragati, IIT Delhi. One is a paten
 - Found a flaw in the ulna-hinge trajectory that the original design had missed.
 - I'm now leading the kinematic redesign.
 
-<figure class="ph-fig"><div data-kind="Screenshot · MBD set-up (no proprietary geometry)"></div><figcaption>Simulation set-up for the review.</figcaption></figure>
+<div class="fig-row">
+<figure>
+
+![Meshing the elbow implant in ANSYS](../../assets/projects/elbow-knee/elbow-mesh.png)
+
+<figcaption>Setting up the mesh on the implant's hinge in ANSYS Mechanical.</figcaption>
+</figure>
+<figure>
+
+![Mesh of an implant component in ANSYS](../../assets/projects/elbow-knee/elbow-setup.png)
+
+<figcaption>Meshed component, ready to solve.</figcaption>
+</figure>
+</div>
+
+<figure>
+
+![Equivalent stress plot on the ulna component](../../assets/projects/elbow-knee/elbow-stress.png)
+
+<figcaption>Static structural: equivalent (von Mises) stress along the ulna component.</figcaption>
+</figure>
+
+<figure>
+
+![Total deformation of the implant assembly](../../assets/projects/elbow-knee/elbow-deformation.png)
+
+<figcaption>Total deformation of the assembly.</figcaption>
+</figure>
+
+<div class="fig-row">
+<figure>
+
+![Aluminium stand-in for the ulna component](../../assets/projects/elbow-knee/ulna-part-1.jpg)
+
+<figcaption>An aluminium stand-in for the ulna component.</figcaption>
+</figure>
+<figure>
+
+![The aluminium ulna part from another angle](../../assets/projects/elbow-knee/ulna-part-3.jpg)
+
+<figcaption>The hinge end of the same part.</figcaption>
+</figure>
+</div>
+
+<figure>
+
+![CAD of the test jig](../../assets/projects/elbow-knee/test-jig.png)
+
+<figcaption>The test jig, modelled in SolidWorks.</figcaption>
+</figure>
 
 ## Prosthetic knee: removing a kinematic lock
 

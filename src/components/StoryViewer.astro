@@ -215,6 +215,7 @@ const reels = await getReels();
 <script>
   type Slide =
     | { type: 'img'; src: string; alt: string; caption?: string; sub?: string }
+    | { type: 'video'; src: string; poster: string; alt: string; caption?: string; sub?: string }
     | { type: 'card'; kicker?: string; title?: string; text?: string };
   type Reel = { title: string; meta: string; href?: string; slides: Slide[] };
 
@@ -237,10 +238,12 @@ const reels = await getReels();
     const last = i === reel.slides.length - 1;
     if (s.type === 'img') {
       media.innerHTML = `<img class="blur" alt="" src="${s.src}"><img class="front" alt="${esc(s.alt)}" src="${s.src}">`;
+    } else if (s.type === 'video') {
+      media.innerHTML = `<img class="blur" alt="" src="${s.poster}"><video class="front" src="${s.src}" poster="${s.poster}" autoplay muted playsinline aria-label="${esc(s.alt)}"></video>`;
     } else {
       media.innerHTML = `<div class="s-card">${s.kicker ? `<span class="k">${esc(s.kicker)}</span>` : ''}${s.title ? `<b>${esc(s.title)}</b>` : ''}${s.text ? `<p>${esc(s.text)}</p>` : ''}</div>`;
     }
-    let c = s.type === 'img' && s.caption ? esc(s.caption) + (s.sub ? `<small>${esc(s.sub)}</small>` : '') : '';
+    let c = s.type !== 'card' && s.caption ? esc(s.caption) + (s.sub ? `<small>${esc(s.sub)}</small>` : '') : '';
     if (last && reel.href) c += `${c ? '<br>' : ''}<a href="${reel.href}">Open the case study →</a>`;
     cap.innerHTML = c;
     [...bars.children].forEach((b, k) => (b.className = k < i ? 'done' : ''));
@@ -248,6 +251,18 @@ const reels = await getReels();
     void cur.offsetWidth;
     cur.className = 'run';
     cur.style.setProperty('--dur', s.type === 'card' ? '6.5s' : '5s');
+    const v = media.querySelector('video');
+    if (v) {
+      // a clip sets its own pace: the bar runs for the clip's length
+      v.addEventListener('loadedmetadata', () => {
+        if (isFinite(v.duration)) {
+          cur.className = '';
+          void cur.offsetWidth;
+          cur.style.setProperty('--dur', `${v.duration}s`);
+          cur.className = 'run';
+        }
+      });
+    }
   }
 
   function open(key: string, from: HTMLElement, start = 0) {
@@ -304,6 +319,11 @@ const reels = await getReels();
     }
   });
   document.addEventListener('visibilitychange', () => el.classList.toggle('paused', document.hidden));
+  // pause/resume the clip together with the progress bar
+  new MutationObserver(() => {
+    const v = media.querySelector('video');
+    if (v) el.classList.contains('paused') ? v.pause() : v.play().catch(() => {});
+  }).observe(el, { attributes: true, attributeFilter: ['class'] });
 
   document.addEventListener('click', (e) => {
     const t = (e.target as HTMLElement).closest<HTMLElement>('[data-reel]');

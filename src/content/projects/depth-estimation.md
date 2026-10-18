@@ -65,7 +65,51 @@ I started with 2D pose estimation, first OpenPose and then AlphaPose, to find th
 </figure>
 </div>
 
-Before testing on surgical footage I recorded myself mimicking surgical movements. The surgical recordings themselves aren't published here.
+Before testing on surgical footage I recorded myself mimicking surgical movements.
+
+<figure>
+<video controls muted playsinline preload="none" poster="../../media/depth-estimation/pose-mimic.jpg"><source src="../../media/depth-estimation/pose-mimic.mp4" type="video/mp4"></video>
+<figcaption>Me mimicking surgical movements to test the tracker. The original file was corrupted, so this copy carries a repair tool's watermark.</figcaption>
+</figure>
+
+### On surgical footage
+
+Then I ran the tracker on recordings of real procedures. Faces are blurred or covered.
+
+<figure>
+<video controls muted playsinline preload="none" poster="../../media/depth-estimation/or-pose-tracking.jpg"><source src="../../media/depth-estimation/or-pose-tracking.mp4" type="video/mp4"></video>
+<figcaption>Pose tracking during a procedure.</figcaption>
+</figure>
+
+<div class="fig-row">
+<figure>
+
+![Joint angles drawn on surgeons during a procedure](../../assets/projects/depth-estimation/or-joint-angles-1.png)
+
+<figcaption>Joint angles calculated live for each surgeon.</figcaption>
+</figure>
+<figure>
+
+![Joint angles with occluded limbs extrapolated](../../assets/projects/depth-estimation/or-joint-angles-2.png)
+
+<figcaption>Angles kept through occlusion by extrapolating the limb lines.</figcaption>
+</figure>
+</div>
+
+<div class="fig-row">
+<figure>
+
+![Pose skeleton on a surgeon, close up](../../assets/projects/depth-estimation/or-pose-closeup.png)
+
+<figcaption>Upper-body keypoints on a surgeon.</figcaption>
+</figure>
+<figure>
+
+![Full-body pose tracking across the operating table](../../assets/projects/depth-estimation/or-pose-wide.png)
+
+<figcaption>Tracking across the operating table.</figcaption>
+</figure>
+</div>
 
 ## Calibration and triangulation
 

@@ -6,7 +6,7 @@ import ProjectRings from '../components/ProjectRings.astro';
 import ProjectIndex from '../components/ProjectIndex.astro';
 import Photography from '../components/Photography.astro';
 import { SITE, url, fmtShort, isVisible } from '../lib/site';
-import me from '../assets/site/me.jpg';
+import me from '../assets/site/me.jpeg';
 
 const journal = (await getCollection('journal', isVisible)).sort((a, b) => +b.data.date - +a.data.date).slice(0, 6);
 const og = (await getImage({ src: me, width: 1200, format: 'jpg' })).src;
@@ -58,7 +58,7 @@ const insta = SITE.links.find((l) => l.label === 'Instagram')?.href;
     <Photography mode="latest" />
 
     <section class="about" id="about" aria-labelledby="about-h">
-      <div class="me"><Image src={me} alt="Pranjal Singh Sesodia" width={1440} class="cover" style="object-position: 56% 40%" /></div>
+      <div class="me"><Image src={me} alt="Pranjal Singh Sesodia outside B Block at night" width={520} class="cover" /></div>
       <div>
         <h2 id="about-h" class="sr-only">About</h2>
         <p class="bio">

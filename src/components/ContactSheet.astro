@@ -39,7 +39,7 @@ const SEL = 'M18,62 C10,22 70,6 118,8 C170,10 196,34 192,64 C188,98 140,114 86,1
               <h2 id={ri === 0 || mode === 'latest' ? `cs-h-${mode}` : undefined}>Contact sheet, {roll.name}</h2>
               {(mode === 'all' ? ri === 0 : true) && (
                 <p>
-                  Stories I chose to keep from a private Instagram. The circled frame is the month's pick. Tap any frame to play
+                  Photographs and clips from the lab and elsewhere. The circled frame is the month's pick. Tap any frame to play
                   its highlight.
                 </p>
               )}
@@ -73,6 +73,7 @@ const SEL = 'M18,62 C10,22 70,6 118,8 C170,10 196,34 192,64 C188,98 140,114 86,1
                       <Image src={entry.data.image} alt="" widths={[360, 720]} sizes="(max-width: 760px) 45vw, 340px" class="cover" />
                     </span>
                     <span class="edge"><span>{String(no).padStart(2, '0')}</span><span>{entry.data.highlight}</span></span>
+                    {entry.data.video && <span class="clip" aria-hidden="true">▶</span>}
                     {entry.data.pick && (
                       <svg class="sel" viewBox="0 0 200 120" preserveAspectRatio="none" aria-hidden="true"><path d={SEL} /></svg>
                     )}
@@ -179,6 +180,20 @@ const SEL = 'M18,62 C10,22 70,6 118,8 C170,10 196,34 192,64 C188,98 140,114 86,1
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--edge);
+  }
+  .clip {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #000a;
+    color: #fff;
+    font-size: 10px;
+    padding-left: 2px;
   }
   .sel {
     position: absolute;

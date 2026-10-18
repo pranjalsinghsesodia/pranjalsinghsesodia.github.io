@@ -93,7 +93,10 @@ The prototype runs on digital servos. They're cheap and easy to replace, but the
 <figcaption>A base part coming off the printer.</figcaption>
 </figure>
 
-<figure class="ph-fig"><div data-kind="Video · fingertip tracking driving the arm"></div><figcaption>Tracking a fingertip with OpenCV.</figcaption></figure>
+<figure>
+<video controls muted playsinline preload="none" poster="../../media/surgical-arm/arm-tracking-test.jpg"><source src="../../media/surgical-arm/arm-tracking-test.mp4" type="video/mp4"></video>
+<figcaption>A test run of the arm with vision tracking at mPragati.</figcaption>
+</figure>
 
 <figure class="ph-fig"><div data-kind="Screenshot · the arm in MuJoCo"></div><figcaption>The same arm in simulation.</figcaption></figure>
 

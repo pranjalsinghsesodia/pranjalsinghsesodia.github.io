@@ -50,6 +50,13 @@ How a maglev pod can measure and estimate the gap between itself and the track i
 
 <figure>
 
+![System architecture comparing classical and quantum machine-learning pipelines](../../assets/projects/hyperloop-gap/system-architecture.png)
+
+<figcaption>The proposed system architecture from the paper: classical and quantum machine-learning pipelines run on the same dataset and compared.</figcaption>
+</figure>
+
+<figure>
+
 ![Roadmap from sensing technologies through estimation, fusion and fault tolerance to real-time implementation](../../assets/projects/hyperloop-gap/roadmap.png)
 
 <figcaption>The structure of the review: sensing, estimation algorithms, sensor fusion, fault tolerance, real-time implementation and future systems.</figcaption>

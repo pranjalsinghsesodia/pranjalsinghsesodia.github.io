@@ -4,6 +4,7 @@ import { url } from './site';
 
 export type Slide =
   | { type: 'img'; src: string; alt: string; caption?: string; sub?: string }
+  | { type: 'video'; src: string; poster: string; alt: string; caption?: string; sub?: string }
   | { type: 'card'; kicker?: string; title?: string; text?: string };
 
 export type StoryReel = { title: string; meta: string; href?: string; slides: Slide[] };
@@ -64,6 +65,11 @@ export async function getReels(): Promise<Record<string, StoryReel>> {
     reels[key] ??= { title: s.data.highlight, meta: '', slides: [] };
     const img = await getImage({ src: s.data.image, width: STORY_WIDTH, format: 'webp' });
     const when = s.data.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+    const common = { alt: s.data.caption ?? s.data.highlight, caption: s.data.caption, sub: [s.data.location, s.data.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })].filter(Boolean).join(' · ') };
+    if (s.data.video) {
+      reels[key].slides.push({ type: 'video', src: url(`media/stories/${s.data.video}`), poster: img.src, ...common });
+      continue;
+    }
     reels[key].slides.push({
       type: 'img',
       src: img.src,

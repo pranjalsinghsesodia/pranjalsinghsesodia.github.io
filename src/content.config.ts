@@ -67,7 +67,8 @@ const stories = defineCollection({
     z.object({
       date: z.coerce.date(),
       highlight: z.string(),
-      image: image(),
+      image: image(), // the photo, or the poster frame of a clip
+      video: z.string().optional(), // optional clip in src/assets/stories/, e.g. 2026-10-clip.mp4
       caption: z.string().optional(),
       location: z.string().optional(),
       pick: z.boolean().default(false), // circled on the contact sheet
