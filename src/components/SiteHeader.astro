@@ -5,7 +5,7 @@ import { SITE, url, isVisible } from '../lib/site';
 const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
 // Journal and Photos only appear once they have something in them
 const hasJournal = (await getCollection('journal', isVisible)).length > 0;
-const hasPhotos = (await getCollection('stories')).length > 0;
+const hasPhotos = (await getCollection('stories')).length + (await getCollection('films')).length > 0;
 const nav = [
   { label: 'Work', href: url('#work'), match: '/work', show: true },
   { label: 'Journal', href: url('journal/'), match: '/journal', show: hasJournal },

@@ -16,6 +16,7 @@ Text lives in `src/content/`. Every file the site loads from this repo lives in 
 ```
 src/assets/
 ├─ site/                 cv.pdf, favicon.svg, me.jpeg
+├─ films/                poster frames for the Films row
 ├─ projects/<slug>/      cover, story images, photos, CAD shots, clips for that project
 └─ stories/              photos for the contact sheet (Pages CMS uploads here)
 ```
@@ -25,6 +26,7 @@ src/assets/
 | Projects (index rows, story rings, case studies) | `src/content/projects/<slug>.md` | `src/assets/projects/<slug>/` | Best: in the project's own repo (below). Or add both here. |
 | Journal entries | `src/content/journal/*.md` | `src/assets/journal/` if needed | Add a Markdown file, or use Pages CMS. `draft: true` keeps it off the live site. |
 | Photo stories (contact sheet) | `src/content/stories/*.md` | `src/assets/stories/` | From your phone with Pages CMS. |
+| Films | `src/content/films/*.md` | `src/assets/films/` (poster frame only) | Pages CMS → Films. The video itself stays on YouTube, Vimeo or Instagram; the card links there. |
 | CV and favicon | | `src/assets/site/` | Replace the file. It's served at a fixed address, `/cv.pdf`, so links in emails never break. |
 | Name, email, social links | `src/lib/site.ts` | | Empty links are hidden. |
 | Colours and type | `src/styles/global.css` | | Tokens at the top: dark first, then light. |
@@ -60,7 +62,7 @@ Instagram's API can't read private accounts, so the site keeps its own copies of
 3. Stories → Add: upload the photo, write a caption, pick a highlight and the date. Tick "Pick of the month" for the one to circle.
 4. Save. GitHub Actions redeploys in about two minutes.
 
-The five stories in `src/content/stories/` are placeholders made from your project images. Delete them when you add real ones.
+The photography section, and its nav link, only appear once there is at least one story or film. The Instagram link comes from `src/lib/site.ts`.
 
 ## Deploying
 

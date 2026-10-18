@@ -8,6 +8,11 @@ media:
     input: src/assets/stories
     output: ../../assets/stories
     categories: [image]
+  - name: films
+    label: Film posters
+    input: src/assets/films
+    output: ../../assets/films
+    categories: [image]
 
 content:
   - name: stories
@@ -86,3 +91,41 @@ content:
       - name: body
         label: Entry
         type: rich-text
+
+  - name: films
+    label: Films
+    type: collection
+    path: src/content/films
+    filename: '{primary}.md'
+    view:
+      fields: [poster, title, date]
+      primary: title
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: poster
+        label: Poster frame
+        type: image
+        required: true
+        options:
+          media: films
+      - name: link
+        label: Where it plays (YouTube, Vimeo or Instagram link)
+        type: string
+        required: true
+      - name: date
+        label: Date
+        type: date
+        required: true
+      - name: role
+        label: Your role (e.g. Shot and edited)
+        type: string
+      - name: duration
+        label: Length (e.g. 2:40)
+        type: string
+      - name: order
+        label: Order (lower comes first)
+        type: number
+        default: 100

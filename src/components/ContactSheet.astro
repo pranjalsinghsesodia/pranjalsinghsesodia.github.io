@@ -21,7 +21,7 @@ const shown = mode === 'latest' ? rolls : [...rolls].reverse();
 const SEL = 'M18,62 C10,22 70,6 118,8 C170,10 196,34 192,64 C188,98 140,114 86,112 C40,110 12,92 14,58 C16,40 34,26 52,20';
 ---
 
-<section class:list={['cs', mode]} id={mode === 'latest' ? 'photos' : undefined} data-mode={mode} aria-labelledby={`cs-h-${mode}`}>
+<section class:list={['cs', mode]} data-mode={mode} aria-labelledby={`cs-h-${mode}`}>
   {
     rolls.length === 0 ? (
       <div class="head">

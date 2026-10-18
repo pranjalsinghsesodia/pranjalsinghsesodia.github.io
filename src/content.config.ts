@@ -74,4 +74,19 @@ const stories = defineCollection({
     }),
 });
 
-export const collections = { projects, journal, stories };
+/* Films: your best videos. The poster lives in src/assets/films/; the video itself stays on YouTube, Vimeo or Instagram. */
+const films = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/films' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      date: z.coerce.date(),
+      poster: image(),
+      link: z.string().url(), // where the film plays
+      role: z.string().optional(), // "Shot and edited"
+      duration: z.string().optional(), // "2:40"
+      order: z.number().default(100), // lower comes first
+    }),
+});
+
+export const collections = { projects, journal, stories, films };
