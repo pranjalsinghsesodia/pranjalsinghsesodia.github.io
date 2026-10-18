@@ -8,7 +8,7 @@ export const SITE = {
   emails: ['pranjalsinghsesodia@gmail.com'],
   cv: 'cv.pdf',
   links: [
-    { label: 'GitHub', href: 'https://github.com/pranjalsesodia' },
+    { label: 'GitHub', href: 'https://github.com/pranjalsinghsesodia' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/pranjalsinghsesodia/' },
     { label: 'Google Scholar', href: 'https://scholar.google.com/citations?hl=en&user=K10pZz0AAAAJ' },
     { label: 'ResearchGate', href: '' },

@@ -32,7 +32,7 @@ const projects = defineCollection({
       coverNote: z.string().optional(), // e.g. "Render" or "Prototype, Oct 2026"
       ring: z.string().optional(), // short text for the ring when there is no cover
       peek: z.string().optional(), // hover text when there is no cover
-      repo: z.string().optional(), // "pranjalsesodia/repo-name"
+      repo: z.string().optional(), // "pranjalsinghsesodia/repo-name"
       links: z.array(z.object({ label: z.string(), href: z.string() })).default([]),
       story: z
         .array(

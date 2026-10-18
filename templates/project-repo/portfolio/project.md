@@ -13,7 +13,7 @@ state: live             # live (blue ring + pulsing pill) | done | win (outlined
 summary: One or two sentences. Shown on the case study and in the hover preview.
 cover: ./cover.jpg      # optional. Without it, the ring shows `ring:` text instead
 # ring: Paper
-# repo: pranjalsesodia/this-repo
+# repo: pranjalsinghsesodia/this-repo
 # links:
 #   - label: Read the paper
 #     href: https://doi.org/...

@@ -36,7 +36,7 @@ In a project's Markdown, refer to its files by path from the Markdown file, e.g.
 Each project can live in its own repo with a `portfolio/` folder:
 
 ```
-pranjalsesodia/surgical-arm-6dof
+pranjalsinghsesodia/surgical-arm-6dof
 ├─ portfolio/
 │  ├─ project.md    front matter: title, year, status, tools, story slides; body: the case study
 │  ├─ cover.jpg
@@ -64,9 +64,9 @@ The five stories in `src/content/stories/` are placeholders made from your proje
 
 ## Deploying
 
-1. Signed in as your own account (Kenkada), create a free organisation named `pranjalsesodia` at github.com/account/organizations/new. Organisations get their own Pages address, so the site lives at pranjalsesodia.github.io and your account name never appears.
-   Create a repo in the organisation named `pranjalsesodia.github.io` and push this folder to `main`.
-   Keep project repos in the organisation too (transfer DeskMilo there), so repo links on the site read `github.com/pranjalsesodia/...`.
+1. Signed in as your own account (Kenkada), create a free organisation named `pranjalsinghsesodia` at github.com/account/organizations/new. Organisations get their own Pages address, so the site lives at pranjalsinghsesodia.github.io and your account name never appears.
+   Create a repo in the organisation named `pranjalsinghsesodia.github.io` and push this folder to `main`.
+   Keep project repos in the organisation too (transfer DeskMilo there), so repo links on the site read `github.com/pranjalsinghsesodia/...`.
 2. Repo Settings → Pages → Source: **GitHub Actions**.
 3. Optional: for private project repos, add a `PROJECTS_READ_TOKEN` secret (a fine-grained token with read access to those repos).
 
