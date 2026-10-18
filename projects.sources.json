@@ -1,0 +1,10 @@
+{
+  "$comment": "One entry per project repo. Each repo keeps its site data in a portfolio/ folder (see templates/project-repo). If a repo or its portfolio/ folder doesn't exist yet, the build keeps the copy in src/content/projects/<slug>.",
+  "projects": [
+    { "slug": "surgical-arm", "repo": "pranjalsesodia/surgical-arm-6dof" },
+    { "slug": "elbow-knee", "repo": "pranjalsesodia/orthopedic-prosthetic-kinematics" },
+    { "slug": "wind-tunnel", "repo": "pranjalsesodia/subsonic-wind-tunnel-cr6" },
+    { "slug": "deskmilo", "repo": "pranjalsesodia/DeskMilo" },
+    { "slug": "hyperloop-gap", "repo": "pranjalsesodia/hyperloop-gap-estimation" }
+  ]
+}

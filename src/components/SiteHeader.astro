@@ -1,0 +1,194 @@
+---
+import { getCollection } from 'astro:content';
+import { SITE, url, isVisible } from '../lib/site';
+
+const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
+// Journal and Photos only appear once they have something in them
+const hasJournal = (await getCollection('journal', isVisible)).length > 0;
+const hasPhotos = (await getCollection('stories')).length > 0;
+const nav = [
+  { label: 'Work', href: url('#work'), match: '/work', show: true },
+  { label: 'Journal', href: url('journal/'), match: '/journal', show: hasJournal },
+  { label: 'Photos', href: url('photos/'), match: '/photos', show: hasPhotos },
+  { label: 'About', href: url('#about'), match: '', show: true },
+  { label: 'CV', href: url(SITE.cv), match: '', show: true },
+].filter((n) => n.show);
+---
+
+<header class="nav" id="top">
+  <div class="w nav-in">
+    <a class="brand" href={url('')}>
+      <b>{SITE.name}</b>
+      <span>{SITE.role}</span>
+    </a>
+
+    <nav class="links" id="nav-links" aria-label="Main">
+      {
+        nav.map((n) => (
+          <a href={n.href} aria-current={n.match && path.startsWith(n.match) ? 'page' : undefined}>
+            {n.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="tools">
+      <span class="time" title="Local time in New Delhi"><span class="clock">--:--</span> IST</span>
+      <button class="theme" id="theme-toggle" type="button" aria-label="Switch to light mode">
+        <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"></path></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"></path></svg>
+        <span class="theme-label">Light</span>
+      </button>
+      <button class="menu" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    padding-top: env(safe-area-inset-top, 0px);
+    background: color-mix(in srgb, var(--bg) 84%, transparent);
+    backdrop-filter: blur(12px) saturate(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2);
+    border-bottom: 1px solid var(--line);
+    transition: background-color 0.25s ease;
+  }
+  .nav-in {
+    min-height: var(--nav-h);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 16px;
+  }
+  .brand {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    min-width: 0;
+  }
+  .brand b {
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .brand span {
+    font-size: 12px;
+    color: var(--mute);
+  }
+  .links {
+    display: flex;
+    gap: 4px;
+    font-size: 14px;
+  }
+  .links a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    color: var(--mute);
+    transition: color 0.15s, background-color 0.15s;
+  }
+  .links a:hover,
+  .links a[aria-current='page'] {
+    color: var(--ink);
+    background: var(--surface);
+  }
+  .tools {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+  }
+  .time {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--mute);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .theme {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 34px;
+    padding: 0 12px 0 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 13px;
+    transition: border-color 0.15s, background-color 0.15s;
+  }
+  .theme:hover {
+    border-color: var(--ink);
+    background: var(--surface);
+  }
+  .theme svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+  /* in dark mode the button offers light (sun); in light mode it offers dark (moon) */
+  .i-moon {
+    display: none;
+  }
+  :global([data-theme='light']) .i-sun {
+    display: none;
+  }
+  :global([data-theme='light']) .i-moon {
+    display: block;
+  }
+  .menu {
+    display: none;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 13px;
+  }
+
+  @media (max-width: 860px) {
+    .time {
+      display: none;
+    }
+  }
+  @media (max-width: 720px) {
+    .nav-in {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .menu {
+      display: inline-block;
+    }
+    .tools {
+      grid-row: 1;
+      grid-column: 2;
+    }
+    .theme-label {
+      display: none;
+    }
+    .theme {
+      width: 34px;
+      padding: 0;
+      justify-content: center;
+    }
+    .links {
+      display: none;
+      grid-row: 2;
+      grid-column: 1 / -1;
+      flex-direction: column;
+      gap: 0;
+      padding-bottom: 12px;
+      font-size: 16px;
+    }
+    .links.open {
+      display: flex;
+    }
+    .links a {
+      padding: 12px 0;
+      border-radius: 0;
+      border-top: 1px solid var(--line);
+      background: none !important;
+    }
+  }
+</style>

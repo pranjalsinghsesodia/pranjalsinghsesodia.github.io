@@ -1,0 +1,23 @@
+# Copy into a project repo. When portfolio/ changes, it asks the portfolio
+# repo to rebuild, so the site updates within a few minutes.
+# Needs a repo secret PORTFOLIO_DISPATCH_TOKEN: a fine-grained token with
+# "Contents: read and write" on the portfolio repo only.
+name: Update portfolio
+
+on:
+  push:
+    branches: [main]
+    paths: ['portfolio/**']
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask the portfolio to rebuild
+        run: |
+          curl -fsS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PORTFOLIO_DISPATCH_TOKEN }}" \
+            https://api.github.com/repos/pranjalsesodia/pranjalsesodia.github.io/dispatches \
+            -d '{"event_type":"project-updated","client_payload":{"repo":"${{ github.repository }}"}}'

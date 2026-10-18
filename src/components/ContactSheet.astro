@@ -1,0 +1,235 @@
+---
+import { Image } from 'astro:assets';
+import { getRolls, highlightKey } from '../lib/stories';
+import { url } from '../lib/site';
+
+interface Props {
+  /** "latest": one month with arrows to step back (home). "all": every month stacked (photos page). */
+  mode?: 'latest' | 'all';
+}
+const { mode = 'latest' } = Astro.props;
+const rolls = await getRolls();
+
+// where each story sits inside its highlight reel (reels play oldest first)
+const seen: Record<string, number> = {};
+const startOf = new Map<string, number>();
+for (const r of rolls) for (const f of r.frames) {
+  const k = highlightKey(f.entry.data.highlight);
+  startOf.set(f.entry.id, (seen[k] = (seen[k] ?? -1) + 1));
+}
+const shown = mode === 'latest' ? rolls : [...rolls].reverse();
+const SEL = 'M18,62 C10,22 70,6 118,8 C170,10 196,34 192,64 C188,98 140,114 86,112 C40,110 12,92 14,58 C16,40 34,26 52,20';
+---
+
+<section class:list={['cs', mode]} id={mode === 'latest' ? 'photos' : undefined} data-mode={mode} aria-labelledby={`cs-h-${mode}`}>
+  {
+    rolls.length === 0 ? (
+      <div class="head">
+        <h2 id={`cs-h-${mode}`}>Contact sheet</h2>
+        <p>The first stories are on their way.</p>
+      </div>
+    ) : (
+      shown.map((roll, ri) => {
+        const counts: Record<string, number> = {};
+        roll.frames.forEach((f) => (counts[f.entry.data.highlight] = (counts[f.entry.data.highlight] ?? 0) + 1));
+        const isLast = ri === shown.length - 1;
+        return (
+          <div class="roll" data-month={roll.key} hidden={mode === 'latest' && !isLast}>
+            <div class="head">
+              <h2 id={ri === 0 || mode === 'latest' ? `cs-h-${mode}` : undefined}>Contact sheet, {roll.name}</h2>
+              {(mode === 'all' ? ri === 0 : true) && (
+                <p>
+                  Stories I chose to keep from a private Instagram. The circled frame is the month's pick. Tap any frame to play
+                  its highlight.
+                </p>
+              )}
+            </div>
+            <div class="bar">
+              <div class="filters" role="group" aria-label={`Filter ${roll.name} by highlight`}>
+                <button class="chip" type="button" aria-pressed="true" data-f="all">All<sup>{roll.frames.length}</sup></button>
+                {Object.entries(counts).map(([h, n]) => (
+                  <button class="chip" type="button" aria-pressed="false" data-f={h}>{h}<sup>{n}</sup></button>
+                ))}
+              </div>
+              {mode === 'latest' && (
+                <div class="months">
+                  <button class="m-prev" type="button" aria-label="Previous month" disabled={ri === 0}>←</button>
+                  <b>{roll.label}</b>
+                  <button class="m-next" type="button" aria-label="Next month" disabled={isLast}>→</button>
+                </div>
+              )}
+              {mode === 'all' && <span class="months"><b>{roll.label}</b></span>}
+            </div>
+            <ul class="sheet">
+              {roll.frames.map(({ entry, no }) => (
+                <li data-h={entry.data.highlight}>
+                  <button
+                    type="button"
+                    data-reel={highlightKey(entry.data.highlight)}
+                    data-start={startOf.get(entry.id)}
+                    aria-label={`${entry.data.highlight}, frame ${no}${entry.data.caption ? ': ' + entry.data.caption : ''}`}
+                  >
+                    <span class="pic">
+                      <Image src={entry.data.image} alt="" widths={[360, 720]} sizes="(max-width: 760px) 45vw, 340px" class="cover" />
+                    </span>
+                    <span class="edge"><span>{String(no).padStart(2, '0')}</span><span>{entry.data.highlight}</span></span>
+                    {entry.data.pick && (
+                      <svg class="sel" viewBox="0 0 200 120" preserveAspectRatio="none" aria-hidden="true"><path d={SEL} /></svg>
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })
+    )
+  }
+  {mode === 'latest' && rolls.length > 0 && <p class="more"><a href={url('photos/')}>All months →</a></p>}
+</section>
+
+<style>
+  .cs {
+    padding-block: 64px;
+  }
+  .roll + .roll {
+    margin-top: 56px;
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 12px 32px;
+    margin-bottom: 24px;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(34px, 5vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .head p {
+    color: var(--mute);
+    max-width: 30em;
+    font-size: 15px;
+  }
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px 24px;
+    margin-bottom: 16px;
+  }
+  .months {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .months b {
+    font-weight: 500;
+    min-width: 14ch;
+    text-align: center;
+  }
+  .months button {
+    color: var(--mute);
+    padding: 4px 6px;
+  }
+  .months button:hover:not(:disabled) {
+    color: var(--ink);
+  }
+  .months button:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .sheet {
+    background: var(--film);
+    padding: 18px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px 12px;
+  }
+  .sheet button {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    width: 100%;
+  }
+  .pic {
+    display: block;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    transition: opacity 0.2s;
+  }
+  .sheet button:hover .pic {
+    opacity: 0.82;
+  }
+  .edge {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--edge);
+  }
+  .sel {
+    position: absolute;
+    inset: -10px -12px 6px -12px;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .sel path {
+    fill: none;
+    stroke: var(--grease);
+    stroke-width: 3;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .more {
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--mute);
+  }
+  .more a:hover {
+    color: var(--ink);
+  }
+  @media (max-width: 760px) {
+    .sheet {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding: 12px;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.cs').forEach((cs) => {
+    const rolls = [...cs.querySelectorAll<HTMLElement>('.roll')];
+    rolls.forEach((roll, i) => {
+      const chips = [...roll.querySelectorAll<HTMLButtonElement>('.chip')];
+      const frames = [...roll.querySelectorAll<HTMLElement>('.sheet li')];
+      chips.forEach((ch) =>
+        ch.addEventListener('click', () => {
+          chips.forEach((c) => c.setAttribute('aria-pressed', String(c === ch)));
+          frames.forEach((f) => (f.hidden = !(ch.dataset.f === 'all' || f.dataset.h === ch.dataset.f)));
+        }),
+      );
+      const show = (j: number) => {
+        if (!rolls[j]) return;
+        roll.hidden = true;
+        rolls[j].hidden = false;
+        rolls[j].querySelector<HTMLButtonElement>(j < i ? '.m-prev' : '.m-next')?.focus();
+      };
+      roll.querySelector('.m-prev')?.addEventListener('click', () => show(i - 1));
+      roll.querySelector('.m-next')?.addEventListener('click', () => show(i + 1));
+    });
+  });
+</script>

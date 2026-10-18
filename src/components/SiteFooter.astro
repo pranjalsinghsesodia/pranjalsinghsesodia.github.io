@@ -1,0 +1,55 @@
+---
+import { SITE, url } from '../lib/site';
+const links = SITE.links.filter((l) => l.href);
+const updated = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' });
+---
+
+<footer class="foot">
+  <div class="w foot-in">
+    <span class="emails">{SITE.emails.map((e) => <span class="email">{e}</span>)}</span>
+    <span class="elsewhere">
+      {links.map((l) => <a href={l.href} rel="me noopener" target="_blank">{l.label}</a>)}
+      <a href={url('rss.xml')}>RSS</a>
+      <a href={url(SITE.cv)}>CV</a>
+    </span>
+    <span>Updated {updated} · <a href="#top">Back to top ↑</a></span>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    border-top: 1px solid var(--line);
+    margin-top: 32px;
+  }
+  .foot-in {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px 28px;
+    padding-block: 24px calc(36px + env(safe-area-inset-bottom, 0px));
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--mute);
+  }
+  .emails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+  }
+  .email {
+    color: var(--ink);
+    user-select: all;
+    overflow-wrap: anywhere;
+  }
+  .elsewhere {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+  }
+  a {
+    color: var(--ink);
+  }
+  a:hover {
+    color: var(--acc);
+  }
+</style>

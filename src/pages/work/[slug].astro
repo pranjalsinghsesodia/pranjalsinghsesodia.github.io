@@ -1,0 +1,259 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getProjects } from '../../lib/stories';
+import { url } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((p, i) => ({
+    params: { slug: p.id },
+    props: { project: p, prev: projects[i - 1], next: projects[i + 1] },
+  }));
+}
+
+const { project, prev, next } = Astro.props;
+const { Content, headings } = await render(project);
+const toc = headings.filter((h) => h.depth === 2);
+const d = project.data;
+const repoUrl = d.repo ? `https://github.com/${d.repo}` : '';
+const og = d.cover ? (await getImage({ src: d.cover, width: 1200, format: 'jpg' })).src : undefined;
+---
+
+<Base title={d.title} description={d.summary} image={og}>
+  <article class="w cs">
+    <nav class="crumb"><a href={url('#work')}>← All work</a></nav>
+
+    <header class="head">
+      <h1>{d.title}</h1>
+      <p class="sum">{d.summary}</p>
+      <dl class="spec">
+        {d.where && <div><dt>Where</dt><dd>{d.where}</dd></div>}
+        <div><dt>When</dt><dd>{d.period ?? d.year}</dd></div>
+        {d.role && <div class="wide"><dt>My role</dt><dd>{d.role}</dd></div>}
+        {d.supervisor && <div><dt>Supervisor</dt><dd>{d.supervisor}</dd></div>}
+        {d.mentors.length > 0 && <div><dt>{d.mentors.length > 1 ? 'Mentors' : 'Mentor'}</dt><dd>{d.mentors.join(', ')}</dd></div>}
+        {d.team && <div><dt>Team</dt><dd>{d.team}</dd></div>}
+        <div><dt>Discipline</dt><dd>{d.field}</dd></div>
+        <div><dt>Tools</dt><dd>{d.tools}</dd></div>
+        <div>
+          <dt>Status</dt>
+          <dd><span class:list={['pill', { live: d.state === 'live', win: d.state === 'win' }]}>{d.status}</span></dd>
+        </div>
+      </dl>
+      <div class="actions">
+        <button class="play" type="button" data-reel={`p-${project.id}`}>▶ Play the story</button>
+        {d.links.map((l) => <a class="out" href={l.href} target="_blank" rel="noopener">{l.label} ↗</a>)}
+        {repoUrl && <a class="out" href={repoUrl} target="_blank" rel="noopener">Source on GitHub ↗</a>}
+      </div>
+    </header>
+
+    {
+      d.cover && (
+        <figure class="cover-fig">
+          <div class="cover-box">
+            <Image src={d.cover} alt={d.title} widths={[640, 1080, 1600, 2200]} sizes="(max-width: 1440px) 100vw, 1300px" class="cover" />
+          </div>
+          {d.coverNote && <figcaption>{d.coverNote}</figcaption>}
+        </figure>
+      )
+    }
+
+    <div class="body-grid">
+      <div class="prose body">
+        <Content />
+      </div>
+      {
+        toc.length > 1 && (
+          <aside class="toc" aria-label="On this page">
+            <p>On this page</p>
+            <ol>
+              {toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+            </ol>
+            <button class="play small" type="button" data-reel={`p-${project.id}`}>▶ Play the story</button>
+          </aside>
+        )
+      }
+    </div>
+
+    <nav class="pager" aria-label="More projects">
+      {prev ? <a href={url(`work/${prev.id}/`)}><span>Previous</span>{prev.data.title}</a> : <span></span>}
+      {next ? <a class="nx" href={url(`work/${next.id}/`)}><span>Next</span>{next.data.title}</a> : <span></span>}
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .cs {
+    padding-block: 32px 40px;
+  }
+  .crumb {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--mute);
+  }
+  .crumb a:hover {
+    color: var(--ink);
+  }
+  .head {
+    padding-block: 40px 32px;
+  }
+  h1 {
+    font-size: clamp(30px, 4.6vw, 52px);
+    line-height: 1.06;
+    letter-spacing: -0.024em;
+    font-weight: 500;
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  .sum {
+    margin-top: 16px;
+    font-size: 19px;
+    line-height: 1.45;
+    color: var(--mute);
+    max-width: 40em;
+  }
+  .spec {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px 24px;
+    margin: 32px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .spec dt {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mute);
+    margin-bottom: 4px;
+  }
+  .spec dd {
+    margin: 0;
+    font-size: 14px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    align-items: center;
+    margin-top: 28px;
+    font-size: 14px;
+  }
+  .play {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+  .play:hover {
+    opacity: 0.88;
+  }
+  .out {
+    border-bottom: 1px solid var(--line);
+  }
+  .out:hover {
+    border-color: var(--acc);
+  }
+  .cover-fig {
+    margin: 0 0 48px;
+  }
+  .cover-box {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .cover-fig figcaption {
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--mute);
+  }
+  .spec .wide {
+    grid-column: span 2;
+  }
+  .body-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 66ch) minmax(220px, 280px);
+    justify-content: space-between;
+    gap: 64px;
+    margin-bottom: 64px;
+  }
+  .toc {
+    position: sticky;
+    top: calc(var(--nav-h) + 32px);
+    align-self: start;
+    padding-left: 20px;
+    border-left: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .toc p {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mute);
+    margin-bottom: 10px;
+  }
+  .toc li + li {
+    margin-top: 8px;
+  }
+  .toc a {
+    color: var(--mute);
+  }
+  .toc a:hover {
+    color: var(--ink);
+  }
+  .play.small {
+    margin-top: 22px;
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+  @media (max-width: 1000px) {
+    .body-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .toc {
+      display: none;
+    }
+  }
+  .body :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .pager a {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-weight: 500;
+  }
+  .pager a:hover {
+    color: var(--acc);
+  }
+  .pager span {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mute);
+    font-weight: 400;
+  }
+  .pager .nx {
+    text-align: right;
+    align-items: flex-end;
+  }
+  @media (max-width: 760px) {
+    .spec {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

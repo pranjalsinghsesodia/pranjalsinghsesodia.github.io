@@ -1,0 +1,16 @@
+{
+  "name": "pranjal-portfolio",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "sync": "node scripts/sync-projects.mjs",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.19",
+    "astro": "^7.3.4"
+  }
+}

@@ -1,0 +1,88 @@
+# Pages CMS (https://pagescms.org): sign in with GitHub, open this repo,
+# and add stories or journal entries from your phone. Saving commits to main,
+# which redeploys the site in about two minutes.
+
+media:
+  - name: stories
+    label: Story photos
+    input: src/assets/stories
+    output: ../../assets/stories
+    categories: [image]
+
+content:
+  - name: stories
+    label: Stories
+    type: collection
+    path: src/content/stories
+    filename: '{year}-{month}-{day}-{primary}.md'
+    view:
+      fields: [image, caption, highlight, date]
+      primary: caption
+      sort: [date]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: image
+        label: Photo
+        type: image
+        required: true
+        options:
+          media: stories
+      - name: caption
+        label: Caption
+        type: string
+        required: true
+      - name: highlight
+        label: Highlight
+        type: select
+        required: true
+        options:
+          values: [Lab, Desk, Streets, Monsoon, Night, Travel]
+          creatable: true
+      - name: date
+        label: Date posted
+        type: date
+        required: true
+      - name: location
+        label: Location
+        type: string
+      - name: pick
+        label: Pick of the month (circled on the contact sheet)
+        type: boolean
+        default: false
+
+  - name: journal
+    label: Journal
+    type: collection
+    path: src/content/journal
+    filename: '{primary}.md'
+    view:
+      fields: [title, date, draft]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: date
+        label: Date
+        type: date
+        required: true
+      - name: summary
+        label: One-line summary
+        type: string
+        required: true
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: draft
+        label: Draft (hidden from the live site)
+        type: boolean
+        default: true
+      - name: body
+        label: Entry
+        type: rich-text
