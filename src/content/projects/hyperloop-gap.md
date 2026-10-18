@@ -11,6 +11,8 @@ tools: Review paper
 status: Published
 state: win
 ring: Paper
+cover: ../../assets/projects/hyperloop-gap/ems-principle.png
+coverNote: "Electromagnetic suspension: the pod's electromagnets hold it a small gap z below the rail."
 summary: A first-author review in Next Research (Elsevier) on sensing and estimating the levitation gap of maglev pods, including under thermal drift and EMI.
 peek: Next Research (Elsevier), Sep 2026 · doi:10.1016/j.nexres.2026.102384
 links:
@@ -20,6 +22,9 @@ story:
   - kicker: Next Research · Elsevier
     title: Robust real-time levitation gap estimation for hyperloop pods
     text: First-author review, 2026.
+  - image: ../../assets/projects/hyperloop-gap/ems-principle.png
+    caption: The gap z that has to be measured
+    sub: Electromagnetic suspension
   - kicker: Sensing
     title: Five ways to measure a gap
     text: Inductive, optical, capacitive, Hall-effect and UWB radar.
@@ -35,6 +40,20 @@ Sesodia, P. S., & Dabass, V. (2026). *Robust Real-Time Levitation Gap Estimation
 ## What it covers
 
 How a maglev pod can measure and estimate the gap between itself and the track in real time. The review compares inductive, optical, capacitive, Hall-effect and UWB-radar gap sensing, then Kalman-filter (EKF and UKF) and sliding-mode observer methods, for electromagnetic (EMS) and electrodynamic (EDS) suspension. It pays particular attention to thermal drift and electromagnetic interference.
+
+<figure>
+
+![Block diagram of inertial-sensor-based gap estimation](../../assets/projects/hyperloop-gap/inertial-gap-estimation.png)
+
+<figcaption>One approach the review covers: estimating the gap from an inertial sensor's acceleration and angular rate.</figcaption>
+</figure>
+
+<figure>
+
+![Roadmap from sensing technologies through estimation, fusion and fault tolerance to real-time implementation](../../assets/projects/hyperloop-gap/roadmap.png)
+
+<figcaption>The structure of the review: sensing, estimation algorithms, sensor fusion, fault tolerance, real-time implementation and future systems.</figcaption>
+</figure>
 
 ## What it taught me
 

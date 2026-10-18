@@ -12,11 +12,11 @@ tools: ANSYS Fluent, ANSYS Static Structural, SolidWorks
 status: Manufacturing
 state: live
 summary: A tabletop subsonic wind tunnel with a 6:1 contraction, funded by an NSUT CPVSK grant. Design is complete; optimisation and manufacturing are under way.
-cover: ../../assets/projects/wind-tunnel/cover.png
-coverNote: Render of the tunnel. Build photos to follow.
+cover: ../../assets/projects/wind-tunnel/tunnel-cad-assembly.png
+coverNote: "CAD assembly: settling chamber, 6:1 contraction, clear test section and diffuser."
 story:
-  - image: ../../assets/projects/wind-tunnel/cover.png
-    caption: Subsonic wind tunnel, 6:1 contraction
+  - image: ../../assets/projects/wind-tunnel/tunnel-cad-assembly.png
+    caption: The tunnel assembly in CAD
     sub: NSUT
   - kicker: Brief
     title: A 6:1 tunnel on a ₹10,000 grant

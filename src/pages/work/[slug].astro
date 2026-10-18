@@ -18,6 +18,8 @@ const { Content, headings } = await render(project);
 const toc = headings.filter((h) => h.depth === 2);
 const d = project.data;
 const repoUrl = d.repo ? `https://github.com/${d.repo}` : '';
+// portrait or very wide covers are shown whole on a blurred backdrop instead of being cropped to 16:9
+const fitWhole = !!d.cover && Math.abs(d.cover.width / d.cover.height - 16 / 9) > 0.4;
 const og = d.cover ? (await getImage({ src: d.cover, width: 1200, format: 'jpg' })).src : undefined;
 ---
 
@@ -52,8 +54,16 @@ const og = d.cover ? (await getImage({ src: d.cover, width: 1200, format: 'jpg' 
     {
       d.cover && (
         <figure class="cover-fig">
-          <div class="cover-box">
-            <Image src={d.cover} alt={d.title} widths={[640, 1080, 1600, 2200]} sizes="(max-width: 1440px) 100vw, 1300px" class="cover" />
+          <div class:list={['cover-box', { whole: fitWhole }]}>
+            {fitWhole && <Image src={d.cover} alt="" width={48} class="backdrop" />}
+            <Image
+              src={d.cover}
+              alt={d.title}
+              widths={[640, 1080, 1600, 2200].filter((w) => w <= d.cover.width).concat(d.cover.width < 640 ? [d.cover.width] : [])}
+              sizes="(max-width: 1440px) 100vw, 1300px"
+              class="cover"
+              style={fitWhole ? `max-width:${d.cover.width}px;max-height:${d.cover.height}px` : undefined}
+            />
           </div>
           {d.coverNote && <figcaption>{d.coverNote}</figcaption>}
         </figure>
@@ -165,6 +175,26 @@ const og = d.cover ? (await getImage({ src: d.cover, width: 1200, format: 'jpg' 
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background: var(--surface);
+  }
+  .cover-box {
+    position: relative;
+  }
+  .cover-box.whole :global(.cover) {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .cover-box :global(.backdrop) {
+    position: absolute;
+    inset: -40px;
+    width: calc(100% + 80px);
+    height: calc(100% + 80px);
+    max-width: none;
+    object-fit: cover;
+    filter: blur(30px) brightness(0.55);
   }
   .cover-fig figcaption {
     margin-top: 10px;

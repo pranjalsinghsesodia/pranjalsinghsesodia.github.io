@@ -282,6 +282,17 @@ a.sr-only:focus {
   margin: 0;
   border-radius: 4px;
 }
+.prose figure video {
+  max-height: 70vh;
+  object-fit: contain;
+  background: var(--film);
+}
+.prose figure p {
+  margin: 0;
+}
+.prose .fig-row {
+  align-items: start;
+}
 .prose figcaption {
   margin-top: 8px;
   font-family: var(--mono);
