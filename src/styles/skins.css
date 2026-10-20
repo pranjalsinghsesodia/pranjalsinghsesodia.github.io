@@ -102,6 +102,17 @@
   color: inherit !important;
 }
 
+/* skill tags = small raised keys */
+[data-skin='bevel'] .tag {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--bv-face) !important;
+  box-shadow: var(--raised);
+  font-family: var(--btn-font);
+  font-size: 13px !important;
+  padding: 4px 9px !important;
+}
+
 /* status tags */
 [data-skin='bevel'] .pill {
   border-radius: 0 !important;

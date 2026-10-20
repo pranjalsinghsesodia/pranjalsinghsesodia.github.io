@@ -11,6 +11,13 @@ import me from '../assets/site/me.jpeg';
 const journal = (await getCollection('journal', isVisible)).sort((a, b) => +b.data.date - +a.data.date).slice(0, 6);
 const og = (await getImage({ src: me, width: 1200, format: 'jpg' })).src;
 const insta = SITE.links.find((l) => l.label === 'Instagram')?.href;
+const SKILLS = [
+  { group: 'CAD & simulation', items: ['SolidWorks', 'Motion studies', 'ANSYS Mechanical', 'FEA', 'Multi-body dynamics', 'ANSYS Fluent', 'CFD'] },
+  { group: 'Robotics', items: ['ROS 2', 'MuJoCo', 'MATLAB', 'Kinematics'] },
+  { group: 'Vision', items: ['OpenCV', 'AlphaPose', 'OpenPose', 'Depth Anything', 'Stereo calibration'] },
+  { group: 'Code & electronics', items: ['Python', 'C', 'ESP32', 'Arduino'] },
+  { group: 'Fabrication', items: ['FDM printing', 'SLA printing', 'Rapid prototyping'] },
+];
 ---
 
 <Base image={og}>
@@ -77,7 +84,17 @@ const insta = SITE.links.find((l) => l.label === 'Instagram')?.href;
           <div><dt>Gripper dynamics</dt><dd>Contact, compliance and slip in grasping.</dd></div>
         </dl>
         <p class="now"><span>Now</span> An independent literature review on the thermal behaviour of robotic actuators and grippers.</p>
-        <p class="tools"><span>Tools</span> SolidWorks (parts, assemblies, motion) · ANSYS Mechanical (static structural, MBD) · ANSYS Fluent · Python (OpenCV) · OpenPose, AlphaPose · ROS 2 · MuJoCo · MATLAB · C · ESP32, Arduino · FDM/SLA printing</p>
+        <div class="skills">
+          <p class="int-h">Skills</p>
+          <dl>
+            {SKILLS.map((g) => (
+              <div>
+                <dt>{g.group}</dt>
+                <dd><ul class="tags">{g.items.map((t) => <li class="tag">{t}</li>)}</ul></dd>
+              </div>
+            ))}
+          </dl>
+        </div>
         <dl class="facts">
           <div><dt>Education</dt><dd>B.Tech Mechanical, NSUT Delhi, 2028<br />CGPA 8.07 / 10, rank 19 of 198</dd></div>
           <div><dt>Research</dt><dd>mPragati, IIT Delhi · Prof. Dinesh Kalyanasundaram<br />QuEST Lab, IIT Delhi · Prof. Jay Dhariwal</dd></div>
@@ -257,6 +274,40 @@ const insta = SITE.links.find((l) => l.label === 'Instagram')?.href;
     color: var(--mute);
   }
   .now,
+  .skills {
+    margin-top: 6px;
+  }
+  .skills dl {
+    margin: 12px 0 0;
+    display: grid;
+    gap: 10px;
+  }
+  .skills dl > div {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 12px;
+    align-items: baseline;
+  }
+  .skills dt {
+    font-size: 13px;
+    color: var(--mute);
+  }
+  .skills dd {
+    margin: 0;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    padding: 3px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--surface);
+  }
   .tools {
     margin-top: 22px;
     font-size: 14px;
@@ -335,6 +386,10 @@ const insta = SITE.links.find((l) => l.label === 'Instagram')?.href;
     .facts,
     .interests {
       grid-template-columns: 1fr;
+    }
+    .skills dl > div {
+      grid-template-columns: 1fr;
+      gap: 6px;
     }
   }
 </style>
