@@ -21,7 +21,7 @@ content:
     path: src/content/stories
     filename: '{year}-{month}-{day}-{primary}.md'
     view:
-      fields: [image, caption, highlight, date]
+      fields: [image, caption, highlight]
       primary: caption
       sort: [date]
       default:
@@ -39,21 +39,26 @@ content:
         type: string
         required: true
       - name: highlight
-        label: Highlight
+        label: Set (Lab, Baja, ...)
         type: select
         required: true
         options:
-          values: [Lab, Desk, Streets, Monsoon, Night, Travel]
+          values: [Lab, Baja, Side builds]
           creatable: true
       - name: date
-        label: Date posted
+        label: Date (optional)
         type: date
-        required: true
+      - name: order
+        label: Order (optional, lower comes first)
+        type: number
       - name: location
         label: Location
         type: string
+      - name: video
+        label: Clip file name in src/assets/stories (optional, e.g. 2026-10-clip.mp4)
+        type: string
       - name: pick
-        label: Pick of the month (circled on the contact sheet)
+        label: My pick (circled on the contact sheet)
         type: boolean
         default: false
 

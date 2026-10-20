@@ -16,21 +16,30 @@ export async function getProjects() {
   return all.sort((a, b) => a.data.order - b.data.order);
 }
 
-/** Stories grouped into rolls by month, newest month last (frame numbers run through the whole roll). */
-export async function getRolls() {
-  const all = (await getCollection('stories')).sort((a, b) => +a.data.date - +b.data.date);
-  const months = new Map<string, CollectionEntry<'stories'>[]>();
-  for (const s of all) {
-    const key = s.data.date.toISOString().slice(0, 7);
-    if (!months.has(key)) months.set(key, []);
-    months.get(key)!.push(s);
+/**
+ * Stories in display order: lower `order` first, then newest first, undated last.
+ * The contact sheet and the story viewer both use this order, so tapping a frame
+ * opens its set at that frame.
+ */
+export async function getStoriesSorted() {
+  const t = (s: CollectionEntry<'stories'>) => (s.data.date ? +s.data.date : 0);
+  return (await getCollection('stories')).sort(
+    (a, b) => (a.data.order ?? 1000) - (b.data.order ?? 1000) || t(b) - t(a) || a.id.localeCompare(b.id),
+  );
+}
+
+/** Stories grouped into sets (Lab, Baja, ...). Frame numbers run through the whole sheet. */
+export async function getSets() {
+  const sets = new Map<string, CollectionEntry<'stories'>[]>();
+  for (const s of await getStoriesSorted()) {
+    if (!sets.has(s.data.highlight)) sets.set(s.data.highlight, []);
+    sets.get(s.data.highlight)!.push(s);
   }
   let frame = 0;
-  return [...months.entries()].map(([key, items]) => ({
-    key,
-    name: new Date(key + '-01T00:00:00Z').toLocaleDateString('en-GB', { month: 'long', timeZone: 'UTC' }),
-    label: new Date(key + '-01T00:00:00Z').toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }),
-    frames: items.map((entry) => ({ entry, no: ++frame })),
+  return [...sets.entries()].map(([name, items]) => ({
+    name,
+    key: highlightKey(name),
+    frames: items.map((entry, start) => ({ entry, no: ++frame, start })),
   }));
 }
 
@@ -59,13 +68,12 @@ export async function getReels(): Promise<Record<string, StoryReel>> {
     };
   }
 
-  const stories = (await getCollection('stories')).sort((a, b) => +a.data.date - +b.data.date);
-  for (const s of stories) {
+  for (const s of await getStoriesSorted()) {
     const key = highlightKey(s.data.highlight);
     reels[key] ??= { title: s.data.highlight, meta: '', slides: [] };
     const img = await getImage({ src: s.data.image, width: STORY_WIDTH, format: 'webp' });
-    const when = s.data.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
-    const common = { alt: s.data.caption ?? s.data.highlight, caption: s.data.caption, sub: [s.data.location, s.data.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })].filter(Boolean).join(' · ') };
+    const when = s.data.date?.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+    const common = { alt: s.data.caption ?? s.data.highlight, caption: s.data.caption, sub: [s.data.location, when].filter(Boolean).join(' · ') };
     if (s.data.video) {
       reels[key].slides.push({ type: 'video', src: url(`media/stories/${s.data.video}`), poster: img.src, ...common });
       continue;

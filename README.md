@@ -2,6 +2,8 @@
 
 Static site built with [Astro](https://astro.build), hosted on GitHub Pages. Dark by default, with a light/dark toggle in the sticky navbar.
 
+Three design styles, switched by the style button in the navbar: **Studio** (default), **Retro** (a 1995 desktop) and **Notebook** (an engineering pad). Each has light and dark. Studio lives in `src/styles/global.css`; Retro and Notebook are in `src/styles/skins.css`.
+
 ```
 npm install
 npm run dev        # http://localhost:4321 (journal drafts are visible here)
@@ -25,7 +27,7 @@ src/assets/
 | --- | --- | --- | --- |
 | Projects (index rows, story rings, case studies) | `src/content/projects/<slug>.md` | `src/assets/projects/<slug>/` | Best: in the project's own repo (below). Or add both here. |
 | Journal entries | `src/content/journal/*.md` | `src/assets/journal/` if needed | Add a Markdown file, or use Pages CMS. `draft: true` keeps it off the live site. |
-| Photo stories (contact sheet) | `src/content/stories/*.md` | `src/assets/stories/` | From your phone with Pages CMS. |
+| Contact sheet frames | `src/content/stories/*.md` (`highlight` = the set: Lab, Baja, ...) | `src/assets/stories/` | Pages CMS → Stories. Clips: add the `.mp4` and name it in `video`. |
 | Films | `src/content/films/*.md` | `src/assets/films/` (poster frame only) | Pages CMS → Films. The video itself stays on YouTube, Vimeo or Instagram; the card links there. |
 | CV and favicon | | `src/assets/site/` | Replace the file. It's served at a fixed address, `/cv.pdf`, so links in emails never break. |
 | Name, email, social links | `src/lib/site.ts` | | Empty links are hidden. |

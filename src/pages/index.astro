@@ -15,7 +15,7 @@ const insta = SITE.links.find((l) => l.label === 'Instagram')?.href;
 
 <Base image={og}>
   <div class="w">
-    <section class="intro">
+    <section class="intro" data-win="Welcome">
       <p class="eyebrow">{SITE.currently} · B.Tech Mechanical, NSUT Delhi '28</p>
       <h1>I build and test robotic systems.</h1>
       <p class="sub">Building a 6-DOF surgical assistance arm at mPragati, after multi-camera depth estimation at QuEST Lab. Recently drawn to simulation for robotics, thermal analysis and gripper dynamics.</p>
@@ -24,7 +24,7 @@ const insta = SITE.links.find((l) => l.label === 'Instagram')?.href;
     <ProjectRings />
     <ProjectIndex />
 
-    <section class="pubs" id="publications" aria-labelledby="pubs-h">
+    <section class="pubs" id="publications" data-win="Publication" aria-labelledby="pubs-h">
       <div class="lbl"><span id="pubs-h">Publication</span><span>First author</span></div>
       <p class="cite">
         <b>Sesodia, P. S.</b>, &amp; Dabass, V. (2026). <a href="https://doi.org/10.1016/j.nexres.2026.102384" target="_blank" rel="noopener">Robust real-time levitation gap estimation for hyperloop pods</a>. <i>Next Research</i>, Elsevier.
@@ -33,7 +33,7 @@ const insta = SITE.links.find((l) => l.label === 'Instagram')?.href;
     </section>
 
     {journal.length > 0 && (
-    <section class="jsec" id="journal" aria-labelledby="journal-h">
+    <section class="jsec" id="journal" data-win="Journal" aria-labelledby="journal-h">
       <div class="lbl"><span id="journal-h">Journal</span><span><a href={url('journal/')}>All entries</a> · <a href={url('rss.xml')}>RSS</a></span></div>
       {
         journal.length ? (
@@ -55,9 +55,9 @@ const insta = SITE.links.find((l) => l.label === 'Instagram')?.href;
     </section>
     )}
 
-    <Photography mode="latest" />
+    <Photography mode="home" />
 
-    <section class="about" id="about" aria-labelledby="about-h">
+    <section class="about" id="about" data-win="About" aria-labelledby="about-h">
       <div class="me"><Image src={me} alt="Pranjal Singh Sesodia outside B Block at night" width={520} class="cover" /></div>
       <div>
         <h2 id="about-h" class="sr-only">About</h2>

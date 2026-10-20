@@ -24,7 +24,7 @@ const og = d.cover ? (await getImage({ src: d.cover, width: 1200, format: 'jpg' 
 ---
 
 <Base title={d.title} description={d.summary} image={og}>
-  <article class="w cs">
+  <article class="w cs" data-win={d.short}>
     <nav class="crumb"><a href={url('#work')}>← All work</a></nav>
 
     <header class="head">

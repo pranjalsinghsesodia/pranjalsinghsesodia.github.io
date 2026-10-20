@@ -5,9 +5,9 @@ import Films from './Films.astro';
 import { SITE } from '../lib/site';
 
 interface Props {
-  mode?: 'latest' | 'all';
+  mode?: 'home' | 'all';
 }
-const { mode = 'latest' } = Astro.props;
+const { mode = 'home' } = Astro.props;
 const hasStories = (await getCollection('stories')).length > 0;
 const hasFilms = (await getCollection('films')).length > 0;
 const insta = SITE.links.find((l) => l.label === 'Instagram')?.href;
@@ -15,7 +15,7 @@ const insta = SITE.links.find((l) => l.label === 'Instagram')?.href;
 
 {
   (hasStories || hasFilms) && (
-    <section class="photo" id="photos" aria-label="Photography and film">
+    <section class="photo" id="photos" data-win="Contact sheet" aria-label="Photography and film">
       {hasStories ? (
         <ContactSheet mode={mode} />
       ) : (

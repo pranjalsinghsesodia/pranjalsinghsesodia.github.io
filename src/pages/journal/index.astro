@@ -7,7 +7,7 @@ const entries = (await getCollection('journal', isVisible)).sort((a, b) => +b.da
 ---
 
 <Base title="Journal" description="Build logs and notes from Pranjal Singh Sesodia's engineering work.">
-  <section class="w page">
+  <section class="w page" data-win="Journal">
     <h1>Journal</h1>
     <p class="lede">Build logs, mistakes and what I learned from them. New entries also go out by <a href={url('rss.xml')}>RSS</a>.</p>
     {

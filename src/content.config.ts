@@ -61,13 +61,14 @@ const journal = defineCollection({
   }),
 });
 
-/* Stories: one file per published Instagram story (added from a phone via Pages CMS). */
+/* Stories: frames on the contact sheet, grouped into sets by `highlight` (Lab, Baja, ...). Added from a phone via Pages CMS. */
 const stories = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/stories' }),
   schema: ({ image }) =>
     z.object({
-      date: z.coerce.date(),
-      highlight: z.string(),
+      date: z.coerce.date().optional(),
+      highlight: z.string(), // the set this frame belongs to
+      order: z.number().optional(), // lower comes first within the sheet; otherwise newest first
       image: image(), // the photo, or the poster frame of a clip
       video: z.string().optional(), // optional clip in src/assets/stories/, e.g. 2026-10-clip.mp4
       caption: z.string().optional(),

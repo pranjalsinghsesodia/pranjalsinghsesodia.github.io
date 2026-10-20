@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/skins.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import StoryViewer from '../components/StoryViewer.astro';
@@ -45,6 +46,24 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           if (localStorage.getItem('theme') === 'light') t = 'light';
         } catch (e) {}
         document.documentElement.dataset.theme = t;
+        // design style: studio (default), retro or notebook; its fonts load only when it's in use
+        var k = 'studio';
+        try {
+          k = localStorage.getItem('skin') || 'studio';
+        } catch (e) {}
+        var F = {
+          retro: 'https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap',
+          notebook: 'https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Courier+Prime:wght@400;700&family=Literata:ital,opsz,wght@0,7..72,400..600;1,7..72,400&display=swap',
+        };
+        window.__skinFonts = F;
+        if (F[k]) {
+          document.documentElement.dataset.skin = k;
+          var l = document.createElement('link');
+          l.rel = 'stylesheet';
+          l.href = F[k];
+          l.id = 'skin-font-' + k;
+          document.head.appendChild(l);
+        }
         var m = document.getElementById('theme-color');
         if (m) m.setAttribute('content', t === 'light' ? '#ecedea' : '#0e0f10');
       })();
@@ -78,6 +97,38 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           localStorage.setItem('theme', root.dataset.theme);
         } catch (e) {}
         sync();
+      });
+
+      // design style switcher: one click moves to the next style
+      const SKINS = ['studio', 'retro', 'notebook'];
+      const NAMES: Record<string, string> = { studio: 'Studio', retro: 'Retro', notebook: 'Notebook' };
+      const skinBtn = document.getElementById('skin-toggle');
+      const skinLabel = skinBtn?.querySelector('.skin-label');
+      const syncSkin = () => {
+        const k = root.dataset.skin || 'studio';
+        const next = SKINS[(SKINS.indexOf(k) + 1) % SKINS.length];
+        if (skinLabel) skinLabel.textContent = NAMES[k];
+        skinBtn?.setAttribute('aria-label', `Style: ${NAMES[k]}. Switch to ${NAMES[next]}`);
+        skinBtn?.setAttribute('title', `Switch to ${NAMES[next]} style`);
+      };
+      syncSkin();
+      skinBtn?.addEventListener('click', () => {
+        const k = root.dataset.skin || 'studio';
+        const next = SKINS[(SKINS.indexOf(k) + 1) % SKINS.length];
+        const fonts = (window as unknown as { __skinFonts: Record<string, string> }).__skinFonts || {};
+        if (fonts[next] && !document.getElementById('skin-font-' + next)) {
+          const l = document.createElement('link');
+          l.rel = 'stylesheet';
+          l.href = fonts[next];
+          l.id = 'skin-font-' + next;
+          document.head.appendChild(l);
+        }
+        if (next === 'studio') delete root.dataset.skin;
+        else root.dataset.skin = next;
+        try {
+          localStorage.setItem('skin', next);
+        } catch (e) {}
+        syncSkin();
       });
 
       // phone menu

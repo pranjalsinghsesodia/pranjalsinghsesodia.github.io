@@ -4,7 +4,7 @@ const links = SITE.links.filter((l) => l.href);
 const updated = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' });
 ---
 
-<footer class="foot">
+<footer class="foot" data-win="Contact">
   <div class="w foot-in">
     <span class="emails">{SITE.emails.map((e) => <span class="email">{e}</span>)}</span>
     <span class="elsewhere">
