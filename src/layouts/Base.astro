@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import '../styles/skins.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import StoryViewer from '../components/StoryViewer.astro';
@@ -17,7 +16,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -38,32 +37,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6..96,400&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400..700&display=swap"
     />
-    <!-- Dark by default; a saved choice wins. Runs before paint so the page never flashes. -->
+    <!-- Follows the system theme (light if unknown); a saved choice wins. Runs before paint so the page never flashes. -->
     <script is:inline>
       (function () {
-        var t = 'dark';
+        var t = null;
         try {
-          if (localStorage.getItem('theme') === 'light') t = 'light';
+          t = localStorage.getItem('theme');
         } catch (e) {}
+        if (t !== 'light' && t !== 'dark') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         document.documentElement.dataset.theme = t;
-        // design style: studio (default), bevel or prints; its fonts load only when it's in use
-        var k = 'studio';
-        try {
-          k = localStorage.getItem('skin') || 'studio';
-        } catch (e) {}
-        var F = {
-          bevel: 'https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..600&display=swap',
-          prints: 'https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap',
-        };
-        window.__skinFonts = F;
-        if (F[k]) {
-          document.documentElement.dataset.skin = k;
-          var l = document.createElement('link');
-          l.rel = 'stylesheet';
-          l.href = F[k];
-          l.id = 'skin-font-' + k;
-          document.head.appendChild(l);
-        }
         var m = document.getElementById('theme-color');
         if (m) m.setAttribute('content', t === 'light' ? '#ecedea' : '#0e0f10');
       })();
@@ -98,37 +80,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         } catch (e) {}
         sync();
       });
-
-      // design style switcher: one click moves to the next style
-      const SKINS = ['studio', 'bevel', 'prints'];
-      const NAMES: Record<string, string> = { studio: 'Studio', bevel: 'Bevel', prints: 'Prints' };
-      const skinBtn = document.getElementById('skin-toggle');
-      const skinLabel = skinBtn?.querySelector('.skin-label');
-      const syncSkin = () => {
-        const k = root.dataset.skin || 'studio';
-        const next = SKINS[(SKINS.indexOf(k) + 1) % SKINS.length];
-        if (skinLabel) skinLabel.textContent = NAMES[k];
-        skinBtn?.setAttribute('aria-label', `Style: ${NAMES[k]}. Switch to ${NAMES[next]}`);
-        skinBtn?.setAttribute('title', `Switch to ${NAMES[next]} style`);
-      };
-      syncSkin();
-      skinBtn?.addEventListener('click', () => {
-        const k = root.dataset.skin || 'studio';
-        const next = SKINS[(SKINS.indexOf(k) + 1) % SKINS.length];
-        const fonts = (window as unknown as { __skinFonts: Record<string, string> }).__skinFonts || {};
-        if (fonts[next] && !document.getElementById('skin-font-' + next)) {
-          const l = document.createElement('link');
-          l.rel = 'stylesheet';
-          l.href = fonts[next];
-          l.id = 'skin-font-' + next;
-          document.head.appendChild(l);
-        }
-        if (next === 'studio') delete root.dataset.skin;
-        else root.dataset.skin = next;
+      // with no saved choice, keep following the system
+      matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        let saved = null;
         try {
-          localStorage.setItem('skin', next);
-        } catch (e) {}
-        syncSkin();
+          saved = localStorage.getItem('theme');
+        } catch (err) {}
+        if (saved) return;
+        root.dataset.theme = e.matches ? 'dark' : 'light';
+        sync();
       });
 
       // phone menu

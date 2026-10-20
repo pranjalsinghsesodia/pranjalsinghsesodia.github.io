@@ -1,5 +1,5 @@
 /* Index layout: one quiet column of lists and tables; the contact sheet is the only dark "object" on the page.
-   Dark is the default theme. Light is opt-in from the navbar toggle and remembered per visitor. */
+   The theme follows the system setting; the navbar toggle overrides it and is remembered per visitor. */
 :root,
 :root[data-theme='dark'] {
   --bg: #0e0f10;
