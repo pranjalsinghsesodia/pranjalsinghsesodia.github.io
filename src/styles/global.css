@@ -9,6 +9,7 @@
   --line: #25282a;
   --acc: #8c9fff;
   --accbg: #1c2348;
+  --steel: #7890aa; /* mono labels and metadata */
   --film: #060504;
   --edge: #cc9a45;
   --grease: #e9573f;
@@ -25,6 +26,7 @@
   --line: #d2d4d0;
   --acc: #2343d2;
   --accbg: #dce2fb;
+  --steel: #55667c;
   --film: #1b1a18;
   --edge: #b07d2a;
   --grease: #cf342b;
@@ -90,6 +92,10 @@ ol {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+::selection {
+  background: var(--accbg);
+  color: var(--ink);
 }
 :focus-visible {
   outline: 2px solid var(--acc);
@@ -251,7 +257,7 @@ a.sr-only:focus {
 .prose a {
   text-decoration: underline;
   text-underline-offset: 3px;
-  text-decoration-color: var(--line);
+  text-decoration-color: color-mix(in srgb, var(--acc) 45%, transparent);
 }
 .prose a:hover {
   text-decoration-color: var(--acc);

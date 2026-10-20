@@ -28,7 +28,6 @@ const rows = await Promise.all(
   </div>
   <div class="layout">
   <nav class="cats" aria-label="Filter projects by field">
-    <button type="button" aria-pressed="true" data-f="all"><span>All work</span><sup>{projects.length}</sup></button>
     {groups.map((g) => <button type="button" aria-pressed="false" data-f={g.key}><span>{g.label}</span><sup>{g.n}</sup></button>)}
   </nav>
 
@@ -122,7 +121,7 @@ const rows = await Promise.all(
     color: var(--ink);
   }
   .cats button[aria-pressed='true'] {
-    color: var(--ink);
+    color: var(--acc);
     border-left-color: var(--acc);
     padding-left: 20px;
   }
@@ -153,7 +152,7 @@ const rows = await Promise.all(
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--mute);
+    color: var(--steel);
     text-align: left;
     padding: 0 16px 10px 0;
     border-bottom: 1px solid var(--ink);
@@ -188,10 +187,13 @@ const rows = await Promise.all(
   tbody tr:hover {
     background: var(--surface);
   }
+  tbody tr:hover .pj a {
+    color: var(--acc);
+  }
   .yr {
     font-family: var(--mono);
     font-size: 13px;
-    color: var(--mute);
+    color: var(--steel);
     white-space: nowrap;
     width: 84px;
     font-variant-numeric: tabular-nums;
@@ -323,13 +325,13 @@ const rows = await Promise.all(
     const canHover = matchMedia('(hover: hover)').matches;
     const esc = (s = '') => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
-    // hover, focus or click a field: it becomes active and stays active after the pointer leaves
-    let active = 'all';
+    // every project shows until a field is picked; hover, focus or click a field and it stays active after the pointer leaves
+    let active = '';
     const pick = (ch: HTMLButtonElement) => {
       if (ch.dataset.f === active) return;
       active = ch.dataset.f!;
       chips.forEach((c) => c.setAttribute('aria-pressed', String(c === ch)));
-      rows.forEach((r) => (r.hidden = !(active === 'all' || r.dataset.d === active)));
+      rows.forEach((r) => (r.hidden = r.dataset.d !== active));
     };
     chips.forEach((ch) => ['mouseenter', 'focus', 'click'].forEach((ev) => ch.addEventListener(ev, () => pick(ch))));
 

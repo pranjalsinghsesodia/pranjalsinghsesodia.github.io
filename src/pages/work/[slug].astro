@@ -189,7 +189,7 @@ for (const f of d.figures) {
     line-height: 1.6;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--mute);
+    color: var(--steel);
     transition: color 70ms linear;
   }
   .tb-v {
@@ -205,6 +205,7 @@ for (const f of d.figures) {
     border-top: 0;
   }
   .tb-code {
+    color: var(--acc);
     white-space: nowrap;
     font-family: var(--mono);
     font-size: 13px;
@@ -225,6 +226,7 @@ for (const f of d.figures) {
     max-width: 62ch;
   }
   .tb-num {
+    color: var(--acc);
     white-space: nowrap;
     font-size: 26px;
     font-weight: 500;
@@ -254,6 +256,7 @@ for (const f of d.figures) {
   }
   .tb-status.live {
     color: var(--acc);
+    background: var(--accbg);
   }
   .tb-status.live::before {
     content: '';
@@ -266,9 +269,9 @@ for (const f of d.figures) {
     background: var(--ink);
     color: var(--bg);
   }
-  .tb-row:hover .tb-k,
-  .tb-row:hover .tb-status {
+  .tb-row:hover :is(.tb-k, .tb-status, .tb-code, .tb-num) {
     color: var(--bg);
+    background: none;
   }
   .actions {
     display: flex;
