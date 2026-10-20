@@ -17,6 +17,13 @@ state: live
 summary: A 6-DOF arm for surgical assistance and endoscope stabilisation, built on open-loop servos. I'm closing the position loop with vision.
 cover: ../../assets/projects/surgical-arm/arm-camera.jpg
 coverNote: The prototype on the bench at mPragati, with a webcam mounted at the end of the arm.
+figures:
+  - value: "6"
+    unit: "DOF"
+    label: Degrees of freedom
+  - value: "1.233"
+    unit: "kg"
+    label: Arm weight
 story:
   - image: ../../assets/projects/surgical-arm/arm-camera.jpg
     caption: The prototype, with a webcam at the end of the arm

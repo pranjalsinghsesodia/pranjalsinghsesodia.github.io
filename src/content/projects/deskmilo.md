@@ -13,6 +13,10 @@ state: done
 summary: An AI desk assistant with a head that turns to look at you. It journals, reminds, plays music and sends voice messages.
 cover: ../../assets/projects/deskmilo/cover.png
 # repo: pranjalsinghsesodia/DeskMilo   (uncomment once DeskMilo is transferred into the pranjalsinghsesodia org)
+figures:
+  - value: "2"
+    unit: "DOF"
+    label: Head
 story:
   - image: ../../assets/projects/deskmilo/sketch.jpeg
     caption: Three possible designs

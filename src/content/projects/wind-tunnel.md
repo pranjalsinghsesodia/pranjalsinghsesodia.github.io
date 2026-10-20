@@ -15,6 +15,11 @@ state: live
 summary: A tabletop subsonic wind tunnel with a 6:1 contraction, funded by an NSUT CPVSK grant. Design is complete; optimisation and manufacturing are under way.
 cover: ../../assets/projects/wind-tunnel/tunnel-cad-assembly.png
 coverNote: "CAD assembly: settling chamber, 6:1 contraction, clear test section and diffuser."
+figures:
+  - value: "6:1"
+    label: Contraction ratio
+  - value: "₹10,000"
+    label: CPVSK grant
 story:
   - image: ../../assets/projects/wind-tunnel/tunnel-cad-assembly.png
     caption: The tunnel assembly in CAD

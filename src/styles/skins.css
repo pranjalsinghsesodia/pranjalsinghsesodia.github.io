@@ -182,7 +182,7 @@
   --paper: #efede6;
   --tape: rgba(255, 244, 190, 0.5);
   --print-ink: #2a2a28;
-  --hand: 'Architects Daughter', 'Comic Sans MS', cursive;
+  --hand: 'Caveat', 'Segoe Print', 'Bradley Hand', cursive;
 }
 :root[data-skin='prints'][data-theme='light'] {
   --paper: #ffffff;
@@ -229,8 +229,9 @@
 [data-skin='prints'] .cover-fig figcaption {
   margin-top: 10px;
   font-family: var(--hand);
-  font-size: 15px;
-  line-height: 1.35;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.2;
   text-align: center;
   color: var(--print-ink);
 }
@@ -307,7 +308,8 @@
 /* a few handwritten notes in red pencil */
 [data-skin='prints'] :is(.rings-wrap .note, .ihead p) {
   font-family: var(--hand) !important;
-  font-size: 15px !important;
+  font-size: 19px !important;
+  font-weight: 500;
   color: var(--grease) !important;
 }
 [data-skin='prints'] .rings-wrap .note i {

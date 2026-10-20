@@ -15,6 +15,12 @@ state: done
 ring: "2022"
 summary: A four-legged walking robot built in 14 days at the Change Makers bootcamp, IIT Delhi.
 peek: Change Makers, IIT Delhi · four-bar leg linkage, servo gait
+figures:
+  - value: "14"
+    unit: "days"
+    label: Build time
+  - value: "25"
+    label: School students selected
 story:
   - kicker: Change Makers · IIT Delhi · 2022
     title: A walking quadruped in 14 days

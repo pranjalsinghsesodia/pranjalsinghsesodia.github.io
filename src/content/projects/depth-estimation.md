@@ -17,6 +17,16 @@ state: done
 summary: Tracking how surgeons move with ordinary webcams. Pose estimation for joint angles, a calibrated stereo pair 7 cm apart for depth, up to 95–96% accurate.
 cover: ../../assets/projects/depth-estimation/depth-live-hand.png
 coverNote: Live webcam feed (left) and its depth map (right).
+figures:
+  - value: "7"
+    unit: "cm"
+    label: Camera baseline
+  - value: "95–96"
+    unit: "%"
+    label: Depth accuracy, up to
+  - value: "11"
+    unit: "fps"
+    label: Depth maps, about
 story:
   - kicker: Question
     title: How do surgeons move?

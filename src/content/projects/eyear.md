@@ -14,6 +14,11 @@ state: win
 ring: Eyear
 summary: A real-time device that turns speech into sign-language output, built in school on an ESP32. Provisional patent filed in 2022.
 peek: Provisional patent application (India, 2022) · Top 350 nationally, ATL Marathon 2021–22
+figures:
+  - value: "350"
+    label: ATL Marathon, top nationally
+  - value: "137"
+    label: Army Public Schools, first to file
 story:
   - kicker: Assistive tech · 2021–22
     title: Speech to sign language

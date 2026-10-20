@@ -15,6 +15,13 @@ state: win
 ring: Baja
 summary: Developed the team's catalytic converter with lower-cost materials, a key factor in winning the mBAJA 2026 Sustainability Event.
 peek: 1st of 54 teams, mBAJA 2026 Sustainability Event · ₹30,000
+figures:
+  - value: "1st"
+    label: Place nationally
+  - value: "54"
+    label: Teams
+  - value: "₹30,000"
+    label: Award
 story:
   - kicker: Team Daedalus Racing
     title: A cheaper catalytic converter

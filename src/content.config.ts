@@ -35,6 +35,8 @@ const projects = defineCollection({
       peek: z.string().optional(), // hover text when there is no cover
       repo: z.string().optional(), // "pranjalsinghsesodia/repo-name"
       links: z.array(z.object({ label: z.string(), href: z.string() })).default([]),
+      // key numbers for the title block; each value must appear word for word in the project's own text (checked at build)
+      figures: z.array(z.object({ value: z.string(), unit: z.string().optional(), label: z.string() })).default([]),
       story: z
         .array(
           z.object({

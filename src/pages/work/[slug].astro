@@ -21,6 +21,20 @@ const repoUrl = d.repo ? `https://github.com/${d.repo}` : '';
 // portrait or very wide covers are shown whole on a blurred backdrop instead of being cropped to 16:9
 const fitWhole = !!d.cover && Math.abs(d.cover.width / d.cover.height - 16 / 9) > 0.4;
 const og = d.cover ? (await getImage({ src: d.cover, width: 1200, format: 'jpg' })).src : undefined;
+
+// title block: item code from the project's order, e.g. PSS-001
+const itemCode = `PSS-${String(d.order).padStart(3, '0')}`;
+// figures may only use numbers that already appear in this project's own text
+const sourceText = [
+  project.body ?? '',
+  d.title, d.summary, d.period, d.role, d.where, d.tools, d.status, d.peek, d.coverNote,
+  ...d.story.flatMap((s) => [s.caption, s.sub, s.kicker, s.title, s.text]),
+].filter(Boolean).join(' ');
+for (const f of d.figures) {
+  if (!sourceText.includes(f.value)) {
+    throw new Error(`Figure "${f.value}" in projects/${project.id}.md doesn't appear in that project's text. Figures must reuse numbers from the text.`);
+  }
+}
 ---
 
 <Base title={d.title} description={d.summary} image={og}>
@@ -28,22 +42,54 @@ const og = d.cover ? (await getImage({ src: d.cover, width: 1200, format: 'jpg' 
     <nav class="crumb"><a href={url('#work')}>← All work</a></nav>
 
     <header class="head">
-      <h1>{d.title}</h1>
-      <p class="sum">{d.summary}</p>
-      <dl class="spec">
-        {d.where && <div><dt>Where</dt><dd>{d.where}</dd></div>}
-        <div><dt>When</dt><dd>{d.period ?? d.year}</dd></div>
-        {d.role && <div class="wide"><dt>My role</dt><dd>{d.role}</dd></div>}
-        {d.supervisor && <div><dt>Supervisor</dt><dd>{d.supervisor}</dd></div>}
-        {d.mentors.length > 0 && <div><dt>{d.mentors.length > 1 ? 'Mentors' : 'Mentor'}</dt><dd>{d.mentors.join(', ')}</dd></div>}
-        {d.team && <div><dt>Team</dt><dd>{d.team}</dd></div>}
-        <div><dt>Discipline</dt><dd>{d.field}</dd></div>
-        <div><dt>Tools</dt><dd>{d.tools}</dd></div>
-        <div>
-          <dt>Status</dt>
-          <dd><span class:list={['pill', { live: d.state === 'live', win: d.state === 'win' }]}>{d.status}</span></dd>
+      <div class="tblock">
+        <div class="tb-row tb-strip">
+          <div class="tb-cell"><span class="tb-k">Item</span><span class="tb-v tb-code">{itemCode}</span></div>
+          <div class="tb-cell"><span class="tb-k">Year</span><span class="tb-v tb-code">{d.year}</span></div>
         </div>
-      </dl>
+        <div class="tb-row">
+          <div class="tb-cell"><span class="tb-k">Title</span><h1 class="tb-v">{d.title}</h1></div>
+        </div>
+        <div class="tb-row">
+          <div class="tb-cell"><span class="tb-k">Summary</span><p class="tb-v tb-sum">{d.summary}</p></div>
+        </div>
+        <div class="tb-row">
+          {d.where && <div class="tb-cell"><span class="tb-k">Where</span><span class="tb-v">{d.where}</span></div>}
+          <div class="tb-cell"><span class="tb-k">When</span><span class="tb-v">{d.period ?? d.year}</span></div>
+        </div>
+        {d.role && (
+          <div class="tb-row">
+            <div class="tb-cell"><span class="tb-k">Role</span><span class="tb-v">{d.role}</span></div>
+          </div>
+        )}
+        {(d.supervisor || d.mentors.length > 0 || d.team) && (
+          <div class="tb-row">
+            {d.supervisor && <div class="tb-cell"><span class="tb-k">Supervisor</span><span class="tb-v">{d.supervisor}</span></div>}
+            {d.mentors.length > 0 && (
+              <div class="tb-cell"><span class="tb-k">{d.mentors.length > 1 ? 'Mentors' : 'Mentor'}</span><span class="tb-v">{d.mentors.join(', ')}</span></div>
+            )}
+            {d.team && <div class="tb-cell"><span class="tb-k">Team</span><span class="tb-v">{d.team}</span></div>}
+          </div>
+        )}
+        <div class="tb-row">
+          <div class="tb-cell"><span class="tb-k">Field</span><span class="tb-v">{d.field}</span></div>
+          <div class="tb-cell tb-wide"><span class="tb-k">Tools</span><span class="tb-v">{d.tools}</span></div>
+          <div class="tb-cell">
+            <span class="tb-k">Status</span>
+            <span class="tb-v"><span class:list={['tb-status', d.state]}>{d.status}</span></span>
+          </div>
+        </div>
+        {d.figures.length > 0 && (
+          <div class="tb-row tb-figs">
+            {d.figures.map((f) => (
+              <div class="tb-cell">
+                <span class="tb-k">{f.label}</span>
+                <span class="tb-v tb-num">{f.value}{f.unit && <small>{f.unit}</small>}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <div class="actions">
         <button class="play" type="button" data-reel={`p-${project.id}`}>▶ Play the story</button>
         {d.links.map((l) => <a class="out" href={l.href} target="_blank" rel="noopener">{l.label} ↗</a>)}
@@ -107,42 +153,122 @@ const og = d.cover ? (await getImage({ src: d.cover, width: 1200, format: 'jpg' 
     color: var(--ink);
   }
   .head {
-    padding-block: 40px 32px;
+    padding-block: 28px 32px;
   }
-  h1 {
-    font-size: clamp(30px, 4.6vw, 52px);
-    line-height: 1.06;
-    letter-spacing: -0.024em;
+  /* engineering title block: 1px rules between every cell, labels beside values, no fills or shadows */
+  .tblock {
+    border: 1px solid var(--ink);
+  }
+  .tb-row {
+    display: flex;
+    border-top: 1px solid var(--line);
+    transition: background-color 70ms linear, color 70ms linear;
+  }
+  .tb-row:first-child {
+    border-top: 0;
+  }
+  .tb-cell {
+    flex: 1 1 0;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 12px;
+    align-items: baseline;
+    padding: 10px 14px;
+    border-left: 1px solid var(--line);
+  }
+  .tb-cell:first-child {
+    border-left: 0;
+  }
+  .tb-wide {
+    flex-grow: 2;
+  }
+  .tb-k {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    line-height: 1.6;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mute);
+    transition: color 70ms linear;
+  }
+  .tb-v {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+  .tb-strip {
+    border-bottom: 1px solid var(--ink);
+  }
+  .tb-strip + .tb-row {
+    border-top: 0;
+  }
+  .tb-code {
+    white-space: nowrap;
+    font-family: var(--mono);
+    font-size: 13px;
     font-weight: 500;
-    max-width: 22ch;
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+  }
+  h1.tb-v {
+    font-size: clamp(26px, 3.4vw, 44px);
+    line-height: 1.08;
+    letter-spacing: -0.022em;
+    font-weight: 500;
     text-wrap: balance;
   }
-  .sum {
-    margin-top: 16px;
-    font-size: 19px;
-    line-height: 1.45;
-    color: var(--mute);
-    max-width: 40em;
+  .tb-sum {
+    font-size: 17px;
+    line-height: 1.5;
+    max-width: 62ch;
   }
-  .spec {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px 24px;
-    margin: 32px 0 0;
-    padding-top: 16px;
-    border-top: 1px solid var(--line);
+  .tb-num {
+    white-space: nowrap;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
   }
-  .spec dt {
+  .tb-num small {
+    margin-left: 4px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .tb-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px;
+    border: 1px solid currentColor;
+    border-radius: 0;
     font-family: var(--mono);
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--mute);
-    margin-bottom: 4px;
+    white-space: nowrap;
   }
-  .spec dd {
-    margin: 0;
-    font-size: 14px;
+  .tb-status.live {
+    color: var(--acc);
+  }
+  .tb-status.live::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+  }
+  /* hover inverts the whole row */
+  .tb-row:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .tb-row:hover .tb-k,
+  .tb-row:hover .tb-status {
+    color: var(--bg);
   }
   .actions {
     display: flex;
@@ -201,9 +327,6 @@ const og = d.cover ? (await getImage({ src: d.cover, width: 1200, format: 'jpg' 
     font-family: var(--mono);
     font-size: 11px;
     color: var(--mute);
-  }
-  .spec .wide {
-    grid-column: span 2;
   }
   .body-grid {
     display: grid;
@@ -282,8 +405,35 @@ const og = d.cover ? (await getImage({ src: d.cover, width: 1200, format: 'jpg' 
     align-items: flex-end;
   }
   @media (max-width: 760px) {
-    .spec {
-      grid-template-columns: 1fr 1fr;
+    .tb-row:not(.tb-strip):not(.tb-figs) {
+      flex-direction: column;
+    }
+    .tb-row:not(.tb-strip):not(.tb-figs) > .tb-cell + .tb-cell {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+    .tb-figs {
+      flex-wrap: wrap;
+    }
+    .tb-figs > .tb-cell {
+      flex: 1 1 100%;
+      border-left: 0;
+      border-top: 1px solid var(--line);
+      margin-top: -1px;
+    }
+    .tb-cell {
+      grid-template-columns: 78px minmax(0, 1fr);
+      gap: 10px;
+      padding: 9px 12px;
+    }
+    .tb-strip .tb-cell {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+    .tb-sum {
+      font-size: 15px;
+    }
+    .tb-num {
+      font-size: 22px;
     }
   }
 </style>
