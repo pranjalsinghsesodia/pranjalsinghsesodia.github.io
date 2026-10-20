@@ -2,7 +2,7 @@
 
 Static site built with [Astro](https://astro.build), hosted on GitHub Pages. Dark by default, with a light/dark toggle in the sticky navbar.
 
-Three design styles, switched by the style button in the navbar: **Studio** (default), **Retro** (a 1995 desktop) and **Notebook** (an engineering pad). Each has light and dark. Studio lives in `src/styles/global.css`; Retro and Notebook are in `src/styles/skins.css`.
+Three design styles, switched by the style button in the navbar: **Studio** (default), **Bevel** (Studio with retro bevelled buttons and framed images) and **Prints** (Studio with photos as taped paper prints). Each has light and dark. Studio lives in `src/styles/global.css`; Bevel and Prints are in `src/styles/skins.css`.
 
 ```
 npm install

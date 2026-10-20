@@ -1,637 +1,304 @@
 /*
  * Design styles, switched by the navbar style button (html[data-skin]).
- * Studio is the default look in global.css; this file only redefines tokens
- * and restyles components for Retro and Notebook. Each style has light and dark.
+ * Both keep Studio's colours, type and layout (global.css) and change only a few things:
+ *   bevel  = Studio + retro: bevelled 3D buttons and framed, square images.
+ *   prints = Studio + notebook: photos as taped paper prints, a looser collage layout.
  * Component styles are scoped by Astro, so overrides here use !important.
  */
 
-/* ================================================================== RETRO
-   A 1995 desktop: teal desktop, grey windows with navy title bars,
-   bevelled 3D buttons, pixel headings, Verdana text, blue links. */
-:root[data-skin='retro'] {
-  --desk: #1c1c3c;
-  --win: #3a3a3a;
-  --field: #1f1f1f;
-  --ink: #f0f0f0;
-  --mute: #b8b8b8;
-  --hi: #6e6e6e;
-  --hi2: #4c4c4c;
-  --lo: #1e1e1e;
-  --dk: #000000;
-  --title-a: #000080;
-  --title-b: #1084d0;
-  --title-ink: #ffffff;
-  --link: #8fb8ff;
-  --sel: #1084d0;
-  --sel-ink: #ffffff;
-  --bg: var(--win);
-  --surface: var(--field);
-  --line: #5a5a5a;
-  --acc: #8fb8ff;
-  --accbg: #000080;
-  --c1: #8fb8ff;
-  --c2: #ffb36b;
-  --film: #000000;
-  --edge: #d6a650;
-  --grease: #ff4d4d;
-  --shadow: #000a;
-  --sans: Verdana, Tahoma, 'Segoe UI', Geneva, sans-serif;
-  --mono: 'Courier New', Courier, monospace;
-  --serif: 'Times New Roman', Times, serif;
-  --disp: 'Pixelify Sans', 'Courier New', monospace;
-  --raised: inset -1px -1px var(--dk), inset 1px 1px var(--hi), inset -2px -2px var(--lo), inset 2px 2px var(--hi2);
-  --sunken: inset -1px -1px var(--hi), inset 1px 1px var(--lo), inset -2px -2px var(--hi2), inset 2px 2px var(--dk);
-  --window: inset -1px -1px var(--dk), inset 1px 1px var(--hi2), inset -2px -2px var(--lo), inset 2px 2px var(--hi);
-  color-scheme: dark;
+/* ================================================================== BEVEL */
+:root[data-skin='bevel'] {
+  --bv-face: #202326;
+  --bv-hi: #474b50;
+  --bv-hi2: #2e3236;
+  --bv-lo: #08090a;
+  --bv-dk: #000000;
+  --btn-font: 'Pixelify Sans', var(--mono);
+  --raised: inset -1px -1px var(--bv-dk), inset 1px 1px var(--bv-hi), inset -2px -2px var(--bv-lo), inset 2px 2px var(--bv-hi2);
+  --sunken: inset -1px -1px var(--bv-hi), inset 1px 1px var(--bv-lo), inset -2px -2px var(--bv-hi2), inset 2px 2px var(--bv-dk);
+  /* the same sunken edge drawn outside a box, for frames around images that fill their box */
+  --sunken-out: -1px -1px 0 var(--bv-lo), 1px 1px 0 var(--bv-hi), -2px -2px 0 var(--bv-dk), 2px 2px 0 var(--bv-hi2);
+  --raised-out: -1px -1px 0 var(--bv-hi2), 1px 1px 0 var(--bv-lo), -2px -2px 0 var(--bv-hi), 2px 2px 0 var(--bv-dk);
 }
-:root[data-skin='retro'][data-theme='light'] {
-  --desk: #008080;
-  --win: #c0c0c0;
-  --field: #ffffff;
-  --ink: #000000;
-  --mute: #404040;
-  --hi: #ffffff;
-  --hi2: #dfdfdf;
-  --lo: #808080;
-  --dk: #0a0a0a;
-  --link: #0000ee;
-  --sel: #000080;
-  --line: #808080;
-  --acc: #000080;
-  --c1: #000080;
-  --c2: #800000;
-  --edge: #b07d2a;
-  --grease: #d00000;
-  --shadow: #0006;
-  color-scheme: light;
+:root[data-skin='bevel'][data-theme='light'] {
+  --bv-face: #e2e3df;
+  --bv-hi: #ffffff;
+  --bv-hi2: #f3f3f0;
+  --bv-lo: #9d9f9a;
+  --bv-dk: #3b3d3a;
 }
 
-[data-skin='retro'] body {
-  background: var(--desk) !important;
-  font-size: 14px;
+[data-skin='bevel'] ::selection {
+  background: var(--acc);
+  color: var(--bg);
 }
-[data-skin='retro'] :is(h1, h2, h3) {
-  font-family: var(--disp) !important;
-  letter-spacing: 0 !important;
-  font-style: normal !important;
-}
-[data-skin='retro'] ::selection {
-  background: var(--sel);
-  color: var(--sel-ink);
-}
-[data-skin='retro'] :focus-visible {
+[data-skin='bevel'] :focus-visible {
   outline: 1px dotted var(--ink) !important;
-  outline-offset: -4px !important;
-  border-radius: 0 !important;
-}
-[data-skin='retro'] img {
+  outline-offset: -5px !important;
   border-radius: 0 !important;
 }
 
-/* every main section is a window */
-[data-skin='retro'] [data-win]:not(.foot) {
-  position: relative;
-  background: var(--win) !important;
-  box-shadow: var(--window) !important;
-  border: 0 !important;
-  padding: 42px 22px 22px !important;
-  margin: 22px auto !important;
-}
-[data-skin='retro'] [data-win]:not(.foot)::before {
-  content: attr(data-win);
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  right: 3px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  padding: 0 34px 0 8px;
-  background: linear-gradient(90deg, var(--title-a), var(--title-b));
-  color: var(--title-ink);
-  font: 700 13px/1 var(--disp);
-  white-space: nowrap;
-  overflow: hidden;
-}
-[data-skin='retro'] [data-win]:not(.foot)::after {
-  content: '\2715';
-  position: absolute;
-  top: 6px;
-  right: 7px;
-  width: 20px;
-  height: 18px;
-  display: grid;
-  place-items: center;
-  background: var(--win);
-  box-shadow: var(--raised);
-  color: var(--ink);
-  font: 700 11px/1 var(--sans);
-}
-[data-skin='retro'] :is(.cs, .films) {
-  padding-block: 0 !important;
-}
-[data-skin='retro'] .rings {
-  margin-inline: 0 !important;
-  padding-inline: 0 !important;
-}
-[data-skin='retro'] .intro h1::after {
-  content: '_';
-  animation: retro-blink 1s steps(1) infinite;
-}
-@keyframes retro-blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-/* navbar as a taskbar, brand as the Start button, clock as the tray */
-[data-skin='retro'] .nav {
-  background: var(--win) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-bottom: 0 !important;
-  box-shadow: inset 0 1px var(--hi), inset 0 -1px var(--dk), inset 0 -2px var(--lo) !important;
-}
-[data-skin='retro'] .brand {
-  justify-self: start;
-  padding: 4px 12px 4px 10px;
-  background: var(--win);
-  box-shadow: var(--raised);
-}
-[data-skin='retro'] .brand b {
-  font-family: var(--disp);
-}
-[data-skin='retro'] .brand span {
-  color: var(--mute) !important;
-}
-[data-skin='retro'] .links a {
-  border-radius: 0 !important;
-  background: transparent !important;
-  color: var(--ink) !important;
-  font-family: var(--disp);
-}
-[data-skin='retro'] .links a:hover {
-  box-shadow: var(--raised);
-}
-[data-skin='retro'] .links a[aria-current='page'] {
-  box-shadow: var(--sunken) !important;
-}
-[data-skin='retro'] .time {
-  padding: 6px 10px;
-  box-shadow: var(--sunken);
-  color: var(--ink) !important;
-}
-
-/* bevelled buttons */
-[data-skin='retro'] :is(.theme, .menu, .play, .chip, .x) {
+/* buttons */
+[data-skin='bevel'] :is(.theme, .menu, .play, .chip, .x) {
   border: 0 !important;
   border-radius: 0 !important;
-  background: var(--win) !important;
+  background: var(--bv-face) !important;
   color: var(--ink) !important;
   box-shadow: var(--raised) !important;
-  font-family: var(--disp) !important;
+  font-family: var(--btn-font) !important;
+  letter-spacing: 0.02em;
 }
-[data-skin='retro'] :is(.theme, .menu, .play, .chip):active,
-[data-skin='retro'] .chip[aria-pressed='true'] {
+[data-skin='bevel'] :is(.theme, .menu, .play, .chip):hover {
+  filter: brightness(1.08);
+}
+[data-skin='bevel'] :is(.theme, .menu, .play, .chip):active,
+[data-skin='bevel'] .chip[aria-pressed='true'] {
   box-shadow: var(--sunken) !important;
 }
-[data-skin='retro'] .chip sup {
-  opacity: 1 !important;
+[data-skin='bevel'] .chip[aria-pressed='true'] {
+  background: var(--bg) !important;
+  color: var(--acc) !important;
+}
+[data-skin='bevel'] .chip sup {
+  opacity: 0.8 !important;
+}
+[data-skin='bevel'] .links a {
+  border-radius: 0 !important;
+  font-family: var(--btn-font);
+  background: transparent !important;
+}
+[data-skin='bevel'] .links a:hover {
+  background: var(--bv-face) !important;
+  box-shadow: var(--raised);
+}
+[data-skin='bevel'] .links a[aria-current='page'] {
+  background: var(--bg) !important;
+  box-shadow: var(--sunken) !important;
+}
+[data-skin='bevel'] .time {
+  padding: 6px 10px;
+  box-shadow: var(--sunken);
 }
 
-/* field list = a listbox */
-[data-skin='retro'] .cats {
-  background: var(--field) !important;
+/* fields list = a sunken listbox with a highlighted row */
+[data-skin='bevel'] .cats {
+  border-left: 0 !important;
+  background: var(--surface) !important;
   box-shadow: var(--sunken) !important;
-  border: 0 !important;
   padding: 4px !important;
 }
-[data-skin='retro'] .cats button {
+[data-skin='bevel'] .cats button {
   border: 0 !important;
   margin: 0 !important;
-  padding: 5px 8px !important;
-  color: var(--ink) !important;
-  font-size: 13px !important;
+  padding: 6px 10px !important;
+  font-family: var(--btn-font) !important;
+  font-size: 14px !important;
 }
-[data-skin='retro'] .cats button[aria-pressed='true'] {
-  background: var(--sel) !important;
-  color: var(--sel-ink) !important;
+[data-skin='bevel'] .cats button[aria-pressed='true'] {
+  background: var(--acc) !important;
+  color: var(--bg) !important;
 }
-[data-skin='retro'] .cats button[aria-pressed='true'] sup {
+[data-skin='bevel'] .cats button[aria-pressed='true'] sup {
   color: inherit !important;
 }
 
-/* status pills = flat tags */
-[data-skin='retro'] .pill {
+/* status tags */
+[data-skin='bevel'] .pill {
   border-radius: 0 !important;
-  border: 1px solid var(--ink) !important;
-  background: transparent !important;
-  color: var(--ink) !important;
+  font-family: var(--btn-font) !important;
 }
-[data-skin='retro'] .pill.live {
-  background: var(--sel) !important;
-  color: var(--sel-ink) !important;
-  border-color: var(--sel) !important;
-}
-[data-skin='retro'] .pill.live::before {
+[data-skin='bevel'] .pill.live::before {
   border-radius: 0 !important;
-  background: currentColor !important;
 }
 
-/* project table = a list view */
-[data-skin='retro'] .tbl {
-  background: var(--field) !important;
-  box-shadow: var(--sunken) !important;
-  padding: 2px;
+/* images: square, in bevelled frames */
+[data-skin='bevel'] :is(img, video, .story .card) {
+  border-radius: 0 !important;
 }
-[data-skin='retro'] .tbl th {
-  background: var(--win) !important;
-  box-shadow: var(--raised);
-  border-bottom: 0 !important;
-  padding: 5px 8px !important;
-  color: var(--ink) !important;
-  font-family: var(--sans) !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-  font-size: 12px !important;
-}
-[data-skin='retro'] .tbl td {
-  padding: 8px !important;
-  border-bottom: 1px dotted var(--lo) !important;
-}
-[data-skin='retro'] .tbl tbody tr:not(.sep):hover {
-  background: var(--sel) !important;
-}
-[data-skin='retro'] .tbl tbody tr:not(.sep):hover :is(td, a) {
-  color: var(--sel-ink) !important;
-}
-[data-skin='retro'] .tbl tr.sep td {
-  background: var(--win);
-  border-bottom: 0 !important;
-}
-[data-skin='retro'] .peek {
-  border: 0 !important;
-  box-shadow: var(--window), 4px 4px 0 #0006 !important;
-  background: var(--win) !important;
+[data-skin='bevel'] :is(.prose figure img, .prose figure video) {
   padding: 3px;
-}
-
-/* project stories = desktop icons */
-[data-skin='retro'] .ring {
-  width: 64px !important;
-  height: 64px !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-}
-[data-skin='retro'] .ring > * {
-  border-radius: 0 !important;
-}
-[data-skin='retro'] .ring.live {
-  outline: 2px dotted var(--acc);
-  outline-offset: 3px;
-}
-[data-skin='retro'] .rings a:hover .ring {
-  transform: none !important;
-  filter: brightness(0.75);
-}
-[data-skin='retro'] .rings .name {
-  padding: 1px 4px;
-}
-[data-skin='retro'] .rings a:hover .name {
-  background: var(--sel);
-  color: var(--sel-ink);
-}
-[data-skin='retro'] .rings-wrap .note i {
-  border-radius: 0 !important;
-}
-
-/* links, labels, prose */
-[data-skin='retro'] :is(.prose, .cite, .contact, .insta, .also, .more, .crumb, .lede, .empty) a {
-  color: var(--link) !important;
-  text-decoration: underline !important;
-  border: 0 !important;
-}
-[data-skin='retro'] .lbl {
-  border-bottom: 1px solid var(--lo) !important;
-  box-shadow: 0 1px var(--hi);
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-  font-size: 13px !important;
-  color: var(--ink) !important;
-}
-[data-skin='retro'] .prose {
-  font-size: 15px;
-}
-[data-skin='retro'] :is(.me, .cover-box, .prose figure img, .prose figure video) {
+  background: var(--bv-face);
   box-shadow: var(--sunken);
-  padding: 2px;
-  background: var(--field);
 }
-
-/* footer = bottom of the taskbar */
-[data-skin='retro'] .foot {
-  background: var(--win) !important;
-  border-top: 0 !important;
-  box-shadow: inset 0 1px var(--hi2), inset 0 2px var(--hi) !important;
+[data-skin='bevel'] :is(.cover-box, .me, .films .poster, .sheet .pic) {
+  box-shadow: var(--sunken-out);
 }
-[data-skin='retro'] .foot :is(a, .email) {
-  color: var(--ink) !important;
-}
-
-/* story viewer */
-[data-skin='retro'] .story .card {
+[data-skin='bevel'] .ring {
+  border: 0 !important;
   border-radius: 0 !important;
-  box-shadow: var(--window), 8px 8px 0 #0008 !important;
+  padding: 0 !important;
+  box-shadow: var(--sunken-out) !important;
+}
+[data-skin='bevel'] .ring > * {
+  border-radius: 0 !important;
+}
+[data-skin='bevel'] .ring.live {
+  outline: 2px solid var(--acc);
+  outline-offset: 4px;
+}
+[data-skin='bevel'] .rings-wrap .note i {
+  border-radius: 0 !important;
+}
+[data-skin='bevel'] .peek {
+  border: 0 !important;
+  padding: 4px;
+  background: var(--bv-face) !important;
+  box-shadow: var(--raised), 6px 6px 0 var(--shadow) !important;
+}
+[data-skin='bevel'] .story .card {
+  box-shadow: var(--raised-out), 0 30px 80px -30px var(--shadow) !important;
 }
 
-/* scrollbars */
-[data-skin='retro'] {
-  scrollbar-color: var(--lo) var(--win);
+/* scrollbars to match */
+[data-skin='bevel'] {
+  scrollbar-color: var(--bv-hi) var(--bv-face);
 }
-[data-skin='retro'] ::-webkit-scrollbar {
-  width: 16px;
-  height: 16px;
+[data-skin='bevel'] ::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
 }
-[data-skin='retro'] ::-webkit-scrollbar-track {
-  background: repeating-conic-gradient(var(--win) 0 25%, var(--hi) 0 50%) 0 0 / 2px 2px;
+[data-skin='bevel'] ::-webkit-scrollbar-track {
+  background: var(--bv-face);
+  box-shadow: var(--sunken);
 }
-[data-skin='retro'] ::-webkit-scrollbar-thumb {
-  background: var(--win);
+[data-skin='bevel'] ::-webkit-scrollbar-thumb {
+  background: var(--bv-face);
   box-shadow: var(--raised);
 }
 
-/* =============================================================== NOTEBOOK
-   An engineering calculation pad: green grid paper (a chalkboard in dark mode),
-   architect-style hand lettering, red-pencil marks, highlighter for "active",
-   photos taped in like prints. */
-:root[data-skin='notebook'] {
-  --bg: #1f2b25;
-  --surface: #26342d;
-  --ink: #eef0e6;
-  --mute: #a9b6ab;
-  --line: #4d6356;
-  --acc: #ff9e8f;
-  --accbg: #4a2f2b;
-  --hl: rgba(255, 232, 110, 0.3);
-  --paper: #f3f1e8;
-  --grid-minor: #253229;
-  --grid-major: #2d3d34;
-  --film: #0d0d0c;
-  --edge: #d6a650;
-  --grease: #ff6b5b;
-  --c1: #9cc9ff;
-  --c2: #ffb4a8;
-  --shadow: #0009;
-  --sans: 'Literata', Georgia, serif;
-  --mono: 'Courier Prime', 'Courier New', monospace;
-  --serif: 'Architects Daughter', 'Comic Sans MS', cursive;
-  --disp: 'Architects Daughter', 'Comic Sans MS', cursive;
-  --hand: 255px 15px 225px 15px / 15px 225px 15px 255px;
-  --hand-round: 48% 52% 45% 55% / 55% 45% 55% 45%;
-  color-scheme: dark;
+/* ================================================================= PRINTS */
+:root[data-skin='prints'] {
+  --paper: #efede6;
+  --tape: rgba(255, 244, 190, 0.5);
+  --print-ink: #2a2a28;
+  --hand: 'Architects Daughter', 'Comic Sans MS', cursive;
 }
-:root[data-skin='notebook'][data-theme='light'] {
-  --bg: #e8efe1;
-  --surface: #f3f7ee;
-  --ink: #1f2622;
-  --mute: #55625a;
-  --line: #a9bd9c;
-  --acc: #c8372d;
-  --accbg: #f7dcd6;
-  --hl: #f3e45e;
-  --paper: #fdfdf9;
-  --grid-minor: #d5e2ca;
-  --grid-major: #bccfae;
-  --edge: #b07d2a;
-  --grease: #c8372d;
-  --c1: #1f4e8c;
-  --c2: #c8372d;
-  --shadow: #0003;
-  color-scheme: light;
+:root[data-skin='prints'][data-theme='light'] {
+  --paper: #ffffff;
+  --tape: rgba(236, 220, 150, 0.6);
 }
 
-[data-skin='notebook'] body {
-  background-color: var(--bg) !important;
-  background-image: linear-gradient(var(--grid-major) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px), linear-gradient(var(--grid-minor) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
-  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
-}
-:root[data-skin='notebook']:not([data-theme='light']) body {
-  text-shadow: 0 0 1px rgba(255, 255, 255, 0.25);
-}
-[data-skin='notebook'] :is(h1, h2, h3) {
-  font-family: var(--disp) !important;
-  font-weight: 400 !important;
-  font-style: normal !important;
-  letter-spacing: 0.01em !important;
-}
-[data-skin='notebook'] .intro h1 {
-  font-size: clamp(34px, 4.4vw, 66px) !important;
-}
-[data-skin='notebook'] ::selection {
-  background: var(--hl);
-  color: var(--ink);
-}
-[data-skin='notebook'] :focus-visible {
-  outline: 2px dashed var(--acc) !important;
-}
-
-/* navbar = the pad's header strip */
-[data-skin='notebook'] .nav {
-  background: color-mix(in srgb, var(--bg) 94%, transparent) !important;
-  border-bottom: 3px double var(--ink) !important;
-}
-[data-skin='notebook'] .brand b {
-  font-family: var(--disp);
-  font-size: 17px !important;
-  font-weight: 400 !important;
-}
-[data-skin='notebook'] .links a {
-  font-family: var(--disp);
-  font-size: 16px;
-  background: transparent !important;
-  border-radius: 0 !important;
-}
-[data-skin='notebook'] .links a[aria-current='page'],
-[data-skin='notebook'] .links a:hover {
-  color: var(--ink) !important;
-  background: linear-gradient(transparent 55%, var(--hl) 55%, var(--hl) 88%, transparent 88%) !important;
-}
-
-/* hand-drawn buttons */
-[data-skin='notebook'] :is(.theme, .menu, .play, .chip) {
-  border: 2px solid var(--ink) !important;
-  border-radius: var(--hand) !important;
-  background: transparent !important;
-  color: var(--ink) !important;
-  box-shadow: 2px 3px 0 var(--ink) !important;
-  font-family: var(--disp) !important;
-  transition: transform 0.15s ease !important;
-}
-[data-skin='notebook'] :is(.theme, .menu, .play, .chip):hover {
-  transform: rotate(-1.5deg);
-}
-[data-skin='notebook'] :is(.theme, .menu, .play, .chip):active {
-  transform: translate(2px, 3px);
-  box-shadow: none !important;
-}
-[data-skin='notebook'] .chip[aria-pressed='true'] {
-  background: linear-gradient(transparent 18%, var(--hl) 18%, var(--hl) 84%, transparent 84%) !important;
-}
-
-/* field list = a handwritten list, active one ticked and highlighted */
-[data-skin='notebook'] .cats {
-  border-left: 0 !important;
-}
-[data-skin='notebook'] .cats button {
-  border: 0 !important;
-  margin: 0 !important;
-  padding: 6px 4px !important;
-  font-family: var(--disp) !important;
-  font-size: 18px !important;
-  color: var(--ink) !important;
-}
-[data-skin='notebook'] .cats button[aria-pressed='true'] {
-  background: linear-gradient(100deg, transparent 1%, var(--hl) 3%, var(--hl) 90%, transparent 95%) !important;
-}
-[data-skin='notebook'] .cats button[aria-pressed='true'] span::before {
-  content: '\2713  ';
-  color: var(--acc);
-}
-
-/* status = words circled in pencil */
-[data-skin='notebook'] .pill {
-  border: 1.5px solid currentColor !important;
-  border-radius: 50% 40% 55% 45% / 60% 50% 50% 40% !important;
-  background: transparent !important;
-  color: var(--ink) !important;
-  padding: 4px 11px !important;
-}
-[data-skin='notebook'] .pill.live {
-  color: var(--acc) !important;
-}
-[data-skin='notebook'] .pill.live::before {
-  display: none !important;
-}
-
-/* table = ruled lines */
-[data-skin='notebook'] .tbl th {
-  font-family: var(--mono) !important;
-  border-bottom: 2px solid var(--ink) !important;
-}
-[data-skin='notebook'] .tbl td {
-  border-bottom: 1px dashed var(--line) !important;
-}
-[data-skin='notebook'] .tbl tbody tr:not(.sep):hover {
-  background: color-mix(in srgb, var(--hl) 45%, transparent) !important;
-}
-[data-skin='notebook'] .tbl tr.sep td {
-  font-family: var(--disp) !important;
-  font-size: 16px !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-}
-[data-skin='notebook'] .peek {
-  border: 8px solid var(--paper) !important;
-  border-bottom-width: 4px !important;
-  background: var(--paper) !important;
-  transform-origin: center;
-  rotate: 1.5deg;
-  box-shadow: 0 10px 24px var(--shadow) !important;
-}
-[data-skin='notebook'] .peek :is(b, .ptxt) {
-  color: #222 !important;
-}
-
-/* project stories = circles drawn by hand */
-[data-skin='notebook'] .ring {
-  border: 2px solid var(--ink) !important;
-  border-radius: var(--hand-round) !important;
-}
-[data-skin='notebook'] .ring.live {
-  border-color: var(--acc) !important;
-}
-[data-skin='notebook'] .ring > * {
-  border-radius: var(--hand-round) !important;
-}
-[data-skin='notebook'] .rings .name {
-  font-family: var(--disp);
-  font-size: 14px;
-}
-[data-skin='notebook'] .rings-wrap .note {
-  font-family: var(--disp) !important;
-  font-size: 15px !important;
-  color: var(--acc) !important;
-}
-[data-skin='notebook'] .rings-wrap .note i {
-  border-color: var(--acc) !important;
-  border-radius: var(--hand-round) !important;
-}
-
-/* section labels written by hand and underlined in red pencil */
-[data-skin='notebook'] .lbl {
-  font-family: var(--disp) !important;
-  font-size: 16px !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-  color: var(--ink) !important;
-  border-bottom: 2px solid var(--acc) !important;
-}
-[data-skin='notebook'] :is(.ihead h2, .head h2, .set-h) {
-  text-decoration: underline;
-  text-decoration-color: var(--acc);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 8px;
-}
-[data-skin='notebook'] :is(.prose, .cite, .contact, .insta, .also, .more, .crumb, .lede, .empty) a {
-  border: 0 !important;
-  text-decoration: underline wavy var(--acc) !important;
-  text-underline-offset: 4px;
-}
-
-/* photos taped in like prints */
-[data-skin='notebook'] :is(.me, .cover-box) {
-  border: 8px solid var(--paper);
-  box-shadow: 0 8px 20px var(--shadow);
-  rotate: -1.2deg;
-}
-[data-skin='notebook'] .prose figure:has(img) {
+/* photos and clips in case studies become taped prints */
+[data-skin='prints'] .prose figure:is(:has(img), :has(video)) {
   position: relative;
   background: var(--paper);
-  padding: 10px 10px 6px;
-  box-shadow: 0 6px 16px var(--shadow);
-  rotate: -0.6deg;
+  padding: 12px 12px 10px;
+  box-shadow: 0 14px 30px -12px var(--shadow), 0 2px 4px #0003;
+  rotate: -1deg;
+  transition: rotate 0.35s ease, scale 0.35s ease;
 }
-[data-skin='notebook'] .prose figure:has(img):nth-of-type(even) {
-  rotate: 0.8deg;
+[data-skin='prints'] .prose figure:is(:has(img), :has(video)):nth-of-type(even) {
+  rotate: 1.3deg;
 }
-[data-skin='notebook'] .prose figure:has(img)::before {
+[data-skin='prints'] .prose figure:is(:has(img), :has(video)):hover {
+  rotate: 0deg;
+  scale: 1.015;
+  z-index: 2;
+}
+[data-skin='prints'] .prose figure:is(:has(img), :has(video))::before,
+[data-skin='prints'] .cover-fig::before,
+[data-skin='prints'] .about .me::before {
   content: '';
   position: absolute;
   top: -11px;
   left: 50%;
-  width: 92px;
+  width: 96px;
   height: 22px;
-  margin-left: -46px;
-  background: rgba(255, 246, 190, 0.6);
+  margin-left: -48px;
+  background: var(--tape);
   box-shadow: 0 1px 2px #0002;
   rotate: -3deg;
+  z-index: 3;
+  pointer-events: none;
 }
-[data-skin='notebook'] .prose figure:has(img) figcaption {
-  font-family: var(--disp);
+[data-skin='prints'] .prose figure :is(img, video) {
+  border-radius: 0 !important;
+}
+[data-skin='prints'] .prose figure:is(:has(img), :has(video)) figcaption,
+[data-skin='prints'] .cover-fig figcaption {
+  margin-top: 10px;
+  font-family: var(--hand);
   font-size: 15px;
-  color: #333;
+  line-height: 1.35;
+  text-align: center;
+  color: var(--print-ink);
+}
+/* collage: lone prints sit narrower, pairs are staggered */
+[data-skin='prints'] .prose > figure:is(:has(img), :has(video)) {
+  max-width: 88%;
+  margin-inline: auto;
+}
+[data-skin='prints'] .prose .fig-row {
+  gap: 30px;
+  padding-block: 14px 6px;
+}
+[data-skin='prints'] .prose .fig-row figure:nth-child(2) {
+  margin-top: 30px !important;
 }
 
-/* rules */
-[data-skin='notebook'] :is(.jsec, .about) {
-  border-top: 2px dashed var(--line) !important;
+/* case-study cover and About photo */
+[data-skin='prints'] .cover-fig {
+  position: relative;
+  padding: 14px 14px 12px;
+  background: var(--paper);
+  box-shadow: 0 18px 40px -16px var(--shadow), 0 2px 4px #0003;
+  rotate: -0.5deg;
 }
-[data-skin='notebook'] .foot {
-  border-top: 3px double var(--ink) !important;
+[data-skin='prints'] .about .me {
+  position: relative;
+  overflow: visible !important;
+  border: 10px solid var(--paper);
+  border-bottom-width: 34px;
+  box-shadow: 0 14px 30px -12px var(--shadow);
+  rotate: -2deg;
 }
-[data-skin='notebook'] .story .card {
-  border-radius: 6px !important;
+[data-skin='prints'] .about .me img {
+  display: block;
+}
+
+/* hover preview and film posters as prints */
+[data-skin='prints'] .peek {
+  border: 8px solid var(--paper) !important;
+  border-bottom-width: 6px !important;
+  background: var(--paper) !important;
+  rotate: 1.5deg;
+  box-shadow: 0 16px 30px -10px var(--shadow) !important;
+}
+[data-skin='prints'] .peek :is(b, .ptxt) {
+  color: var(--print-ink) !important;
+}
+[data-skin='prints'] .films .poster {
+  border: 8px solid var(--paper);
+  box-shadow: 0 10px 22px -10px var(--shadow);
+  rotate: -1deg;
+}
+[data-skin='prints'] .films li:nth-child(even) .poster {
+  rotate: 1deg;
+}
+
+/* project stories = round photo stickers */
+[data-skin='prints'] .ring {
+  border: 0 !important;
+  padding: 3px !important;
+  background: var(--paper) !important;
+  box-shadow: 0 5px 12px -3px var(--shadow) !important;
+}
+[data-skin='prints'] .ring.live {
+  box-shadow: 0 0 0 2px var(--acc), 0 5px 12px -3px var(--shadow) !important;
+}
+[data-skin='prints'] .rings li:nth-child(odd) .ring {
+  rotate: -5deg;
+}
+[data-skin='prints'] .rings li:nth-child(even) .ring {
+  rotate: 4deg;
+}
+
+/* a few handwritten notes in red pencil */
+[data-skin='prints'] :is(.rings-wrap .note, .ihead p) {
+  font-family: var(--hand) !important;
+  font-size: 15px !important;
+  color: var(--grease) !important;
+}
+[data-skin='prints'] .rings-wrap .note i {
+  border-color: var(--grease) !important;
 }
