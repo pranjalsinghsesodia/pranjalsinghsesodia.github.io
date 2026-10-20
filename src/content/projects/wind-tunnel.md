@@ -1,6 +1,7 @@
 ---
 title: Tabletop subsonic wind tunnel, 6:1 contraction
 short: Wind tunnel
+inRings: true
 order: 5
 year: "2026–"
 period: Mar 2026 – present

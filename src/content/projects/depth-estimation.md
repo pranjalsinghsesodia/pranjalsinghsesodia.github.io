@@ -1,6 +1,7 @@
 ---
 title: Multi-camera depth estimation of surgical movement
 short: Depth vision
+inRings: true
 order: 2
 year: "2025–26"
 period: Dec 2025 – May 2026

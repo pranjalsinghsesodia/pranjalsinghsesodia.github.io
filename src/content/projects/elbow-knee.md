@@ -1,6 +1,7 @@
 ---
 title: Elbow implant review and four-bar knee redesign
 short: Elbow & knee
+inRings: true
 order: 3
 year: "2026–"
 period: Jun 2026 – present

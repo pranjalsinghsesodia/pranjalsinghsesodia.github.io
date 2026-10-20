@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import { getProjects } from '../lib/stories';
 import { url } from '../lib/site';
-const projects = (await getProjects()).filter((p) => p.data.featured);
+const projects = (await getProjects()).filter((p) => p.data.inRings);
 ---
 
 <div class="rings-wrap">

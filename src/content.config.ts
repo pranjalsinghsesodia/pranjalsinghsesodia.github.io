@@ -14,6 +14,7 @@ const projects = defineCollection({
       title: z.string(),
       short: z.string(), // label under the story ring
       order: z.number(), // position in rings and index (lower first)
+      inRings: z.boolean().default(false), // shown as a story ring in the hero (keep it to 3–4)
       featured: z.boolean().default(true), // featured projects get a story ring and sit above "Earlier and other work"
       year: z.string(), // shown as written, e.g. "2026–" or "2021–25"
       discipline: z.enum(['robotics', 'biomech', 'fluids', 'hardware', 'research']),

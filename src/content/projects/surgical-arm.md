@@ -1,6 +1,7 @@
 ---
 title: 6‑DOF surgical assistance arm
 short: Surgical arm
+inRings: true
 order: 1
 year: "2026–"
 period: Jun 2026 – present
