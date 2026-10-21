@@ -87,7 +87,7 @@ Text values containing a colon need quotes: `role: "Lead: CAD and testing"`.
 ### Contact sheet from your phone (Pages CMS)
 
 1. Open [app.pagescms.org](https://app.pagescms.org), sign in with GitHub, and open this repo.
-2. **Stories → Add**: upload the photo, write a caption, pick a set (Lab, Baja, Side builds). Tick "pick" to circle it.
+2. **Stories → Add**: upload the photo, write a caption, pick a set (Lab, Baja, Side builds). Tick "My pick" to circle it.
 3. Save. The site rebuilds in about two minutes.
 
 The menu that Pages CMS shows is defined in `.pages.yml`.
