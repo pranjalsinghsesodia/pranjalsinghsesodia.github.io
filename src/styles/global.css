@@ -151,7 +151,7 @@ a.sr-only:focus {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--mute);
+  color: var(--steel);
   padding-bottom: 10px;
   border-bottom: 1px solid var(--ink);
 }

@@ -11,6 +11,28 @@ import me from '../assets/site/me.jpeg';
 const journal = (await getCollection('journal', isVisible)).sort((a, b) => +b.data.date - +a.data.date).slice(0, 6);
 const og = (await getImage({ src: me, width: 1200, format: 'jpg' })).src;
 const insta = SITE.links.find((l) => l.label === 'Instagram')?.href;
+const hyperloop = (await getCollection('projects')).find((p) => p.id === 'hyperloop-gap');
+// academic link row: Email / CV / Scholar / GitHub / LinkedIn
+const LINKS = [
+  { label: 'Email', href: `mailto:${SITE.emails[0]}` },
+  { label: 'CV', href: url(SITE.cv) },
+  ...SITE.links.filter((l) => l.href && l.label !== 'Instagram').map((l) => ({ ...l, label: l.label.replace('Google ', '') })),
+];
+// dated from the CV; months only where the CV gives them
+const NEWS = [
+  { when: 'Jun 2026', html: 'Joined <b>mPragati, IIT Delhi</b> as an R&amp;D intern with Prof. Dinesh Kalyanasundaram: a 6-DOF surgical assistance arm and implant mechanism reviews.' },
+  { when: '2026', html: 'First-author review on levitation gap estimation for hyperloop pods published in <i>Next Research</i> (Elsevier).' },
+  { when: '2026', html: 'Team Daedalus Racing placed <b>1st of 54</b> at the mBAJA 2026 Sustainability Event; I developed the catalytic converter.' },
+  { when: 'Mar 2026', html: 'Started a tabletop subsonic wind tunnel on an NSUT CPVSK project grant.' },
+  { when: 'Dec 2025', html: 'Joined <b>QuEST Lab, IIT Delhi</b> with Prof. Jay Dhariwal: multi-camera depth estimation for movement tracking.' },
+];
+const BIBTEX = `@article{sesodia2026levitation,
+  author  = {Sesodia, Pranjal Singh and Dabass, V.},
+  title   = {Robust Real-Time Levitation Gap Estimation for Hyperloop Pods},
+  journal = {Next Research},
+  year    = {2026},
+  doi     = {10.1016/j.nexres.2026.102384}
+}`;
 const SKILLS = [
   { group: 'CAD & simulation', items: ['SolidWorks', 'Motion studies', 'ANSYS Mechanical', 'FEA', 'Multi-body dynamics', 'ANSYS Fluent', 'CFD'] },
   { group: 'Robotics', items: ['ROS 2', 'MuJoCo', 'MATLAB', 'Kinematics'] },
@@ -23,9 +45,27 @@ const SKILLS = [
 <Base image={og}>
   <div class="w">
     <section class="intro" data-win="Welcome">
-      <p class="eyebrow">{SITE.currently} · B.Tech Mechanical, NSUT Delhi '28</p>
-      <h1>I build and test robotic systems.</h1>
-      <p class="sub">Building a 6-DOF surgical assistance arm at mPragati, after multi-camera depth estimation at QuEST Lab. Recently drawn to simulation for robotics, thermal analysis and gripper dynamics.</p>
+      <div>
+        <h1>Pranjal Singh Sesodia</h1>
+        <p class="eyebrow">Mechanical engineering, NSUT Delhi '28 · {SITE.currently}</p>
+        <p class="sub">
+          I build and test robotic systems. At mPragati, IIT Delhi, I'm building a 6-DOF surgical assistance arm with
+          Prof. Dinesh Kalyanasundaram; before that I worked on multi-camera depth estimation at QuEST Lab with Prof. Jay Dhariwal.
+          I'm looking for a research internship in robotics.
+        </p>
+        <p class="ri"><span>Research interests</span> Simulation for robotics, thermal analysis and gripper dynamics.</p>
+        <p class="elinks">
+          {LINKS.map((l, i) => <>{i > 0 && <span aria-hidden="true">/</span>}<a href={l.href} {...(l.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>{l.label}</a></>)}
+        </p>
+      </div>
+      <div class="me"><Image src={me} alt="Pranjal Singh Sesodia outside B Block at night" width={440} class="cover" loading="eager" /></div>
+    </section>
+
+    <section class="news" id="news" data-win="News" aria-labelledby="news-h">
+      <div class="lbl"><span id="news-h">News</span></div>
+      <ul>
+        {NEWS.map((n) => <li><span class="when">{n.when}</span><p set:html={n.html} /></li>)}
+      </ul>
     </section>
 
     <ProjectRings />
@@ -33,10 +73,27 @@ const SKILLS = [
 
     <section class="pubs" id="publications" data-win="Publication" aria-labelledby="pubs-h">
       <div class="lbl"><span id="pubs-h">Publication</span><span>First author</span></div>
-      <p class="cite">
-        <b>Sesodia, P. S.</b>, &amp; Dabass, V. (2026). <a href="https://doi.org/10.1016/j.nexres.2026.102384" target="_blank" rel="noopener">Robust real-time levitation gap estimation for hyperloop pods</a>. <i>Next Research</i>, Elsevier.
-        <span class="doi">doi:10.1016/j.nexres.2026.102384</span>
-      </p>
+      <article class="pub">
+        {hyperloop?.data.cover && (
+          <a class="pthumb" href={url('work/hyperloop-gap/')} tabindex="-1" aria-hidden="true">
+            <Image src={hyperloop.data.cover} alt="" width={480} class="cover" />
+          </a>
+        )}
+        <div>
+          <a class="ptitle" href="https://doi.org/10.1016/j.nexres.2026.102384" target="_blank" rel="noopener">Robust real-time levitation gap estimation for hyperloop pods</a>
+          <p class="authors"><b>Pranjal Singh Sesodia</b>, V. Dabass</p>
+          <p class="venue"><i>Next Research</i> (Elsevier), 2026 · Review</p>
+          <p class="plinks">
+            <a href="https://doi.org/10.1016/j.nexres.2026.102384" target="_blank" rel="noopener">paper</a>
+            <span aria-hidden="true">/</span>
+            <a href={url('work/hyperloop-gap/')}>project page</a>
+            <span aria-hidden="true">/</span>
+            <button type="button" class="bib-btn" aria-expanded="false" aria-controls="bib">BibTeX</button>
+          </p>
+          <p class="takeaway">Compares inductive, optical, capacitive, Hall-effect and UWB-radar gap sensing, with Kalman-filter and sliding-mode observers, for maglev pods under thermal drift and EMI.</p>
+          <pre id="bib" class="bib" hidden>{BIBTEX}</pre>
+        </div>
+      </article>
     </section>
 
     {journal.length > 0 && (
@@ -65,9 +122,8 @@ const SKILLS = [
     <Photography mode="home" />
 
     <section class="about" id="about" data-win="About" aria-labelledby="about-h">
-      <div class="me"><Image src={me} alt="Pranjal Singh Sesodia outside B Block at night" width={520} class="cover" /></div>
+      <div class="lbl"><h2 id="about-h">About</h2></div>
       <div>
-        <h2 id="about-h" class="sr-only">About</h2>
         <p class="bio">
           I'm a third-year mechanical engineering student at NSUT Delhi. Over the past year I've worked in two labs at IIT Delhi:
           estimating 3D movement from webcams at QuEST Lab, and now building a surgical assistance arm and reviewing implant mechanisms
@@ -77,7 +133,7 @@ const SKILLS = [
         <p class="also">
           Away from the bench I'm a photographer and videographer{insta ? <>: some of that work is on <a href={insta} target="_blank" rel="noopener">Instagram ↗</a></> : '.'}
         </p>
-        <p class="int-h">Recently drawn to</p>
+        <p class="int-h">Research interests</p>
         <dl class="interests">
           <div><dt>Simulation for robotics</dt><dd>Trying motions, contact and control in MuJoCo before they run on hardware.</dd></div>
           <div><dt>Thermal analysis</dt><dd>How heat changes the behaviour of actuators and grippers over time.</dd></div>
@@ -110,55 +166,173 @@ const SKILLS = [
   </div>
 </Base>
 
+<script>
+  const bibBtn = document.querySelector<HTMLButtonElement>('.bib-btn');
+  const bib = document.getElementById('bib');
+  bibBtn?.addEventListener('click', () => {
+    const open = bib!.hidden;
+    bib!.hidden = !open;
+    bibBtn.setAttribute('aria-expanded', String(open));
+  });
+</script>
+
 <style>
   .intro {
-    padding-block: clamp(56px, 8vw, 120px) clamp(40px, 5vw, 72px);
-  }
-  .eyebrow {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--acc);
-    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(180px, 16vw, 240px);
+    gap: clamp(28px, 5vw, 96px);
+    align-items: start;
+    padding-block: clamp(48px, 7vw, 104px) clamp(36px, 4vw, 56px);
   }
   h1 {
-    font-size: clamp(30px, 3.4vw, 52px);
+    font-size: clamp(32px, 3.6vw, 54px);
     line-height: 1.05;
     letter-spacing: -0.028em;
     font-weight: 500;
     text-wrap: balance;
   }
+  .eyebrow {
+    margin-top: 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--acc);
+  }
   .sub {
-    margin-top: 16px;
-    max-width: 38em;
+    margin-top: 22px;
+    max-width: 40em;
     font-size: clamp(16px, 1.25vw, 19px);
-    line-height: 1.5;
+    line-height: 1.55;
+  }
+  .ri {
+    margin-top: 14px;
+    max-width: 40em;
+    font-size: 16px;
     color: var(--mute);
+  }
+  .ri span,
+  .news .when {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--steel);
+    margin-right: 10px;
+  }
+  .elinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin-top: 24px;
+    font-size: 15px;
+  }
+  .elinks span {
+    color: var(--line);
+  }
+  .elinks a,
+  .plinks a,
+  .bib-btn {
+    color: var(--acc);
+  }
+  .elinks a:hover,
+  .plinks a:hover,
+  .bib-btn:hover,
+  .ptitle:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .intro .me {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+
+  .news {
+    margin-bottom: 56px;
+  }
+  .news li {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 14px;
+    padding-block: 10px;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+  }
+  .news .when {
+    padding-top: 3px;
+    white-space: nowrap;
+  }
+  .news b {
+    font-weight: 600;
   }
 
   .pubs {
     margin-top: 72px;
   }
-  .cite {
-    padding-top: 16px;
-    font-size: 16px;
-    line-height: 1.55;
+  .pub {
+    display: grid;
+    grid-template-columns: clamp(140px, 14vw, 200px) minmax(0, 1fr);
+    gap: 24px;
+    padding-top: 20px;
     max-width: 62em;
   }
-  .cite b {
+  .pthumb {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .pthumb :global(img) {
+    object-fit: contain !important;
+  }
+  .ptitle {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  .authors {
+    margin-top: 4px;
+    font-size: 15px;
+    color: var(--mute);
+  }
+  .authors b {
+    color: var(--ink);
     font-weight: 600;
   }
-  .cite a {
-    border-bottom: 1px solid var(--line);
+  .venue {
+    font-size: 15px;
   }
-  .cite a:hover {
-    border-color: var(--acc);
+  .plinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    margin-top: 6px;
+    font-size: 14px;
   }
-  .doi {
-    display: block;
-    margin-top: 4px;
+  .plinks span {
+    color: var(--line);
+  }
+  .bib-btn {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+  }
+  .takeaway {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--mute);
+    max-width: 60em;
+  }
+  .bib {
+    margin-top: 12px;
+    padding: 12px 14px;
+    overflow-x: auto;
     font-family: var(--mono);
     font-size: 12px;
-    color: var(--steel);
+    line-height: 1.6;
+    background: var(--surface);
+    border: 1px solid var(--line);
   }
   .jsec {
     padding-top: 64px;
@@ -220,15 +394,13 @@ const SKILLS = [
   }
 
   .about {
-    display: grid;
-    grid-template-columns: clamp(220px, 20vw, 320px) minmax(0, 1fr);
-    gap: clamp(32px, 4vw, 72px);
     padding-block: 64px;
-    border-top: 1px solid var(--line);
   }
-  .me {
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
+  .about .lbl {
+    margin-bottom: 24px;
+  }
+  .about .lbl h2 {
+    font: inherit;
   }
   .bio {
     font-size: 19px;
@@ -377,12 +549,24 @@ const SKILLS = [
     .jl {
       grid-template-columns: 1fr;
     }
-    .about {
+    .intro {
       grid-template-columns: 1fr;
-      gap: 24px;
+      gap: 28px;
     }
-    .me {
-      max-width: 220px;
+    .intro .me {
+      grid-row: 1;
+      width: 132px;
+    }
+    .news li {
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+    .pub {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .pthumb {
+      max-width: 240px;
     }
     .facts,
     .interests {
