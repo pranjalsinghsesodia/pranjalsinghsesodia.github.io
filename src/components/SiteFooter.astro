@@ -13,10 +13,17 @@ const updated = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 
       <a href={url(SITE.cv)}>CV</a>
     </span>
     <span>Updated {updated} · <a href="#top">Back to top ↑</a></span>
+    <span class="credit">Designed and built with help from <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a>, Anthropic's AI assistant.</span>
   </div>
 </footer>
 
 <style>
+  .credit {
+    flex-basis: 100%;
+  }
+  .credit a {
+    color: var(--ink);
+  }
   .foot {
     border-top: 1px solid var(--line);
     margin-top: 32px;
