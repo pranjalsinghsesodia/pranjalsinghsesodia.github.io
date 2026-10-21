@@ -20,11 +20,9 @@ const LINKS = [
 ];
 // dated from the CV; months only where the CV gives them
 const NEWS = [
-  { when: 'Jun 2026', html: 'Joined <b>mPragati, IIT Delhi</b> as an R&amp;D intern with Prof. Dinesh Kalyanasundaram: a 6-DOF surgical assistance arm and implant mechanism reviews.' },
-  { when: '2026', html: 'First-author review on levitation gap estimation for hyperloop pods published in <i>Next Research</i> (Elsevier).' },
-  { when: '2026', html: 'Team Daedalus Racing placed <b>1st of 54</b> at the mBAJA 2026 Sustainability Event; I developed the catalytic converter.' },
-  { when: 'Mar 2026', html: 'Started a tabletop subsonic wind tunnel on an NSUT CPVSK project grant.' },
-  { when: 'Dec 2025', html: 'Joined <b>QuEST Lab, IIT Delhi</b> with Prof. Jay Dhariwal: multi-camera depth estimation for movement tracking.' },
+  { when: 'Jun 2026', html: 'Joined <b>mPragati, IIT Delhi</b> as an R&amp;D intern.' },
+  { when: '2026', html: 'First-author review published in <i>Next Research</i> (Elsevier).' },
+  { when: '2026', html: '<b>1st of 54</b> at the mBAJA 2026 Sustainability Event with Team Daedalus Racing.' },
 ];
 const BIBTEX = `@article{sesodia2026levitation,
   author  = {Sesodia, Pranjal Singh and Dabass, V.},
@@ -61,8 +59,8 @@ const SKILLS = [
       <div class="me"><Image src={me} alt="Pranjal Singh Sesodia outside B Block at night" width={440} class="cover" loading="eager" /></div>
     </section>
 
-    <section class="news" id="news" data-win="News" aria-labelledby="news-h">
-      <div class="lbl"><span id="news-h">News</span></div>
+    <section class="news" id="news" data-win="Recent" aria-labelledby="news-h">
+      <div class="lbl"><span id="news-h">Recent</span></div>
       <ul>
         {NEWS.map((n) => <li><span class="when">{n.when}</span><p set:html={n.html} /></li>)}
       </ul>
