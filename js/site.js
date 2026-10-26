@@ -48,35 +48,27 @@
     });
   }
 
-  // ---------- photographs open like a lens: a six-bladed iris ----------
-
-  function iris(el, p, w, h) {
-    const R = (Math.hypot(w, h) / 2 / Math.cos(Math.PI / 6)) * p;
-    const turn = (1 - p) * -1.1;
-    const pts = [];
-    for (let i = 0; i < 6; i++) {
-      const a = turn + (i * Math.PI) / 3;
-      pts.push(`${(w / 2 + R * Math.cos(a)).toFixed(1)}px ${(h / 2 + R * Math.sin(a)).toFixed(1)}px`);
-    }
-    el.style.clipPath = `polygon(${pts.join(',')})`;
-  }
+  // ---------- photographs rise gently into place, a row at a time, one after another along it ----------
+  // The CSS does the moving (.ph.pre); the photo and its watercolour frame move together but separately,
+  // so the frame keeps blending into the paper all the way.
 
   if (motion && ST) {
-    document.querySelectorAll('.rows .row').forEach((row) => {
-      const imgs = [...row.querySelectorAll('img')];
-      imgs.forEach((img) => iris(img, 0, 1, 1));
+    const rows = [...document.querySelectorAll('.rows .row')];
+    rows.forEach((row) => row.querySelectorAll('.ph').forEach((ph, i) => {
+      ph.style.setProperty('--d', (i * .08).toFixed(2) + 's');
+      ph.classList.add('pre');
+    }));
+    void document.body.offsetHeight; // settle the hidden state first, or a row already in view would skip its entrance
+    rows.forEach((row) => {
+      const phs = [...row.querySelectorAll('.ph')];
       ST.create({
         trigger: row,
-        start: 'top 88%',
+        start: 'top 90%',
         once: true,
-        onEnter: () => imgs.forEach((img, i) => {
-          const w = img.clientWidth, h = img.clientHeight, s = { p: 0 };
-          gsap.to(s, {
-            p: 1, duration: 1.15, delay: i * .09, ease: 'power2.inOut',
-            onUpdate: () => iris(img, s.p, w, h),
-            onComplete: () => { img.style.clipPath = ''; },
-          });
-        }),
+        onEnter: () => {
+          phs.forEach((ph) => ph.classList.remove('pre'));
+          setTimeout(() => phs.forEach((ph) => ph.style.removeProperty('--d')), 1300); // hovers answer at once again
+        },
       });
     });
   }

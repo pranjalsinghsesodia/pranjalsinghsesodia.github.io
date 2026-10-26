@@ -66,7 +66,7 @@
     </div>
   </section>
   <section class="sec">
-    <div class="mark" aria-hidden="true">A</div>
+    <div class="mark" aria-hidden="true">Problem</div>
     <div class="body prose">
       <h2>The problem</h2>
       <p>The prototype runs on digital hobby servos. They’re cheap and easy to replace, but they’re open-loop: you command an angle and get no confirmation back. Under load, or with backlash in the gears, the arm drifts, and nothing in the hardware notices.</p>
@@ -74,7 +74,7 @@
     </div>
   </section>
   <section class="sec">
-    <div class="mark" aria-hidden="true">B</div>
+    <div class="mark" aria-hidden="true">Hardware</div>
     <div class="body prose">
       <h2>The hardware</h2>
       <p>Six servo-driven joints on aluminium brackets, standing on a 3D-printed base. A servo drives a small pinion that meshes with a ring gear printed inside the housing, so the whole arm turns on it. With its servos and wiring, the arm weighs 1.233 kg.</p>
@@ -105,7 +105,7 @@
     </div>
   </section>
   <section class="sec">
-    <div class="mark" aria-hidden="true">C</div>
+    <div class="mark" aria-hidden="true">Cameras</div>
     <div class="body prose">
       <h2>Closing the loop with cameras</h2>
       <p>Two camera loops stand in for the feedback the servos don’t give.</p>
@@ -120,14 +120,14 @@
     </div>
   </section>
   <section class="sec">
-    <div class="mark" aria-hidden="true">D</div>
+    <div class="mark" aria-hidden="true">Simulation</div>
     <div class="body prose">
       <h2>Simulation first</h2>
       <p>The arm is modelled in ROS 2 and MuJoCo, so a motion is tried, and broken, in simulation before it runs on the hardware. The test is simple: command a position, measure with the camera where the tool actually went, and close the gap.</p>
     </div>
   </section>
   <section class="sec">
-    <div class="mark" aria-hidden="true">E</div>
+    <div class="mark" aria-hidden="true">Next</div>
     <div class="body prose">
       <h2>What’s next</h2>
       <ul>

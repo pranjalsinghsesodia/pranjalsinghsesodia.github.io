@@ -794,9 +794,9 @@
     label();
     hint.textContent = coarse
       ? (on ? 'Tap a key to hear it. The roll plays as you scroll.'
-            : 'This page is a piano roll, with its keys down the left edge. Turn the sound on and tap a key to hear it; the lettered tabs jump between sections.')
+            : 'This page is a piano roll, with its keys down the left edge. Turn the sound on and tap a key to hear it; the named tabs beside them jump between sections.')
       : (on ? 'Click the keys, or play A to ; on your keyboard. A note you punch plays once as it reaches the keys.'
-            : 'This page is a piano roll. Click the paper to punch a note, which plays once as it reaches the keys, or play the keys themselves; their lettered tabs jump between sections.');
+            : 'This page is a piano roll. Click the paper to punch a note, which plays once as it reaches the keys, or play the keys themselves; the named tabs beside them jump between sections.');
     try { localStorage.setItem(SOUND, on ? '1' : '0'); } catch (e) { /* fine */ }
   }
 
@@ -816,8 +816,8 @@
   document.addEventListener('visibilitychange', () => { if (!document.hidden && ac) wake(); });
 
   // ---------- octave tabs: the keyboard doubles as the page's contents ----------
-  // Each section is pinned to a C, the top of the page at the top of the keyboard, and labelled the way a score
-  // labels its parts: D.C. (da capo, back to the beginning), the rehearsal letters, and Fine for the end.
+  // Each section is pinned to a C, the top of the page at the top of the keyboard, and named on a vertical tab:
+  // D.C. (da capo, back to the beginning), each part's name from its mark, and Fine for the end.
   // The tab for the part you're reading fills in, and its octave lights on the keys.
 
   const CS = [87, 75, 63, 51, 39, 27, 15, 3]; // C8 down to C1
@@ -846,8 +846,9 @@
       const a = document.createElement('a');
       a.className = 'oct' + (p.cls ? ' ' + p.cls : '');
       a.href = '#' + p.el.id;
-      a.textContent = p.label;
-      a.dataset.name = p.name;
+      a.appendChild(document.createElement('span')).textContent = p.label;
+      // the full heading slides out on hover, where it says more than the tab
+      if (p.name.toLowerCase() !== p.label.toLowerCase()) a.dataset.name = p.name;
       a.setAttribute('aria-label', `${p.name}, the C${Math.floor((LOW + k) / 12) - 1} octave`);
       // jumping to a part lights that octave's D, the key of the waltz, and sounds a D (kept mid-range) if sound is on
       a.addEventListener('click', () => {
@@ -864,10 +865,17 @@
     if (skip) skip.after(nav); else document.body.prepend(nav);
   })();
 
+  // A tab stays within its octave: a long name shrinks a little to fit, then trails off.
   function placeTabs() {
+    if (!tabs.length) return;
+    tabs[0].a.parentNode.style.setProperty('--oct-h', Math.floor(12 * rh - 6) + 'px');
     tabs.forEach((t) => {
-      const r = keyRects[t.k];
-      t.a.style.top = clamp((r.y0 + r.y1) / 2, 14, H - 14) + 'px';
+      const s = t.a.firstChild;
+      t.a.style.fontSize = '';
+      let px = parseFloat(getComputedStyle(t.a).fontSize);
+      while (s.scrollHeight > s.clientHeight && px > 7) { px -= .5; t.a.style.fontSize = px + 'px'; }
+      const r = keyRects[t.k], half = t.a.offsetHeight / 2 + 4;
+      t.a.style.top = clamp((r.y0 + r.y1) / 2, half, H - half) + 'px';
     });
   }
 
@@ -903,7 +911,7 @@
   new ResizeObserver(relayout).observe(canvas);
   const col = document.querySelector('[data-fog]');
   if (col) new ResizeObserver(() => { if (W) placeFog(); }).observe(col);
-  const repaint = () => { if (!W) return; colors = palette(); drawPaper(); drawTile(); drawKeys(); placeFog(); };
+  const repaint = () => { if (!W) return; colors = palette(); drawPaper(); drawTile(); drawKeys(); placeFog(); placeTabs(); };
   if (document.fonts) document.fonts.ready.then(repaint);
   addEventListener('pagehide', () => { try { sessionStorage.setItem(OFFSET, String(off)); } catch (e) { /* fine */ } });
 

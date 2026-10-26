@@ -81,29 +81,39 @@ img, video { max-width: 100%; }
   touch-action: pan-y;  /* a finger on the edge still scrolls the page */
 }
 
-/* Octave tabs: the page's contents, pinned to the Cs of the keyboard (placed by js/roll.js). */
+/* Octave tabs: the page's contents, each part's name on a vertical tab pinned to a C of the keyboard
+   (placed by js/roll.js, which sets --oct-h to the height of an octave). */
 .octaves { position: fixed; top: 0; left: 0; z-index: 5; width: 0; height: 0; }
 .oct {
   position: absolute;
   left: calc(var(--kb) + 4px);
-  min-width: 22px;
-  height: 22px;
-  margin-top: -11px;
-  padding: 0 4px;
-  display: grid;
-  place-items: center;
+  width: 20px;
+  padding: 7px 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: center;
   border: 1px solid var(--brass);
   background: var(--paper);
   color: var(--brass);
-  font-family: var(--serif);
-  font-size: .72rem;
-  font-weight: 600;
+  font-family: var(--mono);
+  font-size: .6rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
   line-height: 1;
   text-decoration: none;
   cursor: pointer;
   transition: background .3s, color .3s;
 }
-.oct.dc, .oct.fine { font-style: italic; font-weight: 500; }
+/* read from the bottom up, like a label up the side of a page */
+.oct > span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  max-height: calc(var(--oct-h, 110px) - 16px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.oct.dc, .oct.fine { font-family: var(--serif); font-size: .74rem; font-style: italic; letter-spacing: 0; text-transform: none; }
 .oct:hover { color: var(--felt); border-color: var(--felt); }
 .oct.on { background: var(--brass); color: var(--paper); }
 .oct.on:hover { color: var(--paper); background: var(--felt); }
@@ -180,7 +190,7 @@ img, video { max-width: 100%; }
 }
 .hero > .body, .sec > .body { grid-column: 2; grid-row: 1; min-width: 0; }
 
-/* Rehearsal marks: the boxed letters a score uses to name its sections. They wait in the open roll. */
+/* Section marks: each part's name on a vertical bar in the open roll, waiting beside it while you read it. */
 .mark {
   grid-column: 1;
   grid-row: 1;
@@ -189,18 +199,20 @@ img, video { max-width: 100%; }
   position: sticky;
   top: 26vh;  /* below the caption in the corner */
   margin: .5rem clamp(18px, 3vw, 54px) 0 0;
-  width: 2.8rem;
-  height: 2.8rem;
-  display: grid;
-  place-items: center;
+  padding: 1rem .55rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);  /* read from the bottom up */
   border: 1px solid var(--brass);
   color: var(--brass);
   background: var(--paper);
-  font-size: 1.1rem;
-  font-weight: 600;
-  font-variant-numeric: lining-nums;
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1;
 }
-.mark.fine { width: auto; height: auto; border: 0; background: none; font-style: italic; font-size: 1.4rem; }
+.mark.fine { padding: 0; border: 0; background: none; font-family: var(--serif); font-size: 1.4rem; font-style: italic; letter-spacing: 0; text-transform: none; }
 
 .hero { padding-top: 15vh; }
 .sec { margin-top: clamp(6.5rem, 16vh, 11rem); }
@@ -328,6 +340,7 @@ img, video { max-width: 100%; }
   background: none;
   cursor: zoom-in;
   display: block;
+  --rise: cubic-bezier(.22, 1, .36, 1);
 }
 .ph::before {
   content: "";
@@ -340,9 +353,11 @@ img, video { max-width: 100%; }
   mix-blend-mode: multiply;
   opacity: .8;
   pointer-events: none;
-  transition: opacity .6s;
+  transition: opacity .9s var(--rise) var(--d, 0s), transform .9s var(--rise) var(--d, 0s);
 }
-.ph img { position: relative; width: 100%; height: 100%; object-fit: cover; display: block; background: var(--rule-2); transition: filter .6s; }
+.ph img { position: relative; width: 100%; height: 100%; object-fit: cover; display: block; background: var(--rule-2); transition: filter .6s, opacity .9s var(--rise) var(--d, 0s), transform .9s var(--rise) var(--d, 0s); }
+/* photographs rise gently into place as their row comes into view (js/site.js adds .pre, then lifts it) */
+.ph.pre img, .ph.pre::before { opacity: 0; transform: translateY(26px) scale(.97); }
 .rows:hover .ph img { filter: saturate(.8) brightness(.94); }
 .rows .ph:hover img, .rows .ph:focus-visible img { filter: none; }
 .rows .ph:hover::before, .rows .ph:focus-visible::before { opacity: 1; }
@@ -501,20 +516,21 @@ pre.cite {
 @media (max-width: 759px) {
   :root { --kb: 30px; --stage: 0px; --gap: 6px; }
   body { font-size: 17px; }
-  .page { padding: 0 18px 0 16px; }
+  .page { padding: 0 18px 0 26px; }
   .hero, .sec { grid-template-columns: minmax(0, 1fr); }
   .hero > .body, .sec > .body { grid-column: 1; grid-row: 2; }
-  .mark { position: static; grid-row: 1; justify-self: start; margin: 0 0 .9rem; width: 2.2rem; height: 2.2rem; font-size: .95rem; }
-  .mark.fine { font-size: 1.2rem; }
+  /* the heading right below already says it; only the closing Fine stays, written across */
+  .mark { display: none; }
+  .mark.fine { display: block; position: static; grid-row: 1; justify-self: start; margin: 0 0 .9rem; writing-mode: horizontal-tb; transform: none; font-size: 1.2rem; }
   .hero { padding-top: 10vh; }
   .name span + span { padding-left: .5em; }
   .lede p { font-size: 1.1rem; }
   .cards, .smalls { grid-template-columns: minmax(0, 1fr); }
   .cards > li:nth-child(even) { margin-top: 0; }
   .cards { gap: 3.4rem; }
-  /* on a phone the tabs sit on the keys themselves, clear of the text */
-  .oct { left: 2px; min-width: 26px; height: 26px; margin-top: -13px; padding: 0 3px; font-size: .68rem; }
-  .oct.dc, .oct.fine { font-size: .6rem; }
+  /* on a phone the tabs sit just beside the keys, in the page's margin, and leave the keys free to play */
+  .oct { left: calc(var(--kb) + 3px); width: 16px; padding: 5px 0; font-size: .5rem; letter-spacing: .1em; }
+  .oct.dc, .oct.fine { font-size: .62rem; }
   .oct::after { display: none; }
   .rows { --pgap: 9px; }
   .facts { grid-template-columns: minmax(0, 1fr); gap: .15rem; }

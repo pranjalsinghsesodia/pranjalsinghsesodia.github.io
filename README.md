@@ -2,7 +2,7 @@
 
 Live at **https://pranjalsinghsesodia.github.io**. A plain static site: HTML, CSS and a little JavaScript, no build step.
 
-**The idea.** The whole page is a player-piano roll. A player piano plays from punched paper: each hole is a note, its height picks the key, and its length is how long the key is held. The paper is the page's background, an 88-key keyboard runs down the left edge, and the holes drift toward it, so keys light as notes reach them. It carries a short, quiet waltz in D. The roll is sharp on the opening screen; once a visitor scrolls into the work it goes soft (out of focus) and quieter, so the content leads, and it comes back into focus, a little louder, while the cursor is near the keys. On a computer, visitors can punch notes (one click is one note), and each one plays once as it reaches the keys, then leaves the roll. On a phone the roll always stays soft and quiet, only the keys play, and a Sound switch sits in the top corner. Everyone can use the lettered tabs on the keyboard to jump between sections. Photographs sit in watercolour washes. The site is always light, whatever the device's dark-mode setting.
+**The idea.** The whole page is a player-piano roll. A player piano plays from punched paper: each hole is a note, its height picks the key, and its length is how long the key is held. The paper is the page's background, an 88-key keyboard runs down the left edge, and the holes drift toward it, so keys light as notes reach them. It carries a short, quiet waltz in D. The roll is sharp on the opening screen; once a visitor scrolls into the work it goes soft (out of focus) and quieter, so the content leads, and it comes back into focus, a little louder, while the cursor is near the keys. On a computer, visitors can punch notes (one click is one note), and each one plays once as it reaches the keys, then leaves the roll. On a phone the roll always stays soft and quiet, only the keys play, and a Sound switch sits in the top corner. Each section has its name on a vertical bar beside it, and on a matching tab by the keys; the tabs jump between sections. Photographs sit in watercolour washes. The site is always light, whatever the device's dark-mode setting.
 
 ---
 
@@ -46,6 +46,7 @@ Nothing is lost: every change is kept in the repository's history. On GitHub, op
 | Your intro, the "Now / Before / Studying" panel | `index.html` | `<header class="hero">` near the top |
 | Work cards (photo, label, title, one-liner) | `index.html` | `<ul class="cards">` |
 | Smaller things | `index.html` | `<ul class="smalls">` |
+| A section's short name (its vertical bar, and its tab by the keys) | that page | `<div class="mark" aria-hidden="true">` just above the section's heading |
 | Photographs | `index.html` | `<div class="rows">` |
 | About, coursework, tools | `index.html` | `<section class="sec" id="about">` |
 | Email and contact text | every page | `<footer class="sec foot"` |
@@ -86,7 +87,7 @@ Each project on the home page is one block like this:
 3. Copy a card in `index.html` and point its `href` to the new page.
 4. Fix the "Previous" and "Next" links at the bottom of the neighbouring project pages.
 
-The lettered tabs on the keyboard update themselves.
+The tabs by the keyboard update themselves. A section's vertical name (on its bar and its tab) is the text in its `<div class="mark">`, for example `<div class="mark" aria-hidden="true">Work</div>`. Keep it short, a word or two.
 
 ### Images
 

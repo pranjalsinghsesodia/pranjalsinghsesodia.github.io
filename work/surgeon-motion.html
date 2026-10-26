@@ -66,14 +66,14 @@
     </div>
   </section>
   <section class="sec">
-    <div class="mark" aria-hidden="true">A</div>
+    <div class="mark" aria-hidden="true">Question</div>
     <div class="body prose">
       <h2>The question</h2>
       <p>Movement says a lot about technique and fatigue, but measuring it usually needs a motion-capture room or markers on the body. Neither works in an operating theatre. How far could cheap cameras and open-source models go instead?</p>
     </div>
   </section>
   <section class="sec">
-    <div class="mark" aria-hidden="true">B</div>
+    <div class="mark" aria-hidden="true">Pose</div>
     <div class="body prose">
       <h2>Pose and joint angles</h2>
       <p>I started with 2D pose estimation, first OpenPose and then AlphaPose, to find the joints of each person in the frame, and calculated joint angles from the keypoints. When a limb is hidden behind another person or an instrument, the code extrapolates the limb lines to carry the angle through the occlusion.</p>
@@ -92,7 +92,7 @@
     </div>
   </section>
   <section class="sec">
-    <div class="mark" aria-hidden="true">C</div>
+    <div class="mark" aria-hidden="true">Calibration</div>
     <div class="body prose">
       <h2>Calibration and triangulation</h2>
       <p>For depth I paired two webcams 7 cm apart and calibrated them with a checkerboard: each camera’s intrinsics and lens distortion, then the pair’s position relative to each other. After rectification, the same point sits on the same row in both images, so its depth follows from how far it shifts between them. Triangulated distances came out in metres, up to 95–96% accurate in my tests.</p>
@@ -117,7 +117,7 @@
     </div>
   </section>
   <section class="sec">
-    <div class="mark" aria-hidden="true">D</div>
+    <div class="mark" aria-hidden="true">Depth maps</div>
     <div class="body prose">
       <h2>Depth maps</h2>
       <p>Alongside the stereo pair I used Depth Anything for dense depth maps from a single camera, in real time at about 11 frames a second. To test depth on one object, I tracked a red pen cap and estimated its distance as it moved.</p>
@@ -134,7 +134,7 @@
     </div>
   </section>
   <section class="sec">
-    <div class="mark" aria-hidden="true">E</div>
+    <div class="mark" aria-hidden="true">QuEST Lab</div>
     <div class="body prose">
       <h2>Also at QuEST Lab</h2>
       <ul>
@@ -144,7 +144,7 @@
     </div>
   </section>
   <section class="sec">
-    <div class="mark" aria-hidden="true">F</div>
+    <div class="mark" aria-hidden="true">Outcome</div>
     <div class="body prose">
       <h2>What it led to</h2>
       <p>At mPragati the <a href="surgical-arm.html">6-DOF arm</a> has the same problem in another form: its servos can’t report where they are. The calibration and tracking I learned here is how I’m now giving it feedback.</p>
