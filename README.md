@@ -1,173 +1,145 @@
-# Pranjal Singh Sesodia: portfolio and journal
+# Pranjal Singh Sesodia
 
-Static site built with [Astro](https://astro.build), hosted on GitHub Pages at https://pranjalsinghsesodia.github.io. The theme follows the visitor's system setting (light when unknown), and the navbar toggle overrides it.
+Live at **https://pranjalsinghsesodia.github.io**. A plain static site: HTML, CSS and a little JavaScript, no build step.
 
-## Making a change
+**The idea.** The whole page is a player-piano roll. A player piano plays from punched paper: each hole is a note, its height picks the key, and its length is how long the key is held. The paper is the page's background, an 88-key keyboard runs down the left edge, and the holes drift toward it, so keys light as notes reach them. It carries a short, quiet waltz in D. Visitors can punch notes (one click is one note; on a phone, press and hold), play the keys, and use the lettered tabs on the keyboard to jump between sections. Photographs sit in watercolour washes. Everything follows the visitor's light or dark setting.
 
-**From the browser (no setup):** open the file on GitHub, click the pencil icon, edit, then **Commit changes**. To add or replace an image, open the folder, choose **Add file → Upload files**, and commit. Every commit to `main` rebuilds the site in about two minutes; watch it under the repo's **Actions** tab. A green tick means it's live. A red cross means the build failed; click it to read the error, which names the file and line.
+---
 
-**From your laptop (with a preview):**
+## Making changes yourself
 
+### Two ways to edit
+
+**A. On GitHub, in the browser.** Best for quick text fixes.
+
+1. Open https://github.com/pranjalsinghsesodia/pranjalsinghsesodia.github.io
+2. Click the file (for example `index.html`), then the pencil icon (Edit).
+3. Change the text, then click **Commit changes**.
+4. The site updates by itself in a minute or two. The **Actions** tab shows it publishing.
+
+**B. On your computer.** Best for images and bigger changes.
+
+The folder `C:\test_portfolio\site` is linked to the GitHub repository.
+
+1. Edit files with any editor. VS Code is the easiest.
+2. Preview it locally, then open http://localhost:4322:
+   ```bash
+   python -m http.server 4322
+   ```
+   (Run that inside the `site` folder.)
+3. Publish:
+   ```bash
+   git add -A
+   git commit -m "Say what you changed"
+   git push
+   ```
+   GitHub Desktop works too: *File → Add local repository →* choose the `site` folder, then *Commit* and *Push*.
+
+If you edit on GitHub (A) and then on your computer (B), run `git pull` in the `site` folder first, so you start from the latest version.
+
+Nothing is lost: every change is kept in the repository's history. On GitHub, open a file and click **History** to see or restore an older version.
+
+### Where things are
+
+| To change | Open | Look for |
+|---|---|---|
+| Your intro, the "Now / Before / Studying" panel | `index.html` | `<header class="hero">` near the top |
+| Work cards (photo, label, title, one-liner) | `index.html` | `<ul class="cards">` |
+| Smaller things | `index.html` | `<ul class="smalls">` |
+| Photographs | `index.html` | `<div class="rows">` |
+| About, coursework, tools | `index.html` | `<section class="sec" id="about">` |
+| Email and contact text | every page | `<footer class="sec foot"` |
+| A project's page | `work/<project>.html` | title, intro, facts, then sections |
+| Your CV | `cv.pdf` | replace the file, keeping the name `cv.pdf` |
+| Page titles and link previews | each page's `<head>` | `<title>`, `description`, `og:` lines, `media/og.jpg` |
+| Colours and fonts | `css/site.css` | the `:root` block at the top |
+| The music, volume and tempo | `js/roll.js` | `LEFT`, `RIGHT`, `MASTER`, `TEMPO` near the top |
+
+The quickest way to find anything is your editor's search (Ctrl+F) for a few words of the sentence you want to change.
+
+### Text
+
+Change the words between the tags and leave the tags alone. `<p>…</p>` is a paragraph, `<h2>…</h2>` a heading, `<li>…</li>` a list item, and `<a href="…">…</a>` a link. Special characters: write `&amp;` for &. Curly quotes (’ “ ”) are fine to type directly.
+
+### A work card
+
+Each project on the home page is one block like this:
+
+```html
+<li data-reveal><a class="card" href="work/surgical-arm.html">
+  <span class="card-img"><img src="media/work/arm/arm-camera.webp" width="1200" height="1600" alt="" style="object-position:50% 32%" loading="lazy" decoding="async"></span>
+  <span class="meta small"><span class="tag">Robotics</span><span>mPragati, IIT Delhi</span><span>Since 2026</span></span>
+  <h3>A surgical arm that finds its own joints with cameras</h3>
+  <p>Two camera feedback loops for a 6-DOF arm whose servos can’t say where they are.</p>
+</a></li>
 ```
-npm install        # once
-npm run dev        # preview at http://localhost:4321; journal drafts show here only
-npm run build      # the same check GitHub runs; fix any error before pushing
-git add -A
-git commit -m "What changed"
-git push
-```
 
-If the live site doesn't change after a push, refresh with Ctrl+Shift+R. If the Actions tab shows no new run, GitHub may be having an outage (githubstatus.com); push again later.
+- `href`: the project page it opens.
+- `src`: the card's photo. `width` and `height` are that image's real size in pixels. `object-position` picks which part shows in the 4:3 crop: `50% 0%` is the top, `50% 100%` the bottom.
+- The three `<span>`s in `meta`: the label (shown in brass), the place, and the years.
+- `<h3>` is the title and `<p>` the one-liner.
+- To reorder cards, move whole `<li>…</li>` blocks. Cards alternate left and right, and the right-hand column sits a little lower.
 
-## Where to change what
+**Adding a project:**
+1. Copy one of the pages in `work/` and rename it, for example `work/new-thing.html`.
+2. Change its text and images.
+3. Copy a card in `index.html` and point its `href` to the new page.
+4. Fix the "Previous" and "Next" links at the bottom of the neighbouring project pages.
 
-| I want to change… | Edit this |
-| --- | --- |
-| My name, role line, email, social links | `src/lib/site.ts` |
-| Home page: heading, bio, research interests, Recent list, publication, About text, skills, facts | `src/pages/index.astro` |
-| A project's title, summary, status, numbers, case study text | `src/content/projects/<slug>.md` |
-| A project's cover or photos | `src/assets/projects/<slug>/` + the path in that project's `.md` |
-| Profile photo | Replace `src/assets/site/me.jpeg` (keep the name) |
-| CV | Replace `src/assets/site/cv.pdf` (keep the name) |
-| Contact sheet photos and clips | `src/content/stories/` + `src/assets/stories/`, or Pages CMS from your phone |
-| Journal entries | `src/content/journal/*.md` |
-| Navbar links | `src/components/SiteHeader.astro` |
-| Footer | `src/components/SiteFooter.astro` |
-| Colours and fonts | `src/styles/global.css` (tokens at the top: dark, then light) |
-
-### Home page text (`src/pages/index.astro`)
-
-The top part, between the two `---` lines, holds lists you can edit like text:
-
-- `NEWS`: the **Recent** list. Each line is `{ when: 'Jun 2026', html: 'What happened.' }`. Wrap words in `<b>…</b>` for bold or `<i>…</i>` for italics. Delete a line to remove it; keep three or four.
-- `SKILLS`: the skill tags in About, by group.
-- `BIBTEX`: the citation shown by the BibTeX button.
-
-Below that is the page itself. Search for the sentence you want to change (Ctrl+F) and edit it in place. Leave the `<tags>` and `{curly braces}` around it alone.
-
-### Projects (`src/content/projects/<slug>.md`)
-
-Each project is one Markdown file. The block between the `---` lines at the top is its data:
-
-| Field | What it does |
-| --- | --- |
-| `title`, `short` | Full name on the project page; short name under the story ring |
-| `summary` | One-line description in the title block |
-| `order` | Position in the list (1 is first) and the item code `PSS-001` |
-| `featured` | `false` moves it under "Earlier and other work" |
-| `inRings` | `true` puts it in the story rings at the top (keep it to four) |
-| `year`, `period`, `where`, `role`, `supervisor`, `mentors`, `team` | Title-block rows |
-| `discipline` | Filter group: robotics, biomech, fluids, hardware or research |
-| `field`, `tools` | Shown in the work table and title block |
-| `status`, `state` | Status text, and its style: `live` (in progress), `done` or `win` |
-| `figures` | The numbers row. Every value must also appear in that project's text, or the build stops with an error |
-| `cover`, `coverNote` | Cover image and its caption |
-| `story` | The slides of the 30-second story (image + caption, or a text card) |
-| `repo`, `links` | Code link and other links |
-
-Everything below the second `---` is the case study, written in Markdown:
-
-```md
-## A heading
-
-A paragraph. **Bold**, *italic*, [a link](https://example.com).
-
-![What the photo shows](../../assets/projects/surgical-arm/arm-bench.jpg)
-```
-
-Text values containing a colon need quotes: `role: "Lead: CAD and testing"`.
+The lettered tabs on the keyboard update themselves.
 
 ### Images
 
-- Put a project's images in `src/assets/projects/<slug>/` and refer to them from its `.md` with `../../assets/projects/<slug>/<file>`.
-- File names: lowercase, no spaces (`arm-bench.jpg`, not `Arm Bench.JPG`).
-- JPG, PNG or WebP. No need to resize: the build makes small, fast versions. Keep each file under 20 MB (GitHub's browser upload limit is 25 MB).
-- Videos go in `src/assets/projects/<slug>/video/` and are linked as `/media/<slug>/<file>.mp4`.
+- Put images in `media/work/<project>/`. WebP or JPG at about 1600 px wide and under about 300 KB keeps pages fast. Free converter: https://squoosh.app
+- In the HTML, set `src`, `width`/`height` (the real pixel size) and an `alt` that says what the image shows.
+- A figure on a project page looks like this:
+  ```html
+  <figure class="fig">
+    <img class="zoom" data-zoom data-group="fig" data-title="Caption shown when enlarged" src="../media/work/tunnel/tunnel-cad-assembly.webp" width="1600" height="618" alt="What the image shows" loading="lazy" decoding="async">
+    <figcaption>Caption under the image.</figcaption>
+  </figure>
+  ```
+- For two or three images side by side, copy a `<div class="jrow">` block. Each `<figure style="--ar:…">` there takes the image's width ÷ height.
 
-### Contact sheet from your phone (Pages CMS)
+### Photographs
 
-1. Open [app.pagescms.org](https://app.pagescms.org), sign in with GitHub, and open this repo.
-2. **Stories → Add**: upload the photo, write a caption, pick a set (Lab, Baja, Side builds). Tick "My pick" to circle it.
-3. Save. The site rebuilds in about two minutes.
+Each photo is a `<button class="ph" …>` inside a `<div class="row">`. Keep one to three photos per row.
 
-The menu that Pages CMS shows is defined in `.pages.yml`.
+1. Save the photo twice as WebP in `media/photos/`: `name-900.webp` (900 px wide) and `name-1800.webp` (1800 px wide).
+2. Copy an existing `<button class="ph">` block and change `name` everywhere in it.
+3. Set `--ar` to width ÷ height (for example 0.75 for portrait 3:4, 1.7778 for 16:9), and `width`/`height` on the `<img>`.
+4. Fill in `data-title`, `data-date`, `data-camera` and `data-exp` (the exposure, for example `f/1.8 · 1/100 s · ISO 80`). These show in the line under the photographs and when a photo is enlarged.
+5. The watercolour frame comes from `--m` (the mask, in `media/frames/`) and `--wash` (its colour, `--wash-d` in dark mode). For a new photo you can reuse another photo's mask with a similar shape and pick a soft colour, or delete those settings for no frame.
 
-## What every file does
+### Site information
 
-```
-.github/workflows/deploy.yml   Builds and publishes the site on every push, daily, or when a project repo pings it
-.pages.yml                     Pages CMS menus (stories, journal, films)
-astro.config.mjs               Site address and build settings
-package.json                   Dependencies and the npm commands
-projects.sources.json          Which project repos to pull at build time
-scripts/sync-projects.mjs      Pulls each project repo's portfolio/ folder into src/
-templates/project-repo/        Starter files for a new project repo
+- **Email:** search all files for `pranjalsinghsesodia@gmail.com`.
+- **LinkedIn and Instagram:** search for `linkedin.com` and `instagram.com`. Links to other sites open in a new tab because of `target="_blank" rel="noopener"`. Keep that on any new outside link.
+- **CV:** replace `cv.pdf`.
+- **Link previews** (what LinkedIn or WhatsApp show): the `og:` lines in each page's `<head>`, and the image `media/og.jpg` (1200 × 630).
+- **"Last updated":** the last paragraph of the footer in `index.html`.
 
-src/
-├─ assets/                     Every image, video and file the site serves
-│  ├─ site/                    me.jpeg, cv.pdf, favicon.svg
-│  ├─ projects/<slug>/         Covers, photos and clips for each project
-│  ├─ stories/                 Contact-sheet photos and clips
-│  └─ films/                   Poster frames for the Films row
-├─ content/                    All the writing, as Markdown
-│  ├─ projects/                One file per project
-│  ├─ journal/                 Journal entries (draft: true hides one)
-│  ├─ stories/                 One file per contact-sheet frame
-│  └─ films/                   One file per film card
-├─ content.config.ts           The allowed fields for each content type (what the build checks)
-├─ lib/
-│  ├─ site.ts                  Name, role, email, CV, social links
-│  ├─ stories.ts               Sorting and grouping for projects and stories
-│  └─ static-file.ts           Helper that serves files at fixed addresses
-├─ layouts/Base.astro          The page shell: head tags, theme script, navbar and footer
-├─ components/
-│  ├─ SiteHeader.astro         Sticky navbar, clock, theme toggle
-│  ├─ SiteFooter.astro         Footer: email, links, updated date, credit
-│  ├─ ProjectRings.astro       Story rings at the top of the home page
-│  ├─ ProjectIndex.astro       Selected work: field list, table, hover preview
-│  ├─ StoryViewer.astro        Full-screen story player for rings and the contact sheet
-│  ├─ Photography.astro        Photography section wrapper
-│  ├─ ContactSheet.astro       The contact sheet of frames
-│  └─ Films.astro              The Films row
-├─ pages/                      Each file is a page; its path is its address
-│  ├─ index.astro              Home page (/)
-│  ├─ work/[slug].astro        Template for every project page (/work/<slug>/)
-│  ├─ journal/index.astro      Journal list (/journal/)
-│  ├─ journal/[slug].astro     Template for every journal entry
-│  ├─ photos/index.astro       All photo sets (/photos/)
-│  ├─ 404.astro                Page-not-found
-│  ├─ rss.xml.js               Journal RSS feed
-│  ├─ cv.pdf.ts, favicon.svg.ts  Serve the CV and icon at fixed addresses
-│  └─ media/[...path].ts       Serves videos at /media/...
-└─ styles/global.css           Colours, fonts and shared styles
-```
+### The roll
 
-Files you'll edit often: `src/content/**`, `src/assets/**`, `src/pages/index.astro`, `src/lib/site.ts`. Files to leave alone unless you know Astro: `content.config.ts`, `lib/stories.ts`, `lib/static-file.ts`, `layouts/`, `pages/media/`, `scripts/`, `.github/`.
+The top of `js/roll.js`:
 
-## Project data from project repos
+- `MASTER` is the volume. It's deliberately very low; 0.12 is a soft murmur even with speakers at full.
+- `TEMPO` is beats per second while it plays.
+- `LEFT` and `RIGHT` are the waltz, as MIDI note numbers (60 is middle C, 62 is D).
 
-Each project can live in its own repo with a `portfolio/` folder:
+Sound stays off until a visitor turns it on or clicks a key. Browsers only start sound after a click, tap or key press, so a remembered "on" waits for that.
 
-```
-pranjalsinghsesodia/surgical-arm-6dof
-├─ portfolio/
-│  ├─ project.md    front matter: title, year, status, tools, story slides; body: the case study
-│  ├─ cover.jpg
-│  └─ ...images used by the story
-├─ cad/             stays here, never downloaded by the site build
-└─ src/
-```
+---
 
-1. Copy `templates/project-repo/portfolio/` into the project repo and fill in `project.md`.
-2. Add the repo to `projects.sources.json`.
-3. Optional: copy `templates/project-repo/.github/workflows/notify-portfolio.yml` into the project repo and add a `PORTFOLIO_DISPATCH_TOKEN` secret, so a push there rebuilds the site straight away. Without it, the site still picks up changes in its daily rebuild.
+## What's where
 
-At build time `scripts/sync-projects.mjs` downloads only each repo's `portfolio/` folder. It writes `project.md` to `src/content/projects/<slug>.md`, copies the other files to `src/assets/projects/<slug>/`, and rewrites `./file` paths to match. Once a project comes from its repo, edit it there, not here: the next build overwrites the local copy.
+- `index.html`: the home page. `work/*.html`: one page per project.
+- `css/site.css`: everything visual.
+- `js/roll.js`: the roll, keyboard, octave tabs and sound.
+- `js/site.js`: smooth scrolling (Lenis), entrances and reveals (GSAP), the photo readout, the lightbox.
+- `media/`: images, video clips, photographs, frame masks, the portrait and `og.jpg`.
+- `.github/workflows/deploy.yml`: publishes the folder to GitHub Pages on every push to `main`.
 
-## Deploying
+## Before publishing anything new
 
-The repo is `pranjalsinghsesodia/pranjalsinghsesodia.github.io`, in the `pranjalsinghsesodia` organisation. Settings → Pages → Source is **GitHub Actions**; pushing to `main` deploys.
-
-For private project repos, add a `PROJECTS_READ_TOKEN` secret (a fine-grained token with read access to those repos). To use a custom domain, set the `SITE_URL` variable to it, add the domain under Settings → Pages, and point its DNS at GitHub Pages.
-
-The site was designed and built with help from Claude, Anthropic's AI assistant.
+The elbow-implant images (mPragati) and operating-theatre footage (QuEST Lab) are deliberately left out until the labs clear them. Each spot is marked with a `CONFIDENTIALITY` comment in `work/elbow-and-knee.html` and `work/surgeon-motion.html`.

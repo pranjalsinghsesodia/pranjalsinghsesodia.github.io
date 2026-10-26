@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checking a patented elbow implant, and freeing a knee that jammed · Pranjal Singh Sesodia</title>
+<meta name="description" content="Two mechanism problems at mPragati. Both were in the geometry, and both showed up in simulation before anything was cut.">
+<meta property="og:title" content="Checking a patented elbow implant, and freeing a knee that jammed · Pranjal Singh Sesodia">
+<meta property="og:description" content="Two mechanism problems at mPragati. Both were in the geometry, and both showed up in simulation before anything was cut.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Pranjal Singh Sesodia">
+<!-- Link previews need a full address here: once the site is live, change this to https://<your-domain>/media/og.jpg -->
+<meta property="og:image" content="https://pranjalsinghsesodia.github.io/media/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f0e8d8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1b1712" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fragment+Mono&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap">
+<link rel="stylesheet" href="../css/site.css">
+<script>(function (d) {
+  // 'js' lets entrance animations take over; the loading screen shows once per visit
+  d.classList.add('js');
+  try { if (sessionStorage.getItem('pss-seen')) d.classList.add('seen'); else { sessionStorage.setItem('pss-seen', '1'); d.classList.add('loader-on'); } }
+  catch (e) { d.classList.add('seen'); }
+})(document.documentElement)</script>
+</head>
+<body class="work-page">
+<div class="loader" aria-hidden="true"><div class="loader-keys"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><b style="--x:1"></b><b style="--x:2"></b><b style="--x:4"></b><b style="--x:5"></b><b style="--x:6"></b></div><p>Pranjal Singh Sesodia</p></div>
+<canvas class="roll-paper" aria-hidden="true"></canvas>
+<canvas class="roll-canvas" aria-hidden="true"></canvas>
+<div class="fog" aria-hidden="true"></div>
+<div class="keys-hit" aria-hidden="true" title="Piano keys: click to play"></div>
+<a class="skip" href="#text">Skip to the text</a>
+<main class="page">
+  <header class="hero">
+    <div class="body" data-fog>
+      <p class="crumb intro"><a href="../index.html">&larr; Pranjal Singh Sesodia</a></p>
+      <div class="kicker small intro"><span class="tag">Mechanisms</span><span>mPragati, IIT Delhi</span><span>June 2026 – now</span></div>
+      <h1 class="p-title intro">Checking a patented elbow implant, and freeing a knee that jammed</h1>
+      <div class="hero-row">
+        <p class="dek intro">Two mechanism problems at mPragati. Both were in the geometry, and both showed up in simulation before anything was cut.</p>
+        <dl class="now intro">
+          <dt>With</dt><dd>Dr. Dinesh Kalyanasundaram (supervisor); Bavath D. and Yogesh Sahu (mentors)</dd>
+          <dt>My part</dt><dd>CAD of the implant and its test jig, the multi-body dynamics, both redesigns</dd>
+          <dt>Tools</dt><dd>SolidWorks (parts and assemblies), ANSYS Mechanical (multi-body dynamics, static structural)</dd>
+          <dt>Status</dt><dd>Knee fixed and printed; hinge redesign under way</dd>
+        </dl>
+      </div>
+      <div class="roll-cap">
+        <p class="roll-hint">This page is a piano roll. Its keys run down the left edge: click one, or click the paper to punch a note. Scrolling plays it.</p>
+        <div class="ctl"><button class="roll-sound" type="button" aria-pressed="false">Sound off</button><button class="roll-clear" type="button" hidden>Clear your notes</button></div>
+      </div>
+    </div>
+  </header>
+  <div id="text"></div>
+  <section class="sec lead">
+    <div class="body">
+      <figure class="fig tall">
+        <img class="zoom" data-zoom data-group="fig" data-title="The printed knee in front of its SolidWorks model, after the links were re-sized." src="../media/work/knee/knee-print-vs-cad.webp" width="900" height="1600" alt="A hand holding the printed knee in front of a laptop showing the same knee in SolidWorks" loading="eager" fetchpriority="high" decoding="async">
+      <figcaption>The printed knee in front of its SolidWorks model, after the links were re-sized.</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">A</div>
+    <div class="body prose">
+      <h2>The elbow implant: a review before technology transfer</h2>
+      <p>A patented elbow implant was being reviewed before its technology transfer. My job was to check that it moves the way it is meant to.</p>
+      <ul>
+        <li>Modelled the implant and its test jig as SolidWorks parts and assemblies.</li>
+        <li>Ran multi-body dynamics in ANSYS Mechanical and compared the ulna’s path about the hinge with the motion the patent claims.</li>
+        <li>Found a mismatch between the simulated motion of the ulna about the hinge and the motion it was meant to have.</li>
+        <li>Started the kinematic redesign of the hinge.</li>
+      </ul>
+    <!-- CONFIDENTIALITY: the implant is patented and was in pre-technology-transfer review. Its CAD, mesh and stress images are in the old site's media/projects/knee/ (elbow-*.webp, test-jig.webp, ulna-part-*.webp). Add them here only once mPragati has cleared them. -->
+    <p class="aside">The implant’s images stay with the lab while it is under review.</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">B</div>
+    <div class="body prose">
+      <h2>The prosthetic knee: removing a kinematic lock</h2>
+      <p>A polycentric knee joins thigh and shin with two links instead of a single pin, so the four of them form a four-bar linkage. This one jammed part-way through its range: no link could turn far enough, and the linkage locked.</p>
+      <p>Whether a four-bar can turn all the way round depends only on its link lengths. With the shortest link <i>s</i>, the longest <i>l</i>, and the other two <i>p</i> and <i>q</i>, the Grashof condition is</p>
+    <p class="eq">s + l ≤ p + q</p>
+      <p>If it holds, the shortest link can make a full turn. If it doesn’t, every link only rocks between two dead positions, and at each one the linkage locks. I re-sized the link lengths in SolidWorks, as parts and as an assembly, until the inequality held. That removed the lock and gave the knee back its full range of flexion. Then I printed it and checked it on the physical prototype.</p>
+      <div class="jrow">
+        <figure style="--ar:1.2702">
+          <img class="zoom" data-zoom data-group="fig" data-title="The knee unit in SolidWorks." src="../media/work/knee/knee-cad-front.webp" width="912" height="718" alt="The knee unit rendered in SolidWorks, from the front" loading="lazy" decoding="async">
+          <figcaption>The knee unit in SolidWorks.</figcaption>
+        </figure>
+        <figure style="--ar:1.1036">
+          <img class="zoom" data-zoom data-group="fig" data-title="The four-bar linkage from the side." src="../media/work/knee/knee-cad-side.webp" width="767" height="695" alt="The knee’s four-bar linkage from the side" loading="lazy" decoding="async">
+          <figcaption>The four-bar linkage from the side.</figcaption>
+        </figure>
+        <figure style="--ar:0.8597">
+          <img class="zoom" data-zoom data-group="fig" data-title="In the full prosthetic leg." src="../media/work/knee/knee-leg-assembly.webp" width="711" height="827" alt="The knee inside a full prosthetic leg assembly, in red and grey" loading="lazy" decoding="async">
+          <figcaption>In the full prosthetic leg.</figcaption>
+        </figure>
+      </div>
+      <div class="jrow">
+        <figure style="--ar:0.5625">
+          <img class="zoom" data-zoom data-group="fig" data-title="The printed polycentric knee." src="../media/work/knee/knee-printed-1.webp" width="900" height="1600" alt="The printed knee held in a hand" loading="lazy" decoding="async">
+          <figcaption>The printed polycentric knee.</figcaption>
+        </figure>
+        <figure style="--ar:0.5625">
+          <img class="zoom" data-zoom data-group="fig" data-title="The printed linkage, flexed." src="../media/work/knee/knee-printed-2.webp" width="900" height="1600" alt="The printed linkage held flexed" loading="lazy" decoding="async">
+          <figcaption>The printed linkage, flexed.</figcaption>
+        </figure>
+      </div>
+      <figure class="fig">
+        <img class="zoom" data-zoom data-group="fig" data-title="Working on the assembly." src="../media/work/knee/knee-solidworks.webp" width="1600" height="900" alt="A laptop screen with the knee assembly open in SolidWorks" loading="lazy" decoding="async">
+      <figcaption>Working on the assembly.</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">C</div>
+    <div class="body prose">
+      <h2>What it taught me</h2>
+      <p>Simulate before you trust a mechanism, even a patented one.</p>
+    </div>
+  </section>
+  <nav class="sec" aria-label="More work">
+    <div class="body">
+      <div class="next">
+        <a href="surgical-arm.html"><span class="small">&larr; Previous</span><span class="t">A surgical arm that finds its own joints with cameras</span></a>
+        <a class="fwd" href="levitation-gap.html"><span class="small">Next &rarr;</span><span class="t">Robust real-time levitation gap estimation for hyperloop pods</span></a>
+      </div>
+    </div>
+  </nav>
+  <footer class="sec foot" id="contact">
+    <div class="mark fine" aria-hidden="true">Fine</div>
+    <div class="body">
+      <p class="small">Write to me</p>
+      <a class="email" href="mailto:pranjalsinghsesodia@gmail.com">pranjalsinghsesodia@gmail.com</a>
+      <p>If you’re building something that needs both a wide look and a careful one, in a lab, a studio or a team, I’d like to hear about it.</p>
+      <ul class="links">
+        <li><a href="../cv.pdf" target="_blank" rel="noopener">CV</a></li>
+        <li><a href="https://www.linkedin.com/in/pranjalsinghsesodia/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://www.instagram.com/hipranjal_/" target="_blank" rel="noopener">Instagram</a></li>
+      </ul>
+    </div>
+  </footer>
+</main>
+<dialog class="lb" aria-label="Enlarged image">
+  <figure class="lb-fig"><img alt=""></figure>
+  <p class="lb-cap"><span class="t"></span><span class="m"></span></p>
+  <button class="lb-x" type="button">Close</button>
+  <button class="lb-p" type="button" aria-label="Previous">&larr;</button>
+  <button class="lb-n" type="button" aria-label="Next">&rarr;</button>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="../js/roll.js" defer></script>
+<script src="../js/site.js" defer></script>
+</body>
+</html>

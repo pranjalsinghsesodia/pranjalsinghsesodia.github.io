@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeskMilo, a desk companion that turns to look at you · Pranjal Singh Sesodia</title>
+<meta name="description" content="A personal build on a Raspberry Pi. It journals a thought, sends a voice message, sets a reminder or plays music.">
+<meta property="og:title" content="DeskMilo, a desk companion that turns to look at you · Pranjal Singh Sesodia">
+<meta property="og:description" content="A personal build on a Raspberry Pi. It journals a thought, sends a voice message, sets a reminder or plays music.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Pranjal Singh Sesodia">
+<!-- Link previews need a full address here: once the site is live, change this to https://<your-domain>/media/og.jpg -->
+<meta property="og:image" content="https://pranjalsinghsesodia.github.io/media/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f0e8d8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1b1712" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fragment+Mono&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap">
+<link rel="stylesheet" href="../css/site.css">
+<script>(function (d) {
+  // 'js' lets entrance animations take over; the loading screen shows once per visit
+  d.classList.add('js');
+  try { if (sessionStorage.getItem('pss-seen')) d.classList.add('seen'); else { sessionStorage.setItem('pss-seen', '1'); d.classList.add('loader-on'); } }
+  catch (e) { d.classList.add('seen'); }
+})(document.documentElement)</script>
+</head>
+<body class="work-page">
+<div class="loader" aria-hidden="true"><div class="loader-keys"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><b style="--x:1"></b><b style="--x:2"></b><b style="--x:4"></b><b style="--x:5"></b><b style="--x:6"></b></div><p>Pranjal Singh Sesodia</p></div>
+<canvas class="roll-paper" aria-hidden="true"></canvas>
+<canvas class="roll-canvas" aria-hidden="true"></canvas>
+<div class="fog" aria-hidden="true"></div>
+<div class="keys-hit" aria-hidden="true" title="Piano keys: click to play"></div>
+<a class="skip" href="#text">Skip to the text</a>
+<main class="page">
+  <header class="hero">
+    <div class="body" data-fog>
+      <p class="crumb intro"><a href="../index.html">&larr; Pranjal Singh Sesodia</a></p>
+      <div class="kicker small intro"><span class="tag">Personal</span><span>A personal build</span><span>2026</span></div>
+      <h1 class="p-title intro">DeskMilo, a desk companion that turns to look at you</h1>
+      <div class="hero-row">
+        <p class="dek intro">A personal build on a Raspberry Pi. It journals a thought, sends a voice message, sets a reminder or plays music.</p>
+        <dl class="now intro">
+          <dt>My part</dt><dd>Everything: concept, mechanism, CAD and build</dd>
+          <dt>Tools</dt><dd>Raspberry Pi, Python, SolidWorks</dd>
+          <dt>Status</dt><dd>Prototype</dd>
+        </dl>
+      </div>
+      <div class="roll-cap">
+        <p class="roll-hint">This page is a piano roll. Its keys run down the left edge: click one, or click the paper to punch a note. Scrolling plays it.</p>
+        <div class="ctl"><button class="roll-sound" type="button" aria-pressed="false">Sound off</button><button class="roll-clear" type="button" hidden>Clear your notes</button></div>
+      </div>
+    </div>
+  </header>
+  <div id="text"></div>
+  <section class="sec lead">
+    <div class="body">
+      <figure class="fig">
+        <img class="zoom" data-zoom data-group="fig" data-title="DeskMilo, as it stands." src="../media/work/milo/cover.webp" width="1600" height="900" alt="DeskMilo: a small dark device with a screen face on a stand, on a wooden desk" loading="eager" fetchpriority="high" decoding="async">
+      <figcaption>DeskMilo, as it stands.</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">A</div>
+    <div class="body prose">
+      <h2>Design</h2>
+      <p>It started as a page of sketches: three possible designs. I kept the one that needed only two motors.</p>
+      <p>A direction in space takes two angles, a turn and a nod. One motor for each gives the head two degrees of freedom: pan and tilt. A third motor would tip the head sideways, but it wouldn’t change where the head faces, so two is the fewest that let it look at you anywhere in front of the desk.</p>
+      <div class="jrow">
+        <figure style="--ar:0.8219">
+          <img class="zoom" data-zoom data-group="fig" data-title="The page of sketches. The deciding note: only two motors, so the easiest mechanism." src="../media/work/milo/sketch.webp" width="1052" height="1280" alt="A notebook page with three sketched designs and handwritten notes" loading="lazy" decoding="async">
+          <figcaption>The page of sketches. The deciding note: only two motors, so the easiest mechanism.</figcaption>
+        </figure>
+        <figure style="--ar:1.8583">
+          <img class="zoom" data-zoom data-group="fig" data-title="Exploded CAD, in SolidWorks." src="../media/work/milo/cad-exploded.webp" width="1193" height="642" alt="Exploded CAD of the head, stand and base" loading="lazy" decoding="async">
+          <figcaption>Exploded CAD, in SolidWorks.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">B</div>
+    <div class="body prose">
+      <h2>What it does</h2>
+      <ul>
+        <li>A two-degree-of-freedom head that turns toward you.</li>
+        <li>A speaker, so it can answer questions.</li>
+        <li>Cooling, so it doesn’t overheat on the desk.</li>
+        <li>Connects to GPT-style assistants.</li>
+      </ul>
+    </div>
+  </section>
+  <nav class="sec" aria-label="More work">
+    <div class="body">
+      <div class="next">
+        <a href="wind-tunnel.html"><span class="small">&larr; Previous</span><span class="t">A tabletop subsonic wind tunnel, designed end to end</span></a>
+        <a class="fwd" href="surgeon-motion.html"><span class="small">Next &rarr;</span><span class="t">Measuring how surgeons move, with two ordinary webcams</span></a>
+      </div>
+    </div>
+  </nav>
+  <footer class="sec foot" id="contact">
+    <div class="mark fine" aria-hidden="true">Fine</div>
+    <div class="body">
+      <p class="small">Write to me</p>
+      <a class="email" href="mailto:pranjalsinghsesodia@gmail.com">pranjalsinghsesodia@gmail.com</a>
+      <p>If you’re building something that needs both a wide look and a careful one, in a lab, a studio or a team, I’d like to hear about it.</p>
+      <ul class="links">
+        <li><a href="../cv.pdf" target="_blank" rel="noopener">CV</a></li>
+        <li><a href="https://www.linkedin.com/in/pranjalsinghsesodia/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://www.instagram.com/hipranjal_/" target="_blank" rel="noopener">Instagram</a></li>
+      </ul>
+    </div>
+  </footer>
+</main>
+<dialog class="lb" aria-label="Enlarged image">
+  <figure class="lb-fig"><img alt=""></figure>
+  <p class="lb-cap"><span class="t"></span><span class="m"></span></p>
+  <button class="lb-x" type="button">Close</button>
+  <button class="lb-p" type="button" aria-label="Previous">&larr;</button>
+  <button class="lb-n" type="button" aria-label="Next">&rarr;</button>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="../js/roll.js" defer></script>
+<script src="../js/site.js" defer></script>
+</body>
+</html>

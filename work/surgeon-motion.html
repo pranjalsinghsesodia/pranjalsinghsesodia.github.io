@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Measuring how surgeons move, with two ordinary webcams · Pranjal Singh Sesodia</title>
+<meta name="description" content="Markerless motion capture for the operating theatre: live joint angles from pose estimation, and depth from a calibrated stereo pair. No markers, no motion-capture room.">
+<meta property="og:title" content="Measuring how surgeons move, with two ordinary webcams · Pranjal Singh Sesodia">
+<meta property="og:description" content="Markerless motion capture for the operating theatre: live joint angles from pose estimation, and depth from a calibrated stereo pair. No markers, no motion-capture room.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Pranjal Singh Sesodia">
+<!-- Link previews need a full address here: once the site is live, change this to https://<your-domain>/media/og.jpg -->
+<meta property="og:image" content="https://pranjalsinghsesodia.github.io/media/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f0e8d8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1b1712" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fragment+Mono&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap">
+<link rel="stylesheet" href="../css/site.css">
+<script>(function (d) {
+  // 'js' lets entrance animations take over; the loading screen shows once per visit
+  d.classList.add('js');
+  try { if (sessionStorage.getItem('pss-seen')) d.classList.add('seen'); else { sessionStorage.setItem('pss-seen', '1'); d.classList.add('loader-on'); } }
+  catch (e) { d.classList.add('seen'); }
+})(document.documentElement)</script>
+</head>
+<body class="work-page">
+<div class="loader" aria-hidden="true"><div class="loader-keys"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><b style="--x:1"></b><b style="--x:2"></b><b style="--x:4"></b><b style="--x:5"></b><b style="--x:6"></b></div><p>Pranjal Singh Sesodia</p></div>
+<canvas class="roll-paper" aria-hidden="true"></canvas>
+<canvas class="roll-canvas" aria-hidden="true"></canvas>
+<div class="fog" aria-hidden="true"></div>
+<div class="keys-hit" aria-hidden="true" title="Piano keys: click to play"></div>
+<a class="skip" href="#text">Skip to the text</a>
+<main class="page">
+  <header class="hero">
+    <div class="body" data-fog>
+      <p class="crumb intro"><a href="../index.html">&larr; Pranjal Singh Sesodia</a></p>
+      <div class="kicker small intro"><span class="tag">Vision</span><span>QuEST Lab, IIT Delhi</span><span>December 2025 – May 2026</span></div>
+      <h1 class="p-title intro">Measuring how surgeons move, with two ordinary webcams</h1>
+      <div class="hero-row">
+        <p class="dek intro">Markerless motion capture for the operating theatre: live joint angles from pose estimation, and depth from a calibrated stereo pair. No markers, no motion-capture room.</p>
+        <dl class="now intro">
+          <dt>With</dt><dd>Dr. Jay Dhariwal (supervisor); Bavath D. (mentor)</dd>
+          <dt>My part</dt><dd>Camera calibration, pose tracking, joint angles, triangulation, depth mapping</dd>
+          <dt>Tools</dt><dd>Python, OpenCV, OpenPose, AlphaPose, Depth Anything; two webcams, 7 cm apart</dd>
+          <dt>In numbers</dt><dd>Up to 95–96% triangulated-distance accuracy · depth maps at about 11 frames a second</dd>
+          <dt>Status</dt><dd>Complete; validated on recordings of real procedures</dd>
+        </dl>
+      </div>
+      <div class="roll-cap">
+        <p class="roll-hint">This page is a piano roll. Its keys run down the left edge: click one, or click the paper to punch a note. Scrolling plays it.</p>
+        <div class="ctl"><button class="roll-sound" type="button" aria-pressed="false">Sound off</button><button class="roll-clear" type="button" hidden>Clear your notes</button></div>
+      </div>
+    </div>
+  </header>
+  <div id="text"></div>
+  <section class="sec lead">
+    <div class="body">
+      <figure class="fig">
+        <img class="zoom" data-zoom data-group="fig" data-title="A webcam frame and its live depth map. Nearer is brighter, so the hand stands out from the face." src="../media/work/motion/depth-live-hand.webp" width="1600" height="631" alt="A webcam frame of a raised hand beside its depth map, where the hand shows brightest" loading="eager" fetchpriority="high" decoding="async">
+      <figcaption>A webcam frame and its live depth map. Nearer is brighter, so the hand stands out from the face.</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">A</div>
+    <div class="body prose">
+      <h2>The question</h2>
+      <p>Movement says a lot about technique and fatigue, but measuring it usually needs a motion-capture room or markers on the body. Neither works in an operating theatre. How far could cheap cameras and open-source models go instead?</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">B</div>
+    <div class="body prose">
+      <h2>Pose and joint angles</h2>
+      <p>I started with 2D pose estimation, first OpenPose and then AlphaPose, to find the joints of each person in the frame, and calculated joint angles from the keypoints. When a limb is hidden behind another person or an instrument, the code extrapolates the limb lines to carry the angle through the occlusion.</p>
+      <p>Then I ran the tracker on recordings of real procedures, with faces blurred.</p>
+    <!-- CONFIDENTIALITY: operating-theatre recordings and stills (or-*.webp, or-pose-tracking.mp4 in the old site's media). Add them here only once QuEST Lab has cleared them. -->
+      <div class="jrow">
+        <figure style="--ar:1.7778">
+          <img class="zoom" data-zoom data-group="fig" data-title="Pose and face keypoints on my own webcam, early on." src="../media/work/motion/pose-webcam-1.webp" width="1600" height="900" alt="Pose and face keypoints drawn over a webcam image of Pranjal at a desk" loading="lazy" decoding="async">
+          <figcaption>Pose and face keypoints on my own webcam, early on.</figcaption>
+        </figure>
+        <figure style="--ar:0.5624">
+          <video src="../media/video/pose-early.mp4" poster="../media/work/motion/pose-early.webp" width="478" height="850" controls playsinline preload="none" aria-label="Early pose detection tracking arms and hands"></video>
+          <figcaption>Early pose detection, tracking my arms and hands.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">C</div>
+    <div class="body prose">
+      <h2>Calibration and triangulation</h2>
+      <p>For depth I paired two webcams 7 cm apart and calibrated them with a checkerboard: each camera’s intrinsics and lens distortion, then the pair’s position relative to each other. After rectification, the same point sits on the same row in both images, so its depth follows from how far it shifts between them. Triangulated distances came out in metres, up to 95–96% accurate in my tests.</p>
+      <div class="jrow">
+        <figure style="--ar:1.7816">
+          <img class="zoom" data-zoom data-group="fig" data-title="Calibration images for the stereo pair." src="../media/work/motion/calibration-checkerboard.webp" width="1085" height="609" alt="A person holding a printed checkerboard up to the cameras" loading="lazy" decoding="async">
+          <figcaption>Calibration images for the stereo pair.</figcaption>
+        </figure>
+        <figure style="--ar:0.5624">
+          <video src="../media/video/triangulation-timelapse.mp4" poster="../media/work/motion/triangulation-timelapse.webp" width="478" height="850" controls playsinline preload="none" aria-label="Timelapse of building and calibrating the stereo rig"></video>
+          <figcaption>Timelapse: building and calibrating the rig.</figcaption>
+        </figure>
+      </div>
+      <figure class="fig">
+        <img class="zoom" data-zoom data-group="fig" data-title="Rectified left and right views. The lines are shared rows." src="../media/work/motion/rectified-face.webp" width="742" height="305" alt="Rectified left and right camera views of a face with horizontal guide lines" loading="lazy" decoding="async">
+      <figcaption>Rectified left and right views. The lines are shared rows.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img class="zoom" data-zoom data-group="fig" data-title="The same check on a hand." src="../media/work/motion/rectified-hand.webp" width="728" height="279" alt="Rectified left and right views of a hand with guide lines" loading="lazy" decoding="async">
+      <figcaption>The same check on a hand.</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">D</div>
+    <div class="body prose">
+      <h2>Depth maps</h2>
+      <p>Alongside the stereo pair I used Depth Anything for dense depth maps from a single camera, in real time at about 11 frames a second. To test depth on one object, I tracked a red pen cap and estimated its distance as it moved.</p>
+      <div class="jrow">
+        <figure style="--ar:2.5437">
+          <img class="zoom" data-zoom data-group="fig" data-title="Webcam feed and its live depth map." src="../media/work/motion/depth-live-face.webp" width="1600" height="629" alt="Webcam feed of a face beside its live depth map" loading="lazy" decoding="async">
+          <figcaption>Webcam feed and its live depth map.</figcaption>
+        </figure>
+      </div>
+      <figure class="fig tall">
+        <video src="../media/video/depth-pen-cap.mp4" poster="../media/work/motion/depth-pen-cap.webp" width="478" height="850" controls playsinline preload="none" aria-label="Tracking a red pen cap and estimating its depth"></video>
+        <figcaption>Depth test: tracking a red pen cap.</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">E</div>
+    <div class="body prose">
+      <h2>Also at QuEST Lab</h2>
+      <ul>
+        <li>A literature review on contactless, gamified ways to assess physical and cognitive fatigue in clinicians, and on optical depth sensing.</li>
+        <li>In a team of four, a pump and lining system for managing saline during minimally invasive surgery.</li>
+      </ul>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">F</div>
+    <div class="body prose">
+      <h2>What it led to</h2>
+      <p>At mPragati the <a href="surgical-arm.html">6-DOF arm</a> has the same problem in another form: its servos can’t report where they are. The calibration and tracking I learned here is how I’m now giving it feedback.</p>
+    </div>
+  </section>
+  <nav class="sec" aria-label="More work">
+    <div class="body">
+      <div class="next">
+        <a href="deskmilo.html"><span class="small">&larr; Previous</span><span class="t">DeskMilo, a desk companion that turns to look at you</span></a>
+        <a class="fwd" href="surgical-arm.html"><span class="small">Next &rarr;</span><span class="t">A surgical arm that finds its own joints with cameras</span></a>
+      </div>
+    </div>
+  </nav>
+  <footer class="sec foot" id="contact">
+    <div class="mark fine" aria-hidden="true">Fine</div>
+    <div class="body">
+      <p class="small">Write to me</p>
+      <a class="email" href="mailto:pranjalsinghsesodia@gmail.com">pranjalsinghsesodia@gmail.com</a>
+      <p>If you’re building something that needs both a wide look and a careful one, in a lab, a studio or a team, I’d like to hear about it.</p>
+      <ul class="links">
+        <li><a href="../cv.pdf" target="_blank" rel="noopener">CV</a></li>
+        <li><a href="https://www.linkedin.com/in/pranjalsinghsesodia/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://www.instagram.com/hipranjal_/" target="_blank" rel="noopener">Instagram</a></li>
+      </ul>
+    </div>
+  </footer>
+</main>
+<dialog class="lb" aria-label="Enlarged image">
+  <figure class="lb-fig"><img alt=""></figure>
+  <p class="lb-cap"><span class="t"></span><span class="m"></span></p>
+  <button class="lb-x" type="button">Close</button>
+  <button class="lb-p" type="button" aria-label="Previous">&larr;</button>
+  <button class="lb-n" type="button" aria-label="Next">&rarr;</button>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="../js/roll.js" defer></script>
+<script src="../js/site.js" defer></script>
+</body>
+</html>
