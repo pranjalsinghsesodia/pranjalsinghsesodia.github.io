@@ -1,7 +1,10 @@
 // The whole page is a player-piano roll. Its keyboard runs down the left edge and the paper is everything else.
 // A hole's height on the page picks the key; its length is how long the key is held. The paper drifts toward
 // the keys on its own, runs faster while the page scrolls, and backwards when it scrolls back up.
+// It has the opening screen to itself. Once you're reading it goes soft and quiet, and comes back into focus,
+// a little louder, while the cursor is near the keys. On a phone it always stays soft, and only the keys play.
 // Click the paper to punch a note, or the keys to play them. With sound on, A to ; play and record too.
+// A note a visitor adds plays once as it reaches the keys, then it's gone.
 (() => {
   const paperCv = document.querySelector('.roll-paper');
   const canvas = document.querySelector('.roll-canvas');
@@ -24,7 +27,9 @@
   const PEDAL = -1;                   // the sustain pedal's perforation: it's read, not drawn
   const TYPE = { a: 62, s: 64, d: 66, f: 69, g: 71, h: 74, j: 76, k: 78, l: 81, ';': 83 };
   const MASTER = .12;                 // overall loudness: kept very low, a background murmur even with speakers at full
-  const HOLD = 480;                   // on a touch screen a note takes a deliberate press and hold, never a tap
+  const QUIET = .5;                   // how strongly the soft roll shows once you're reading below the opening screen
+  const HUSH = .35;                   // the volume while it's soft, as a share of MASTER
+  const NEAR = 70;                    // within this many px of the keys the roll is fully in focus; it fades over 150 more
   const STORE = 'pss-roll-2', SOUND = 'pss-sound', OFFSET = 'pss-offset';
   const MAX_MINE = 200;
   // Where a click lands on something to read or press, it isn't punching the paper.
@@ -33,7 +38,6 @@
   const mod = (a, n) => ((a % n) + n) % n;
   const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
   const isBlack = (m) => BLACK.includes(mod(m, 12));
-  const dark = matchMedia('(prefers-color-scheme: dark)');
   const coarse = matchMedia('(hover: none)').matches;
 
   // An original waltz in D, written for this page: slow and quiet, a singing line over a soft low accompaniment.
@@ -69,6 +73,8 @@
 
   let W = 0, H = 0, dpr = 1, KB = 46, rh = 10, beatPx = 60, L = 1440, colors, narrow = false;
   const tile = document.createElement('canvas');
+  const PAD = 32;                     // the soft copy of the roll carries this much of its own other end on each side
+  const softCvs = [0, 1, 2, 3].map(() => document.createElement('canvas'));
   const keysCv = document.createElement('canvas');
   const keyRects = [];
 
@@ -110,16 +116,11 @@
 
   function palette() {
     const paper = getComputedStyle(document.documentElement).getPropertyValue('--paper').trim() || '#f0e8d8';
-    return dark.matches ? {
-      paper, fibreA: 'rgba(255,236,200,.035)', fibreB: 'rgba(0,0,0,.2)',
-      hole: '#f1d49a', glow: 'rgba(255,196,110,.6)', line: 'rgba(224,124,100,.42)', print: 'rgba(214,190,150,.42)',
-      ivory: ['#cfc4ae', '#e8dfcb'], seam: 'rgba(0,0,0,.4)', ebony: ['#0a0907', '#2c2721'], felt: '#7e2a20', label: 'rgba(40,32,22,.7)',
-      press: 'rgba(255,190,110,', wash: 'rgba(202,165,94,', ghost: 'rgba(241,212,154,.7)', chad: '#5a4d3c', shade: 'rgba(0,0,0,.45)', fog: .8,
-    } : {
+    return {
       paper, fibreA: 'rgba(255,255,255,.45)', fibreB: 'rgba(100,70,25,.06)',
-      hole: 'rgba(43,34,25,.86)', glow: null, line: 'rgba(160,52,38,.38)', print: 'rgba(116,90,52,.6)',
+      hole: 'rgba(43,34,25,.86)', line: 'rgba(160,52,38,.38)', print: 'rgba(116,90,52,.6)',
       ivory: ['#e6dcc6', '#fbf7ee'], seam: 'rgba(90,70,40,.3)', ebony: ['#12100d', '#3b342c'], felt: '#8e2b22', label: 'rgba(90,76,56,.8)',
-      press: 'rgba(196,140,60,', wash: 'rgba(150,112,40,', ghost: 'rgba(43,34,25,.5)', chad: '#d9cbad', shade: 'rgba(60,40,15,.16)', fog: .86,
+      press: 'rgba(196,140,60,', wash: 'rgba(150,112,40,', ghost: 'rgba(43,34,25,.5)', chad: '#d9cbad', shade: 'rgba(60,40,15,.16)', fog: .94,
     };
   }
 
@@ -177,18 +178,37 @@
     if ('letterSpacing' in c) c.letterSpacing = '0px';
 
     holes.forEach((h) => cut(c, h));
+    soften();
   }
 
   function cut(c, h) {
     if (h.k === PEDAL) return;
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
     c.fillStyle = colors.hole;
-    c.shadowColor = colors.glow || 'transparent';
-    c.shadowBlur = colors.glow ? 6 * dpr : 0;
     const hh = holeH(), y = rowY(h.k) - hh / 2;
     const x = h.s * beatPx, len = Math.max(hh, (h.e - h.s) * beatPx);
     for (const o of [0, -L]) slot(c, x + o, y, len, hh, true);
-    c.shadowBlur = 0;
+  }
+
+  // The roll out of focus: shrunk in halves to an eighth of its size, then a step back up, and stretched to full
+  // size as it's drawn. A blur any browser does quickly. The roll wraps round, so it's softened with a margin of
+  // its own other end on each side, or the join would show.
+  function soften() {
+    const w = L + PAD * 2;
+    const [half, quarter, eighth, back] = softCvs;
+    const fit = (cv, d) => {
+      const cw = Math.max(1, Math.round(w / d)), ch = Math.max(1, Math.round(H / d));
+      if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }
+      const c = cv.getContext('2d');
+      c.clearRect(0, 0, cw, ch);
+      c.imageSmoothingQuality = 'high';
+      return c;
+    };
+    const c = fit(half, 2);
+    for (const o of [-L, 0, L]) c.drawImage(tile, (PAD + o) / 2, 0, L / 2, H / 2);
+    fit(quarter, 4).drawImage(half, 0, 0, quarter.width, quarter.height);
+    fit(eighth, 8).drawImage(quarter, 0, 0, eighth.width, eighth.height);
+    fit(back, 4).drawImage(eighth, 0, 0, back.width, back.height);
   }
 
   function slot(c, x, y, w, h, fill) {
@@ -281,7 +301,14 @@
   const down = new Int16Array(KEYS);
   let pedal = false;
   let speed = DRIFT, scrollV = 0, lastY = window.scrollY, last = performance.now();
-  let hover = null, hold = null, dirty = 0, frame = 0;
+  let hover = null, dirty = 0, frame = 0;
+  // How the roll shows: presence (how strongly), clarity (1 in focus, 0 soft), and the volume. They follow focus,
+  // which is 1 on the opening screen, while the cursor is near the keys, and for a moment after a visitor punches
+  // or plays a note (attn), so they can see what they did; 0 while reading.
+  // Phones and tablets have no hover: there the roll always stays soft and quiet.
+  const heroEl = document.querySelector('.page > .hero');
+  let presence = -1, clarity = 1, attn = 0, near = 0;
+  let pAim = 1, cAim = 1, vAim = MASTER;
   const chads = [];
   const live = new Map();             // notes being held right now, at the keys: they grow as the paper moves
 
@@ -319,16 +346,23 @@
     }
   }
 
+  // A visitor's own note plays once: when it has passed the keys it's gone from the roll.
   function sweep(a, b, gain) {
     const lo = Math.min(a, b), hi = Math.max(a, b);
+    let spent = false;
     for (const h of holes) {
       const on = covers(h, b);
       if (!h.on && (on || crosses(h, lo, hi))) {
         start(h, gain);
-        if (!on) stop(h);
-      } else if (h.on && !on) stop(h);
+        if (!on) { stop(h); if (h.mine) h.spent = spent = true; }
+      } else if (h.on && !on) { stop(h); if (h.mine) h.spent = spent = true; }
       h.on = on;
     }
+    if (!spent) return;
+    for (let i = holes.length - 1; i >= 0; i--) if (holes[i].spent) holes.splice(i, 1);
+    dirty = 1;
+    save();
+    changed();
   }
 
   function tick(now) {
@@ -340,9 +374,17 @@
     const y = window.scrollY;
     const pxs = dt > 0 ? (y - lastY) / dt : 0;
     lastY = y;
-    scrollV += (clamp(pxs * .3 / beatPx, -6, 6) - scrollV) * (1 - Math.exp(-dt * 10));
+    scrollV += (clamp(pxs * .15 / beatPx, -3, 3) - scrollV) * (1 - Math.exp(-dt * 10));
     speed += ((playing() ? TEMPO : DRIFT) - speed) * (1 - Math.exp(-dt * 2.2));
     off += (speed + scrollV) * dt;
+
+    attn = Math.max(0, attn - dt / 1.2);
+    aim();
+    const ease = 1 - Math.exp(-dt * 9); // quick: in or out of focus in about a third of a second
+    presence += (pAim - presence) * ease;
+    clarity += (cAim - clarity) * ease;
+    const settling = Math.abs(pAim - presence) + Math.abs(cAim - clarity) > .006;
+    if (soundOn && ac) level(vAim);
 
     const t = introT(now);
     const before = shown;
@@ -374,8 +416,23 @@
     }
 
     // a slow, quiet roll only needs half the frames
-    const busy = v > .5 || lit || chads.length || hover || live.size || t < 1;
+    const busy = v > .5 || lit || chads.length || hover || live.size || t < 1 || settling;
     if (busy || (frame++ & 1) === 0) draw(t);
+  }
+
+  // 1 while the opening screen is in view, falling to 0 as it scrolls away
+  function opening() {
+    if (!heroEl) return 0;
+    return clamp((heroEl.getBoundingClientRect().bottom - H * .25) / (H * .5), 0, 1);
+  }
+  function aim() {
+    const open = opening();
+    document.documentElement.classList.toggle('roll-quiet', open < .5);
+    const focus = coarse ? 0 : Math.max(open, near, Math.min(1, attn));
+    pAim = QUIET + (1 - QUIET) * (coarse ? open : focus);
+    cAim = focus;
+    vAim = MASTER * (HUSH + (1 - HUSH) * focus);
+    if (presence < 0) { presence = pAim; clarity = cAim; } // a page reloaded halfway down starts quiet, without fading
   }
 
   function draw(t) {
@@ -384,7 +441,18 @@
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     // whole device pixels, or the seam between two copies of the tile shows
-    for (let x = KB - Math.round(mod(shown * beatPx, L) * dpr) / dpr; x < W; x += L) g.drawImage(tile, x, 0, L, H);
+    if (presence < 0) aim();
+    const x0 = KB - Math.round(mod(shown * beatPx, L) * dpr) / dpr;
+    if (clarity < .995) {
+      const back = softCvs[3], k = back.width / (L + PAD * 2);
+      g.globalAlpha = presence * (1 - clarity);
+      for (let x = x0; x < W; x += L) g.drawImage(back, PAD * k, 0, L * k, back.height, x, 0, L, H);
+    }
+    if (clarity > .005) {
+      g.globalAlpha = presence * clarity;
+      for (let x = x0; x < W; x += L) g.drawImage(tile, x, 0, L, H);
+    }
+    g.globalAlpha = 1;
 
     if (hover) {
       const k = snap(hover.y), hh = holeH();
@@ -416,7 +484,8 @@
       g.fillRect(KB - 2.5, y0 + 1, 2.5, y1 - y0 - 2);
     }
 
-    // keys going down, and light where the paper meets them
+    // keys going down, and light where the paper meets them (dimmer while you're reading)
+    const shine = .35 + .65 * clarity;
     for (let k = 0; k < KEYS; k++) {
       const v = glow[k];
       if (v < .02) continue;
@@ -424,13 +493,13 @@
       g.fillStyle = colors.press + (r.black ? .45 : .28) * v + ')';
       g.fillRect(2.5, r.black ? r.y0 + .4 : r.y0, w - 2.5, r.black ? r.y1 - r.y0 - .8 : r.y1 - r.y0);
       const streak = g.createLinearGradient(KB, 0, KB + 70 * v, 0);
-      streak.addColorStop(0, `rgba(255,214,150,${(.55 * v).toFixed(3)})`);
+      streak.addColorStop(0, `rgba(255,214,150,${(.55 * v * shine).toFixed(3)})`);
       streak.addColorStop(1, 'rgba(255,214,150,0)');
       g.fillStyle = streak;
       g.fillRect(KB, y - holeH() / 2, 70 * v, holeH());
       const rr = 4 + 14 * v;
       const rg = g.createRadialGradient(KB, y, 0, KB, y, rr);
-      rg.addColorStop(0, `rgba(255,224,165,${(.9 * v).toFixed(3)})`);
+      rg.addColorStop(0, `rgba(255,224,165,${(.9 * v * shine).toFixed(3)})`);
       rg.addColorStop(1, 'rgba(255,200,120,0)');
       g.fillStyle = rg;
       g.fillRect(KB - rr, y - rr, rr * 2, rr * 2);
@@ -454,9 +523,10 @@
     const k = snap(y);
     const at = shown + (x - KB) / beatPx;
     const h = { k, s: mod(at, BEATS), e: mod(at, BEATS) + .5, v: .55, mine: true, at };
+    attn = 1.4;
     h.on = covers(h, shown);
     holes.push(h);
-    if (trim()) drawTile(); else cut(tile.getContext('2d'), h);
+    if (trim()) drawTile(); else { cut(tile.getContext('2d'), h); soften(); }
     if (h.on) start(h, 1, true);
     else blip(LOW + k, .5, 380);
     chads.push({ x, y: rowY(k), w: beatPx * .5, h: holeH(), vx: (Math.random() - .5) * 120, vy: -60 - Math.random() * 90, r: 0, vr: (Math.random() - .5) * 10, t: 0 });
@@ -486,65 +556,23 @@
     clearBtn.textContent = n === 1 ? 'Clear your note' : `Clear your ${n} notes`;
   }
 
-  // A mouse punches on click. A finger has to press and hold without moving, with a ring filling round it,
-  // so tapping, scrolling or resting a thumb never adds a note by accident.
-  function holdStart(e) {
-    holdEnd();
-    const ring = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    ring.setAttribute('class', 'press-ring');
-    ring.setAttribute('viewBox', '0 0 36 36');
-    ring.innerHTML = '<circle cx="18" cy="18" r="15" pathLength="1"/>';
-    ring.style.left = e.clientX + 'px';
-    ring.style.top = e.clientY + 'px';
-    document.body.appendChild(ring);
-    hold = { id: e.pointerId, x: e.clientX, y: e.clientY, ring };
-    hold.timer = setTimeout(() => {
-      if (!hold) return;
-      punch(hold.x, hold.y);
-      save();
-      // a tick of vibration, where the browser allows it (not before the page's first tap)
-      if (navigator.vibrate && (!navigator.userActivation || navigator.userActivation.hasBeenActive)) navigator.vibrate(8);
-      hold.ring.classList.add('done');
-      const r = hold.ring;
-      setTimeout(() => r.remove(), 260);
-      hold = null;
-    }, HOLD);
-  }
-  function holdEnd() {
-    if (!hold) return;
-    clearTimeout(hold.timer);
-    hold.ring.remove();
-    hold = null;
-  }
-
+  // A mouse punches on click: one click, one note, and dragging afterwards adds nothing and stretches nothing.
+  // A finger never punches the paper; on a touch screen only the keys play.
   document.addEventListener('pointerdown', (e) => {
     wake();
-    if (e.clientX < KB + 2 || !onPaper(e.target)) return;
-    if (e.pointerType === 'mouse') {
-      // one click, one note: dragging afterwards adds nothing and stretches nothing
-      if (e.button !== 0) return;
-      e.preventDefault();
-      punch(e.clientX, e.clientY);
-      save();
-    } else {
-      holdStart(e);
-    }
+    if (e.pointerType !== 'mouse' || e.button !== 0 || e.clientX < KB + 2 || !onPaper(e.target)) return;
+    e.preventDefault();
+    punch(e.clientX, e.clientY);
+    save();
   });
 
+  // the cursor near the keys brings the roll into focus, more the nearer it is
   document.addEventListener('pointermove', (e) => {
-    if (e.pointerType === 'mouse') hover = e.buttons === 0 && e.clientX > KB + 2 && onPaper(e.target) ? { x: e.clientX, y: e.clientY } : null;
-    if (hold && e.pointerId === hold.id && Math.hypot(e.clientX - hold.x, e.clientY - hold.y) > 8) holdEnd();
+    if (e.pointerType !== 'mouse') return;
+    hover = e.buttons === 0 && e.clientX > KB + 2 && onPaper(e.target) ? { x: e.clientX, y: e.clientY } : null;
+    near = clamp(1 - (e.clientX - KB - NEAR) / 150, 0, 1);
   });
-
-  const endPunch = (e) => {
-    if (hold && e.pointerId === hold.id) holdEnd();
-  };
-  document.addEventListener('pointerup', endPunch);
-  document.addEventListener('pointercancel', endPunch);
-  addEventListener('scroll', holdEnd, { passive: true });
-  // a long press can also open the browser's own menu; on the paper it shouldn't
-  document.addEventListener('contextmenu', (e) => { if (hold && onPaper(e.target)) e.preventDefault(); });
-  document.documentElement.addEventListener('pointerleave', () => { hover = null; });
+  document.documentElement.addEventListener('pointerleave', () => { hover = null; near = 0; });
 
   clearBtn.addEventListener('click', () => {
     for (let i = holes.length - 1; i >= 0; i--) {
@@ -570,6 +598,7 @@
   function press(id, k) {
     const h = { k, s: mod(shown, BEATS), e: mod(shown, BEATS) + .12, v: .6, mine: true, at: shown, on: true };
     holes.push(h);
+    attn = 1.4;
     if (trim()) drawTile();
     start(h, 1, true);
     live.set(id, h);
@@ -620,7 +649,7 @@
 
   // ---------- sound: a soft piano voice, synthesised ----------
 
-  let ac = null, out = null, noise = null, soundOn = false;
+  let ac = null, out = null, noise = null, soundOn = false, gainAim = 0, wokeAt = -1e9, spared = false;
   const voices = new Set(), sustained = new Set();
   const playing = () => soundOn && ac && ac.state === 'running';
 
@@ -734,8 +763,15 @@
     if (!soundOn) return;
     const a = audio();
     if (!a) return;
-    if (a.state !== 'running') a.resume().catch(() => {});
-    out.gain.setTargetAtTime(MASTER, a.currentTime, .1);
+    if (a.state !== 'running') { wokeAt = performance.now(); a.resume().catch(() => {}); }
+    if (!gainAim) { gainAim = vAim; out.gain.setTargetAtTime(gainAim, a.currentTime, .1); }
+  }
+
+  // the volume follows the roll's focus, fading rather than jumping
+  function level(v) {
+    if (!gainAim || Math.abs(v - gainAim) < MASTER * .02) return;
+    gainAim = v;
+    out.gain.setTargetAtTime(v, ac.currentTime, .12);
   }
 
   // The button says what's true: on, off, or on but waiting for the browser to allow it.
@@ -751,19 +787,26 @@
       try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* fine */ }
       wake();
     } else if (!on && ac) {
+      gainAim = 0;
       out.gain.setTargetAtTime(0, ac.currentTime, .08);
       voices.forEach((v) => release(v, .08));
     }
     label();
     hint.textContent = coarse
-      ? (on ? 'Tap a key to hear it. Press and hold the empty paper to punch a note; the roll plays it as you scroll.'
-            : 'This page is a piano roll, with its keys down the left edge. Press and hold the empty paper to punch a note; the lettered tabs jump between sections.')
-      : (on ? 'Click the keys, or play A to ; on your keyboard. What you play is punched into the roll.'
-            : 'This page is a piano roll. Click the paper to punch a note, or play the keys on the left; their lettered tabs jump between sections.');
+      ? (on ? 'Tap a key to hear it. The roll plays as you scroll.'
+            : 'This page is a piano roll, with its keys down the left edge. Turn the sound on and tap a key to hear it; the lettered tabs jump between sections.')
+      : (on ? 'Click the keys, or play A to ; on your keyboard. A note you punch plays once as it reaches the keys.'
+            : 'This page is a piano roll. Click the paper to punch a note, which plays once as it reaches the keys, or play the keys themselves; their lettered tabs jump between sections.');
     try { localStorage.setItem(SOUND, on ? '1' : '0'); } catch (e) { /* fine */ }
   }
 
-  soundBtn.addEventListener('click', () => setSound(!soundOn));
+  soundBtn.addEventListener('click', () => {
+    // On, but waiting for the browser: the tap that starts it shouldn't also turn it off. Only once, though,
+    // so a browser that never allows sound can't leave the switch stuck on.
+    if (soundOn && performance.now() - wokeAt < 1500 && !spared) { spared = true; return; }
+    spared = false;
+    setSound(!soundOn);
+  });
   let pref = null;
   try { pref = localStorage.getItem(SOUND); } catch (e) { /* fine */ }
   setSound(pref === '1', true);
@@ -861,7 +904,6 @@
   const col = document.querySelector('[data-fog]');
   if (col) new ResizeObserver(() => { if (W) placeFog(); }).observe(col);
   const repaint = () => { if (!W) return; colors = palette(); drawPaper(); drawTile(); drawKeys(); placeFog(); };
-  dark.addEventListener('change', repaint);
   if (document.fonts) document.fonts.ready.then(repaint);
   addEventListener('pagehide', () => { try { sessionStorage.setItem(OFFSET, String(off)); } catch (e) { /* fine */ } });
 

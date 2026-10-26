@@ -21,22 +21,7 @@
   --stage: clamp(140px, 21vw, 380px);      /* open roll between the keys and the reading column */
   --measure: 920px;
   --gap: 10px;
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #1b1712;
-    --ink: #ece4d4;
-    --ink-2: #b6ac9a;
-    --ink-3: #91877a;
-    --rule: #3b342a;
-    --rule-2: #2a241d;
-    --brass: #caa55e;
-    --felt: #e07c64;
-    --felt-wash: rgba(224, 124, 100, .2);
-    --mat: #e9e2d3;
-  }
+  color-scheme: light;  /* always the paper, whatever the device's own setting */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -144,28 +129,6 @@ img, video { max-width: 100%; }
 }
 .oct:hover::after, .oct:focus-visible::after { opacity: 1; transform: translate(0, -50%); }
 
-/* the ring that fills while a finger holds the paper; only a full ring punches a note */
-.press-ring {
-  position: fixed;
-  z-index: 6;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
-  pointer-events: none;
-  transform: rotate(-90deg);
-}
-.press-ring circle {
-  fill: none;
-  stroke: var(--felt);
-  stroke-width: 2.2;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: ring-fill .48s linear forwards;
-}
-.press-ring.done { animation: ring-pop .26s ease-out forwards; }
-@keyframes ring-fill { to { stroke-dashoffset: 0; } }
-@keyframes ring-pop { to { transform: rotate(-90deg) scale(1.5); opacity: 0; } }
-
 .roll-cap {
   position: fixed;
   z-index: 3;
@@ -194,6 +157,13 @@ img, video { max-width: 100%; }
 .roll-cap button:hover { border-color: var(--felt); color: var(--felt); }
 .roll-cap button[aria-pressed="true"] { color: var(--felt); border-color: var(--felt); }
 .roll-cap [hidden] { display: none; }
+/* once you're reading, the caption keeps only its sound switch, and that one quietly (js/roll.js sets .roll-quiet) */
+@media (min-width: 1200px) {
+  .roll-cap .roll-hint, .roll-cap .roll-clear { transition: opacity .25s, visibility .25s; }
+  .roll-cap .roll-sound { transition: opacity .25s, color .25s, border-color .25s; }
+  .roll-quiet .roll-cap .roll-hint, .roll-quiet .roll-cap .roll-clear { opacity: 0; visibility: hidden; }
+  .roll-quiet .roll-cap .roll-sound:not(:hover, :focus-visible) { opacity: .55; }
+}
 
 /* ---------- the reading column, and the stage beside it ---------- */
 
@@ -509,6 +479,18 @@ pre.cite {
 /* where the open margin is too narrow to hold it, the caption sits under the links instead of floating */
 @media (max-width: 1199px) {
   .roll-cap { position: static; width: auto; max-width: 34rem; margin-top: 2.2rem; text-shadow: none; }
+  /* and the sound switch stays within reach in the top corner, wherever you are on the page */
+  .roll-cap .roll-sound {
+    position: fixed;
+    z-index: 6;
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+    padding: .45rem .8rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--paper);
+    box-shadow: 0 2px 10px rgba(60, 40, 15, .1);
+  }
 }
 
 @media (max-width: 1100px) {
@@ -542,11 +524,6 @@ pre.cite {
   .next .fwd { text-align: left; }
   .lb-fig { padding: 52px 12px 0; }
   .lb-p, .lb-n { top: auto; bottom: 18px; transform: none; }
-}
-
-@media (prefers-color-scheme: dark) {
-  .card-img.diagram img { mix-blend-mode: normal; }
-  .ph::before { background: var(--wash-d); mix-blend-mode: normal; opacity: .75; }
 }
 
 @media (prefers-reduced-motion: reduce) {

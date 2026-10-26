@@ -2,7 +2,7 @@
 
 Live at **https://pranjalsinghsesodia.github.io**. A plain static site: HTML, CSS and a little JavaScript, no build step.
 
-**The idea.** The whole page is a player-piano roll. A player piano plays from punched paper: each hole is a note, its height picks the key, and its length is how long the key is held. The paper is the page's background, an 88-key keyboard runs down the left edge, and the holes drift toward it, so keys light as notes reach them. It carries a short, quiet waltz in D. Visitors can punch notes (one click is one note; on a phone, press and hold), play the keys, and use the lettered tabs on the keyboard to jump between sections. Photographs sit in watercolour washes. Everything follows the visitor's light or dark setting.
+**The idea.** The whole page is a player-piano roll. A player piano plays from punched paper: each hole is a note, its height picks the key, and its length is how long the key is held. The paper is the page's background, an 88-key keyboard runs down the left edge, and the holes drift toward it, so keys light as notes reach them. It carries a short, quiet waltz in D. The roll is sharp on the opening screen; once a visitor scrolls into the work it goes soft (out of focus) and quieter, so the content leads, and it comes back into focus, a little louder, while the cursor is near the keys. On a computer, visitors can punch notes (one click is one note), and each one plays once as it reaches the keys, then leaves the roll. On a phone the roll always stays soft and quiet, only the keys play, and a Sound switch sits in the top corner. Everyone can use the lettered tabs on the keyboard to jump between sections. Photographs sit in watercolour washes. The site is always light, whatever the device's dark-mode setting.
 
 ---
 
@@ -53,7 +53,7 @@ Nothing is lost: every change is kept in the repository's history. On GitHub, op
 | Your CV | `cv.pdf` | replace the file, keeping the name `cv.pdf` |
 | Page titles and link previews | each page's `<head>` | `<title>`, `description`, `og:` lines, `media/og.jpg` |
 | Colours and fonts | `css/site.css` | the `:root` block at the top |
-| The music, volume and tempo | `js/roll.js` | `LEFT`, `RIGHT`, `MASTER`, `TEMPO` near the top |
+| The music, volume and tempo, and how soft the roll gets | `js/roll.js` | `LEFT`, `RIGHT`, `MASTER`, `HUSH`, `TEMPO`, `QUIET`, `NEAR` near the top |
 
 The quickest way to find anything is your editor's search (Ctrl+F) for a few words of the sentence you want to change.
 
@@ -109,7 +109,7 @@ Each photo is a `<button class="ph" …>` inside a `<div class="row">`. Keep one
 2. Copy an existing `<button class="ph">` block and change `name` everywhere in it.
 3. Set `--ar` to width ÷ height (for example 0.75 for portrait 3:4, 1.7778 for 16:9), and `width`/`height` on the `<img>`.
 4. Fill in `data-title`, `data-date`, `data-camera` and `data-exp` (the exposure, for example `f/1.8 · 1/100 s · ISO 80`). These show in the line under the photographs and when a photo is enlarged.
-5. The watercolour frame comes from `--m` (the mask, in `media/frames/`) and `--wash` (its colour, `--wash-d` in dark mode). For a new photo you can reuse another photo's mask with a similar shape and pick a soft colour, or delete those settings for no frame.
+5. The watercolour frame comes from `--m` (the mask, in `media/frames/`) and `--wash` (its colour). For a new photo you can reuse another photo's mask with a similar shape and pick a soft colour, or delete those settings for no frame.
 
 ### Site information
 
@@ -124,6 +124,9 @@ Each photo is a `<button class="ph" …>` inside a `<div class="row">`. Keep one
 The top of `js/roll.js`:
 
 - `MASTER` is the volume. It's deliberately very low; 0.12 is a soft murmur even with speakers at full.
+- `HUSH` is the volume while the roll is soft (when reading, and always on phones), as a share of `MASTER`. It's 0.35.
+- `QUIET` is how strongly the soft roll shows below the opening screen: 0 hides it there, 1 is full strength. It's 0.5.
+- `NEAR` is how close, in pixels from the keys, the cursor has to be for the roll to come fully into focus. It's 70.
 - `TEMPO` is beats per second while it plays.
 - `LEFT` and `RIGHT` are the waltz, as MIDI note numbers (60 is middle C, 62 is D).
 
