@@ -817,7 +817,7 @@
 
   // ---------- octave tabs: the keyboard doubles as the page's contents ----------
   // Each section is pinned to a C, the top of the page at the top of the keyboard, and named on a vertical tab:
-  // D.C. (da capo, back to the beginning), each part's name from its mark, and Fine for the end.
+  // Top, each part's name from its mark, and Contact for the end (plain words: not everyone reads music).
   // The tab for the part you're reading fills in, and its octave lights on the keys.
 
   const CS = [87, 75, 63, 51, 39, 27, 15, 3]; // C8 down to C1
@@ -827,13 +827,13 @@
   (() => {
     const parts = [];
     const hero = document.querySelector('.page > .hero');
-    if (hero) parts.push({ el: hero, label: 'D.C.', name: 'Back to the top', cls: 'dc' });
+    if (hero) parts.push({ el: hero, label: 'Top', name: 'Back to the top', cls: 'dc' });
     document.querySelectorAll('.page > .sec').forEach((sec) => {
       const m = sec.querySelector(':scope > .mark');
       if (!m) return;
       const fine = m.classList.contains('fine');
       const h = sec.querySelector('h2');
-      parts.push({ el: sec, label: m.textContent.trim(), name: fine ? 'Write to me' : (h ? h.textContent.trim() : m.textContent.trim()), cls: fine ? 'fine' : '' });
+      parts.push({ el: sec, label: fine ? 'Contact' : m.textContent.trim(), name: fine ? 'Write to me' : (h ? h.textContent.trim() : m.textContent.trim()), cls: fine ? 'fine' : '' });
     });
     if (!parts.length) return;
     const keys = parts.length <= 7 ? CS.slice(1, 1 + parts.length) : CS.slice(0, 8);
@@ -849,7 +849,7 @@
       a.appendChild(document.createElement('span')).textContent = p.label;
       // the full heading slides out on hover, where it says more than the tab
       if (p.name.toLowerCase() !== p.label.toLowerCase()) a.dataset.name = p.name;
-      a.setAttribute('aria-label', `${p.name}, the C${Math.floor((LOW + k) / 12) - 1} octave`);
+      a.setAttribute('aria-label', p.name);
       // jumping to a part lights that octave's D, the key of the waltz, and sounds a D (kept mid-range) if sound is on
       a.addEventListener('click', () => {
         glow[k + 2] = 1;

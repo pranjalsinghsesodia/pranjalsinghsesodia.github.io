@@ -87,8 +87,8 @@ img, video { max-width: 100%; }
 .oct {
   position: absolute;
   left: calc(var(--kb) + 4px);
-  width: 20px;
-  padding: 7px 0;
+  width: 24px;
+  padding: 8px 0;
   transform: translateY(-50%);
   display: flex;
   justify-content: center;
@@ -96,8 +96,8 @@ img, video { max-width: 100%; }
   background: var(--paper);
   color: var(--brass);
   font-family: var(--mono);
-  font-size: .6rem;
-  letter-spacing: .12em;
+  font-size: .7rem;
+  letter-spacing: .1em;
   text-transform: uppercase;
   line-height: 1;
   text-decoration: none;
@@ -113,7 +113,8 @@ img, video { max-width: 100%; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.oct.dc, .oct.fine { font-family: var(--serif); font-size: .74rem; font-style: italic; letter-spacing: 0; text-transform: none; }
+/* a little more to press than the tab shows */
+.oct::before { content: ""; position: absolute; inset: -4px -4px; }
 .oct:hover { color: var(--felt); border-color: var(--felt); }
 .oct.on { background: var(--brass); color: var(--paper); }
 .oct.on:hover { color: var(--paper); background: var(--felt); }
@@ -269,7 +270,8 @@ img, video { max-width: 100%; }
   font-family: var(--mono);
   font-size: .78rem;
 }
-.links a { text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+/* taller to press than they look: the padding above the text is invisible */
+.links a { display: inline-block; text-decoration: none; border-bottom: 1px solid var(--rule); padding: .7rem 0 2px; margin-top: -.7rem; }
 .links a:hover { border-color: var(--felt); color: var(--felt); }
 .links a[target="_blank"]::after { content: " ↗"; font-size: .85em; color: var(--ink-3); }
 
@@ -353,9 +355,9 @@ img, video { max-width: 100%; }
   mix-blend-mode: multiply;
   opacity: .8;
   pointer-events: none;
-  transition: opacity .9s var(--rise) var(--d, 0s), transform .9s var(--rise) var(--d, 0s);
+  transition: opacity .55s var(--rise) var(--d, 0s), transform .55s var(--rise) var(--d, 0s);
 }
-.ph img { position: relative; width: 100%; height: 100%; object-fit: cover; display: block; background: var(--rule-2); transition: filter .6s, opacity .9s var(--rise) var(--d, 0s), transform .9s var(--rise) var(--d, 0s); }
+.ph img { position: relative; width: 100%; height: 100%; object-fit: cover; display: block; background: var(--rule-2); transition: filter .6s, opacity .55s var(--rise) var(--d, 0s), transform .55s var(--rise) var(--d, 0s); }
 /* photographs rise gently into place as their row comes into view (js/site.js adds .pre, then lifts it) */
 .ph.pre img, .ph.pre::before { opacity: 0; transform: translateY(26px) scale(.97); }
 .rows:hover .ph img { filter: saturate(.8) brightness(.94); }
@@ -412,7 +414,7 @@ img, video { max-width: 100%; }
 /* ---------- project pages ---------- */
 
 .crumb { margin: 0 0 3rem; font-family: var(--mono); font-size: .74rem; }
-.crumb a { text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+.crumb a { display: inline-block; text-decoration: none; border-bottom: 1px solid var(--rule); padding: .7rem 0 2px; margin-top: -.7rem; }
 .crumb a:hover { color: var(--felt); border-color: var(--felt); }
 .kicker { display: flex; flex-wrap: wrap; gap: .3rem 1.1rem; margin-bottom: 1.1rem; }
 .p-title { font-size: clamp(38px, 4.6vw, 72px); font-weight: 300; line-height: 1.02; letter-spacing: -.022em; margin: 0 0 .7em; max-width: 15em; }
@@ -491,21 +493,17 @@ pre.cite {
 
 /* ---------- narrower ---------- */
 
-/* where the open margin is too narrow to hold it, the caption sits under the links instead of floating */
+/* the roll is explained once, on the home page; a project page keeps only the sound switch */
+.work-page .roll-hint { display: none; }
+
+/* where the open margin is too narrow to hold it, the caption sits under the links instead of floating,
+   and the sound switch stays with it rather than floating over the text */
 @media (max-width: 1199px) {
   .roll-cap { position: static; width: auto; max-width: 34rem; margin-top: 2.2rem; text-shadow: none; }
-  /* and the sound switch stays within reach in the top corner, wherever you are on the page */
-  .roll-cap .roll-sound {
-    position: fixed;
-    z-index: 6;
-    top: max(12px, env(safe-area-inset-top));
-    right: max(12px, env(safe-area-inset-right));
-    padding: .45rem .8rem;
-    border: 1px solid var(--rule);
-    border-radius: 999px;
-    background: var(--paper);
-    box-shadow: 0 2px 10px rgba(60, 40, 15, .1);
-  }
+  .roll-cap .roll-sound { padding: .5rem .85rem; border: 1px solid var(--rule); border-radius: 999px; }
+  .roll-cap .roll-sound:hover, .roll-cap .roll-sound[aria-pressed="true"] { border-color: var(--felt); }
+  /* on a project page it would sit between the title and the first figure: the home page has it */
+  .work-page .roll-cap { display: none; }
 }
 
 @media (max-width: 1100px) {
@@ -529,8 +527,8 @@ pre.cite {
   .cards > li:nth-child(even) { margin-top: 0; }
   .cards { gap: 3.4rem; }
   /* on a phone the tabs sit just beside the keys, in the page's margin, and leave the keys free to play */
-  .oct { left: calc(var(--kb) + 3px); width: 16px; padding: 5px 0; font-size: .5rem; letter-spacing: .1em; }
-  .oct.dc, .oct.fine { font-size: .62rem; }
+  .oct { left: calc(var(--kb) + 2px); width: 20px; padding: 6px 0; font-size: .6rem; letter-spacing: .08em; }
+  .oct::before { inset: -4px -2px -4px -3px; }
   .oct::after { display: none; }
   .rows { --pgap: 9px; }
   .facts { grid-template-columns: minmax(0, 1fr); gap: .15rem; }

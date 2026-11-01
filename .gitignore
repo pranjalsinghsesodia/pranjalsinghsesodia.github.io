@@ -1,0 +1,7 @@
+# Local leftovers from the earlier Astro build and working files; the site is only what's tracked.
+node_modules/
+dist/
+.astro/
+mockups/
+screenshots/
+.claude/

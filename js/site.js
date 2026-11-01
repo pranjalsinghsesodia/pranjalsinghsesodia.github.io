@@ -44,7 +44,8 @@
 
   if (motion && ST) {
     gsap.utils.toArray('[data-reveal]').forEach((el) => {
-      gsap.from(el, { opacity: 0, y: 16, duration: 1, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
+      // short and early, so a quick scroll or a jump from a tab never lands on a blank page
+      gsap.from(el, { opacity: 0, y: 10, duration: .5, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top bottom', once: true } });
     });
   }
 
@@ -55,7 +56,7 @@
   if (motion && ST) {
     const rows = [...document.querySelectorAll('.rows .row')];
     rows.forEach((row) => row.querySelectorAll('.ph').forEach((ph, i) => {
-      ph.style.setProperty('--d', (i * .08).toFixed(2) + 's');
+      ph.style.setProperty('--d', (i * .05).toFixed(2) + 's');
       ph.classList.add('pre');
     }));
     void document.body.offsetHeight; // settle the hidden state first, or a row already in view would skip its entrance
@@ -63,11 +64,11 @@
       const phs = [...row.querySelectorAll('.ph')];
       ST.create({
         trigger: row,
-        start: 'top 90%',
+        start: 'top bottom',
         once: true,
         onEnter: () => {
           phs.forEach((ph) => ph.classList.remove('pre'));
-          setTimeout(() => phs.forEach((ph) => ph.style.removeProperty('--d')), 1300); // hovers answer at once again
+          setTimeout(() => phs.forEach((ph) => ph.style.removeProperty('--d')), 800); // hovers answer at once again
         },
       });
     });
