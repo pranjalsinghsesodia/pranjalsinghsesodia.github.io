@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A vision-guided robot arm on servos with no encoders · Pranjal Singh Sesodia</title>
-<meta name="description" content="A 4-DOF arm I designed and built that keeps a wrist camera on a moving target using vision in place of joint encoders, with a digital twin, a MATLAB model and a 6-DOF successor in CAD.">
+<meta name="description" content="A 4-DOF arm I designed and built that keeps a wrist camera on a moving target using vision in place of joint encoders, with a digital twin that is still being improved, a MATLAB model and a 6-DOF successor in CAD.">
 <meta property="og:title" content="A vision-guided robot arm on servos with no encoders · Pranjal Singh Sesodia">
-<meta property="og:description" content="A 4-DOF arm I designed and built that keeps a wrist camera on a moving target using vision in place of joint encoders, with a digital twin, a MATLAB model and a 6-DOF successor in CAD.">
+<meta property="og:description" content="A 4-DOF arm I designed and built that keeps a wrist camera on a moving target using vision in place of joint encoders, with a digital twin that is still being improved, a MATLAB model and a 6-DOF successor in CAD.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Pranjal Singh Sesodia">
 <meta property="og:url" content="https://pranjalsinghsesodia.github.io/work/robotic-arm.html">
@@ -49,7 +49,7 @@
           <dt>My part</dt><dd>Mechanical design and build, firmware, tracking control, digital twin, MATLAB model, 6-DOF design</dd>
           <dt>Tools</dt><dd>Python (OpenCV, MediaPipe, NumPy), Arduino, MATLAB, SolidWorks, FDM printing</dd>
           <dt>In numbers</dt><dd>4 DOF built · 30 Hz tracking loop · 100 Hz firmware motion profile · 1.233 kg</dd>
-          <dt>Status</dt><dd>Tracking runs on the arm. Joint error in degrees isn’t measured yet.</dd>
+          <dt>Status</dt><dd>Tracking runs on the arm. The digital twin is being improved, and joint error in degrees isn’t measured yet.</dd>
         </dl>
       </div>
       <div class="roll-cap">
@@ -84,7 +84,7 @@
           <tr><td>4-DOF arm: base yaw, shoulder, elbow, wrist pitch</td><td><span class="st hw">On hardware</span></td><td>Photos and videos on this page.</td></tr>
           <tr><td>Fingertip tracking with PD control (V1 to V3, July)</td><td><span class="st hw">On hardware</span></td><td>My test runs. I kept no logs from these versions, so they have no error figures.</td></tr>
           <tr><td>Eye-in-hand tracking with velocity control and coordinated tilt (October)</td><td><span class="st hw">On hardware</span></td><td>Screen recording, 24 Oct 2026. Tracking error not measured yet.</td></tr>
-          <tr><td>Digital twin: commanded stream, load estimate, CSV logging</td><td><span class="st hw">On hardware</span></td><td>Runs alongside tracking in the same recording; four logs from 24 Oct.</td></tr>
+          <tr><td>Digital twin: live 3D view, load estimate, CSV logging</td><td><span class="st todo">Being improved</span></td><td>Runs alongside tracking (recording and four logs, 24 Oct), but its 3D view is not yet in sync with the arm’s real pose.</td></tr>
           <tr><td>Digital twin: measured joint angles</td><td><span class="st todo">In progress</span></td><td>Calibration attempted on 24 Oct and not completed: markers were lost or read too much motion.</td></tr>
           <tr><td>Joint angle from the servo’s own potentiometer</td><td><span class="st des">Written</span></td><td>Two one-servo test sketches from 19 Oct. No results recorded yet.</td></tr>
           <tr><td>MATLAB dynamics model and controller comparison</td><td><span class="st sim">Simulation</span></td><td>All 18 checks pass (re-run 5 Nov 2026), on placeholder masses and dimensions.</td></tr>
@@ -262,10 +262,11 @@ for n in self.lower:
     """Joint angle (deg) from the relative rotation, see module doc."""
     rv = rodrigues(R_rel @ R_ref.T)
     return home + math.degrees(float(np.dot(rv, axis)))</code></pre></figure>
-          <p>Commanded angles arrive from the controller over UDP at 30 Hz. A live viewer shows the 3D arm, measured against commanded, along with joint plots and an estimated servo load, and everything is logged to CSV for MATLAB.</p>
+          <p>Commanded angles arrive from the controller over UDP at 30 Hz. A live viewer is meant to show the 3D arm, measured against commanded, along with joint plots and an estimated servo load, and everything is logged to CSV for MATLAB.</p>
+          <p>The twin isn’t accurate yet, and I’m improving it. In the recording below its 3D arm is not in sync with the real arm. With no measured angles, it draws the commanded angles, through kinematics whose direction signs and reference pose I haven’t yet calibrated against the arm.</p>
           <figure class="fig">
             <video src="../media/video/arm-twin-tracking.mp4" poster="../media/work/arm/arm-twin-tracking.webp" width="1280" height="692" controls playsinline preload="none" aria-label="The digital twin window updating while the wrist camera tracks a hand"></video>
-            <figcaption>The twin running alongside tracking. Its plots and table follow the commanded angles; the measured column stays empty until calibration works.</figcaption>
+            <figcaption>The twin running alongside tracking, in the version I’m improving. Its 3D view does not match the real arm’s pose, and the measured column stays empty until calibration works.</figcaption>
           </figure>
           <p>Calibration nudges each joint by +15° and compares what the markers see. It hasn’t worked yet. In one attempt on 24 October the base read 21.4° and the shoulder 26.8° for a 15° move, the software flagged other joints changing at the same time and asked whether a marker was loose, and the elbow’s marker was lost while it moved. My guesses at the causes, still to test: no camera calibration yet (the field of view is assumed to be 70°), markers seen at a steep angle, and markers not stuck down flat.</p>
           <figure class="fig">
@@ -276,7 +277,7 @@ for n in self.lower:
             <img class="plot" src="../media/work/arm/commanded-run.svg" width="680" height="470" alt="Four stacked plots of commanded base, shoulder, elbow and wrist angle over about 125 seconds" loading="lazy" decoding="async">
             <figcaption>Commanded angles from one log, 125 s of tracking. You can see the joint limits at work: the elbow sits at 120° and the shoulder at 20° for stretches.</figcaption>
           </figure>
-          <p>The twin also computes static gravity torque per joint from the pose. In this log the shoulder estimate peaks at 0.70 N·m, about 46% of the servo’s 1.52 N·m stall at 4.8 V, or 42% of 1.67 N·m at 6 V. The link masses behind it (110, 100 and 200 g) are my estimates, so this figure is rough until I weigh the links.</p>
+          <p>The twin also computes static gravity torque per joint from the pose it draws, which for now is the commanded pose. In this log the shoulder estimate peaks at 0.70 N·m, about 46% of the servo’s 1.52 N·m stall at 4.8 V, or 42% of 1.67 N·m at 6 V. The link masses behind it (110, 100 and 200 g) are my estimates, and the pose isn’t measured, so this figure is rough until both are fixed.</p>
         </li>
       </ol>
     </div>
@@ -340,7 +341,8 @@ tau = mass_matrix(q, mdl) * qdd_star + rnea(q, qd, zeros(mdl.n, 1), mdl) + joint
     <div class="body prose">
       <h2>What’s next</h2>
       <ul>
-        <li>Calibrate the external camera properly, fix the markers flat, and get the twin calibration through. That gives joint error in degrees for the first time.</li>
+        <li>Calibrate the twin’s kinematics against the real arm so its 3D view matches the arm’s pose.</li>
+        <li>Calibrate the external camera properly, fix the markers flat, and get the twin’s vision calibration through. That gives joint error in degrees for the first time.</li>
         <li>Weigh the links, put the arm’s real masses and dimensions into the MATLAB model, and re-run the actuator sizing.</li>
         <li>Build the 6-DOF stage around the cycloidal reducer.</li>
       </ul>
