@@ -69,7 +69,8 @@
       cv.setAttribute('role', 'img');
       cv.setAttribute('aria-label', `CV, page ${n} of ${pdf.numPages}`);
       sheet.appendChild(cv);
-      await page.render({ canvasContext: cv.getContext('2d'), viewport: vp }).promise;
+      // 'print' draws in one pass without waiting for animation frames, so a CV opened in a background tab is ready when you switch to it
+      await page.render({ canvasContext: cv.getContext('2d'), viewport: vp, intent: 'print' }).promise;
       const css = page.getViewport({ scale: w / base.width });
       for (const a of await page.getAnnotations()) {
         if (a.subtype !== 'Link' || !a.url) continue;
