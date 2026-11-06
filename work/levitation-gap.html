@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Robust real-time levitation gap estimation for hyperloop pods · Pranjal Singh Sesodia</title>
-<meta name="description" content="A first-author review, with V. Dabass: five ways to sense the gap between a maglev pod and its rail, and the estimators that keep the reading honest under heat and interference.">
-<meta property="og:title" content="Robust real-time levitation gap estimation for hyperloop pods · Pranjal Singh Sesodia">
-<meta property="og:description" content="A first-author review, with V. Dabass: five ways to sense the gap between a maglev pod and its rail, and the estimators that keep the reading honest under heat and interference.">
+<title>Robust real-time levitation gap estimation for Hyperloop pods · Pranjal Singh Sesodia</title>
+<meta name="description" content="A first-author review with Dr. Vandana Dabass of the sensors and estimators that measure the gap between a maglev pod and its rail.">
+<meta property="og:title" content="Robust real-time levitation gap estimation for Hyperloop pods · Pranjal Singh Sesodia">
+<meta property="og:description" content="A first-author review with Dr. Vandana Dabass of the sensors and estimators that measure the gap between a maglev pod and its rail.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Pranjal Singh Sesodia">
 <meta property="og:url" content="https://pranjalsinghsesodia.github.io/work/levitation-gap.html">
@@ -16,7 +16,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#f0e8d8">
+<meta name="theme-color" content="#f1efea">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,16 +40,14 @@
   <header class="hero">
     <div class="body" data-fog>
       <p class="crumb intro"><a href="../index.html">&larr; Pranjal Singh Sesodia</a></p>
-      <div class="kicker small intro"><span class="tag">Paper</span><span>Next Research (Elsevier)</span><span>Published September 2026</span></div>
-      <h1 class="p-title intro">Robust real-time levitation gap estimation for hyperloop pods</h1>
+      <div class="kicker small intro"><span class="tag">Publication</span><span>Next Research (Elsevier)</span><span>Vol. 13, 2026</span></div>
+      <h1 class="p-title intro">Robust real-time levitation gap estimation for Hyperloop pods</h1>
       <div class="hero-row">
-        <p class="dek intro">A first-author review, with V. Dabass: five ways to sense the gap between a maglev pod and its rail, and the estimators that keep the reading honest under heat and interference.</p>
+        <p class="dek intro">A first-author review with Dr. Vandana Dabass of the sensors and estimators that measure the gap between a maglev pod and its rail.</p>
         <dl class="now intro">
           <dt>Authors</dt><dd>P. S. Sesodia, V. Dabass</dd>
-          <dt>Journal</dt><dd>Next Research (Elsevier), 2026</dd>
-          <dt>Type</dt><dd>Review article</dd>
-          <dt>Covers</dt><dd>Inductive, optical, capacitive, Hall-effect and UWB-radar sensing; EKF, UKF and sliding-mode observers; EMS and EDS suspension</dd>
           <dt>Read it</dt><dd><a href="https://doi.org/10.1016/j.nexres.2026.102384" target="_blank" rel="noopener">doi:10.1016/j.nexres.2026.102384</a></dd>
+          <dt>Status</dt><dd>Page under development</dd>
         </dl>
       </div>
       <div class="roll-cap">
@@ -60,70 +58,22 @@
   </header>
   <div id="text"></div>
   <section class="sec lead">
-    <div class="body">
-      <figure class="fig">
-        <img class="zoom" data-zoom data-group="fig" data-title="Electromagnetic suspension: a pod-mounted magnet pulls up toward the rail across the gap." src="../media/work/maglev/ems-principle.webp" width="549" height="404" alt="Diagram of a pod-mounted electromagnet below a ferromagnetic rail, with the air gap marked" loading="eager" fetchpriority="high" decoding="async">
-      <figcaption>Electromagnetic suspension: a pod-mounted magnet pulls up toward the rail across the gap.</figcaption>
-      </figure>
-    </div>
-  </section>
-  <section class="sec">
-    <div class="mark" aria-hidden="true">Overview</div>
     <div class="body prose">
-      <h2>What it covers</h2>
-      <p>A maglev pod has to know, continuously, how far it is from the track. The review compares the ways to sense that gap (inductive, optical, capacitive, Hall-effect and UWB radar) and then the ways to estimate it: extended and unscented Kalman filters, and sliding-mode observers, for both electromagnetic (EMS) and electrodynamic (EDS) suspension. It pays particular attention to the two things that quietly ruin a measurement: thermal drift and electromagnetic interference.</p>
-    </div>
-  </section>
-  <section class="sec">
-    <div class="mark" aria-hidden="true">The gap</div>
-    <div class="body prose">
-      <h2>Why the gap has to be estimated, quickly</h2>
-      <p>An electromagnet pulling up on a steel rail, with current <i>i</i> and gap <i>z</i>, pulls with a force that goes roughly as</p>
-    <p class="eq">F = k (i / z)²</p>
-      <p>At equilibrium that force holds up the pod’s weight. But nudge the gap and the force moves the wrong way: if the pod drops and the gap grows, the pull weakens and it drops further; if it rises, the pull grows and it snaps to the rail. Electromagnetic suspension is unstable on its own. The controller has to change the current faster than the gap drifts, and it can only act on the gap it measures. Hence a whole review about measuring <i>z</i>.</p>
-      <figure class="fig">
-        <img class="zoom" data-zoom data-group="fig" data-title="One approach the review covers: the gap from an inertial sensor’s acceleration and angular rate." src="../media/work/maglev/inertial-gap-estimation.webp" width="554" height="286" alt="Block diagram: inertial sensor data through position and orientation estimation to a gap estimate" loading="lazy" decoding="async">
-      <figcaption>One approach the review covers: the gap from an inertial sensor’s acceleration and angular rate.</figcaption>
-      </figure>
-      <div class="jrow">
-        <figure style="--ar:1.6834">
-          <img class="zoom" data-zoom data-group="fig" data-title="The architecture the paper proposes: classical and quantum machine-learning pipelines, run on the same dataset and compared." src="../media/work/maglev/system-architecture.webp" width="569" height="338" alt="Flowchart of the proposed system architecture" loading="lazy" decoding="async">
-          <figcaption>The architecture the paper proposes: classical and quantum machine-learning pipelines, run on the same dataset and compared.</figcaption>
-        </figure>
-        <figure style="--ar:0.7756">
-          <img class="zoom" data-zoom data-group="fig" data-title="How the review is organised." src="../media/work/maglev/roadmap.webp" width="667" height="860" alt="The review’s roadmap, from sensing technologies to future hyperloop systems" loading="lazy" decoding="async">
-          <figcaption>How the review is organised.</figcaption>
-        </figure>
+      <div class="wip-note">
+        <p class="small wip">Page under development</p>
+        <p>I’m writing up the build log for this project, with its figures and data. Until it’s ready, my <a href="../cv.html" target="_blank" rel="noopener">CV</a> has a summary, and I’m happy to talk it through by email.</p>
+        <p>The <a href="robotic-arm.html">robot arm</a> is written up in full.</p>
       </div>
-    </div>
-  </section>
-  <section class="sec">
-    <div class="mark" aria-hidden="true">Cite</div>
-    <div class="body prose">
-      <h2>Cite</h2>
-      <p>Sesodia, P. S., &amp; Dabass, V. (2026). Robust real-time levitation gap estimation for hyperloop pods. <i>Next Research</i>. <a href="https://doi.org/10.1016/j.nexres.2026.102384" target="_blank" rel="noopener">doi:10.1016/j.nexres.2026.102384</a></p>
-    <pre class="cite" id="bib">@article{sesodia2026levitation,
-  author  = {Sesodia, Pranjal Singh and Dabass, V.},
-  title   = {Robust Real-Time Levitation Gap Estimation for Hyperloop Pods},
-  journal = {Next Research},
-  year    = {2026},
-  doi     = {10.1016/j.nexres.2026.102384}
-}</pre>
-    <button class="copy" type="button" data-copy="#bib">Copy BibTeX</button>
-    </div>
-  </section>
-  <section class="sec">
-    <div class="mark" aria-hidden="true">Lessons</div>
-    <div class="body prose">
-      <h2>What it taught me</h2>
-      <p>How to read a field systematically, and that a controller is only as good as its estimate of the state.</p>
+      <figure class="fig">
+        <img class="plot" src="../media/work/maglev/force-gap.svg" width="580" height="320" alt="Plot of magnet pull divided by weight against gap, falling as one over gap squared" loading="eager" decoding="async">
+      </figure>
     </div>
   </section>
   <nav class="sec" aria-label="More work">
     <div class="body">
       <div class="next">
-        <a href="elbow-and-knee.html"><span class="small">&larr; Previous</span><span class="t">Checking a patented elbow implant, and freeing a knee that jammed</span></a>
-        <a class="fwd" href="wind-tunnel.html"><span class="small">Next &rarr;</span><span class="t">A tabletop subsonic wind tunnel, designed end to end</span></a>
+        <a href="surgeon-motion.html"><span class="small">&larr; Previous</span><span class="t">Measuring how surgeons move, with two ordinary webcams</span></a>
+        <a class="fwd" href="wind-tunnel.html"><span class="small">Next &rarr;</span><span class="t">A tabletop subsonic wind tunnel</span></a>
       </div>
     </div>
   </nav>
@@ -132,9 +82,9 @@
     <div class="body">
       <p class="small">Write to me</p>
       <a class="email" href="mailto:pranjalsinghsesodia@gmail.com">pranjalsinghsesodia@gmail.com</a>
-      <p>If you’re building something that needs both a wide look and a careful one, in a lab, a studio or a team, I’d like to hear about it.</p>
+      <p>If your lab works on surgical robots, actuators or mechanisms and takes undergraduate researchers, I’d like to hear about it.</p>
       <ul class="links">
-        <li><a href="../cv.pdf" target="_blank" rel="noopener">CV</a></li>
+        <li><a href="../cv.html" target="_blank" rel="noopener">CV</a></li>
         <li><a href="https://www.linkedin.com/in/pranjalsinghsesodia/" target="_blank" rel="noopener">LinkedIn</a></li>
         <li><a href="https://scholar.google.com/citations?hl=en&amp;user=K10pZz0AAAAJ" target="_blank" rel="noopener">Google Scholar</a></li>
         <li><a href="https://www.instagram.com/hipranjal_/" target="_blank" rel="noopener">Instagram</a></li>

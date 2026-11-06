@@ -149,6 +149,40 @@
     });
   }
 
+  // ---------- work categories: one tab per category, arrow keys move between them ----------
+
+  document.querySelectorAll('[data-tabs]').forEach((box) => {
+    const bar = box.querySelector('.tabs');
+    const tabs = [...bar.querySelectorAll('[role="tab"]')];
+    const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls')));
+    const KEY = 'pss-work-tab';
+    const pick = (i, focus) => {
+      tabs.forEach((t, k) => {
+        const on = k === i;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        panels[k].hidden = !on;
+      });
+      if (focus) tabs[i].focus();
+      try { sessionStorage.setItem(KEY, tabs[i].id); } catch (e) { /* fine */ }
+      if (ST) ST.refresh();
+    };
+    let start = 0;
+    try { start = Math.max(0, tabs.findIndex((t) => t.id === sessionStorage.getItem(KEY))); } catch (e) { /* fine */ }
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => pick(i));
+      t.addEventListener('keydown', (e) => {
+        const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+        if (d) { e.preventDefault(); pick((i + d + tabs.length) % tabs.length, true); }
+        if (e.key === 'Home') { e.preventDefault(); pick(0, true); }
+        if (e.key === 'End') { e.preventDefault(); pick(tabs.length - 1, true); }
+      });
+    });
+    bar.classList.add('on');
+    box.classList.add('tabs-on');
+    pick(start);
+  });
+
   // ---------- copy the citation ----------
 
   document.querySelectorAll('.copy[data-copy]').forEach((b) => {

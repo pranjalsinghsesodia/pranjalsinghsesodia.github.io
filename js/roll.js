@@ -115,12 +115,12 @@
   }
 
   function palette() {
-    const paper = getComputedStyle(document.documentElement).getPropertyValue('--paper').trim() || '#f0e8d8';
+    const paper = getComputedStyle(document.documentElement).getPropertyValue('--paper').trim() || '#f1efea';
     return {
-      paper, fibreA: 'rgba(255,255,255,.45)', fibreB: 'rgba(100,70,25,.06)',
-      hole: 'rgba(43,34,25,.86)', line: 'rgba(160,52,38,.38)', print: 'rgba(116,90,52,.6)',
-      ivory: ['#e6dcc6', '#fbf7ee'], seam: 'rgba(90,70,40,.3)', ebony: ['#12100d', '#3b342c'], felt: '#8e2b22', label: 'rgba(90,76,56,.8)',
-      press: 'rgba(196,140,60,', wash: 'rgba(150,112,40,', ghost: 'rgba(43,34,25,.5)', chad: '#d9cbad', shade: 'rgba(60,40,15,.16)', fog: .94,
+      paper, fibreA: 'rgba(255,255,255,.45)', fibreB: 'rgba(70,62,48,.05)',
+      hole: 'rgba(36,33,29,.86)', line: 'rgba(150,58,47,.36)', print: 'rgba(100,88,66,.6)',
+      ivory: ['#e2ded5', '#fbfaf6'], seam: 'rgba(80,72,60,.3)', ebony: ['#121110', '#38342f'], felt: '#8a3329', label: 'rgba(80,75,67,.8)',
+      press: 'rgba(196,140,60,', wash: 'rgba(140,110,50,', ghost: 'rgba(36,33,29,.5)', chad: '#d8d3c8', shade: 'rgba(40,34,24,.15)', fog: .94,
     };
   }
 
@@ -280,7 +280,7 @@
     const feather = 72;
     const left = Math.max(KB, r.left - feather), right = Math.min(W, r.right + feather);
     const a = colors.fog - (narrow ? .05 : 0);
-    const solid = rgba(colors.paper.length > 3 ? colors.paper : '#f0e8d8', a);
+    const solid = rgba(colors.paper.length > 3 ? colors.paper : '#f1efea', a);
     const fl = Math.max(0, r.left - left), fr = Math.max(0, right - r.right);
     fog.style.left = left + 'px';
     fog.style.width = (right - left) + 'px';

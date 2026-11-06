@@ -67,7 +67,7 @@ Change the words between the tags and leave the tags alone. `<p>…</p>` is a pa
 Each project on the home page is one block like this:
 
 ```html
-<li data-reveal><a class="card" href="work/surgical-arm.html">
+<li data-reveal><a class="card" href="work/robotic-arm.html">
   <span class="card-img"><img src="media/work/arm/arm-camera.webp" width="1200" height="1600" alt="" style="object-position:50% 32%" loading="lazy" decoding="async"></span>
   <span class="meta small"><span class="tag">Robotics</span><span>mPragati, IIT Delhi</span><span>Since 2026</span></span>
   <h3>A surgical arm that finds its own joints with cameras</h3>
@@ -146,4 +146,4 @@ Sound stays off until a visitor turns it on or clicks a key. Browsers only start
 
 ## Before publishing anything new
 
-The elbow-implant images (mPragati) and operating-theatre footage (QuEST Lab) are deliberately left out until the labs clear them. Each spot is marked with a `CONFIDENTIALITY` comment in `work/elbow-and-knee.html` and `work/surgeon-motion.html`.
+The elbow-implant images (mPragati) and operating-theatre footage (QuEST Lab) are deliberately left out until the labs clear them. Each spot is marked with a `CONFIDENTIALITY` comment in `work/elbow-implant.html` and `work/surgeon-motion.html`.

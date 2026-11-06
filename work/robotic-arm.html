@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A vision-guided robot arm on servos with no encoders · Pranjal Singh Sesodia</title>
+<meta name="description" content="A 4-DOF arm I designed and built that keeps a wrist camera on a moving target using vision in place of joint encoders, with a digital twin, a MATLAB model and a 6-DOF successor in CAD.">
+<meta property="og:title" content="A vision-guided robot arm on servos with no encoders · Pranjal Singh Sesodia">
+<meta property="og:description" content="A 4-DOF arm I designed and built that keeps a wrist camera on a moving target using vision in place of joint encoders, with a digital twin, a MATLAB model and a 6-DOF successor in CAD.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Pranjal Singh Sesodia">
+<meta property="og:url" content="https://pranjalsinghsesodia.github.io/work/robotic-arm.html">
+<link rel="canonical" href="https://pranjalsinghsesodia.github.io/work/robotic-arm.html">
+<!-- Link previews need a full address here: once the site is live, change this to https://<your-domain>/media/og.jpg -->
+<meta property="og:image" content="https://pranjalsinghsesodia.github.io/media/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f1efea">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fragment+Mono&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap">
+<link rel="stylesheet" href="../css/site.css">
+<script>(function (d) {
+  // 'js' lets entrance animations take over; the loading screen shows once per visit
+  d.classList.add('js');
+  try { if (sessionStorage.getItem('pss-seen')) d.classList.add('seen'); else { sessionStorage.setItem('pss-seen', '1'); d.classList.add('loader-on'); } }
+  catch (e) { d.classList.add('seen'); }
+})(document.documentElement)</script>
+</head>
+<body class="work-page">
+<div class="loader" aria-hidden="true"><div class="loader-keys"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><b style="--x:1"></b><b style="--x:2"></b><b style="--x:4"></b><b style="--x:5"></b><b style="--x:6"></b></div><p>Pranjal Singh Sesodia</p></div>
+<canvas class="roll-paper" aria-hidden="true"></canvas>
+<canvas class="roll-canvas" aria-hidden="true"></canvas>
+<div class="fog" aria-hidden="true"></div>
+<div class="keys-hit" aria-hidden="true" title="Piano keys: click to play"></div>
+<a class="skip" href="#text">Skip to the text</a>
+<main class="page">
+  <header class="hero">
+    <div class="body" data-fog>
+      <p class="crumb intro"><a href="../index.html">&larr; Pranjal Singh Sesodia</a></p>
+      <div class="kicker small intro"><span class="tag">Robotics</span><span>mPragati, IIT Delhi</span><span>June 2026 to now</span></div>
+      <h1 class="p-title intro">A vision-guided robot arm on servos with no encoders</h1>
+      <div class="hero-row">
+        <p class="dek intro">A 4-DOF arm I designed and built to keep a wrist camera on a moving target. Its hobby servos report nothing back, so feedback has to come from cameras. It is groundwork for later research toward a medical arm, so the questions here are general ones: cheap actuation, visual servoing and estimating joint state.</p>
+        <dl class="now intro">
+          <dt>With</dt><dd>Dr. Dinesh Kalyanasundaram (supervisor); Bavath D. and Yogesh Sahu (mentors)</dd>
+          <dt>My part</dt><dd>Mechanical design and build, firmware, tracking control, digital twin, MATLAB model, 6-DOF design</dd>
+          <dt>Tools</dt><dd>Python (OpenCV, MediaPipe, NumPy), Arduino, MATLAB, SolidWorks, FDM printing</dd>
+          <dt>In numbers</dt><dd>4 DOF built · 30 Hz tracking loop · 100 Hz firmware motion profile · 1.233 kg</dd>
+          <dt>Status</dt><dd>Tracking runs on the arm. Joint error in degrees isn’t measured yet.</dd>
+        </dl>
+      </div>
+      <div class="roll-cap">
+        <p class="roll-hint">This page is a piano roll. Its keys run down the left edge: click one, or click the paper to punch a note. Scrolling plays it.</p>
+        <div class="ctl"><button class="roll-sound" type="button" aria-pressed="false">Sound off</button><button class="roll-clear" type="button" hidden>Clear your notes</button></div>
+      </div>
+    </div>
+  </header>
+  <div id="text"></div>
+  <section class="sec lead">
+    <div class="body">
+      <div class="jrow">
+        <figure style="--ar:0.7500">
+          <img class="zoom" data-zoom data-group="fig" data-title="The arm on its printed base, with the wrist camera at the top." src="../media/work/arm/arm-camera.webp" width="1200" height="1600" alt="The arm on its black printed base with a webcam at the wrist, on a lab bench" loading="eager" fetchpriority="high" decoding="async">
+          <figcaption>The arm on its printed base, with the wrist camera at the top.</figcaption>
+        </figure>
+        <figure style="--ar:1.3333">
+          <video src="../media/video/arm-eye-in-hand.mp4" poster="../media/work/arm/arm-eye-in-hand.webp" width="800" height="600" controls playsinline preload="none" aria-label="The wrist camera's view while the arm tracks a fingertip, with live joint angles and the tilt split printed at the top"></video>
+          <figcaption>What the wrist camera sees while the arm tracks my fingertip, 24 October. The top line shows live joint angles; the second shows how the tilt is split between joints.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Status</div>
+    <div class="body prose">
+      <h2>Where it stands</h2>
+      <p>Part of this runs on the arm and part of it only in simulation or CAD. This table says which is which.</p>
+      <table class="ledger">
+        <thead><tr><th>Work</th><th>State</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>4-DOF arm: base yaw, shoulder, elbow, wrist pitch</td><td><span class="st hw">On hardware</span></td><td>Photos and videos on this page.</td></tr>
+          <tr><td>Fingertip tracking with PD control (V1 to V3, July)</td><td><span class="st hw">On hardware</span></td><td>My test runs. I kept no logs from these versions, so they have no error figures.</td></tr>
+          <tr><td>Eye-in-hand tracking with velocity control and coordinated tilt (October)</td><td><span class="st hw">On hardware</span></td><td>Screen recording, 24 Oct 2026. Tracking error not measured yet.</td></tr>
+          <tr><td>Digital twin: commanded stream, load estimate, CSV logging</td><td><span class="st hw">On hardware</span></td><td>Runs alongside tracking in the same recording; four logs from 24 Oct.</td></tr>
+          <tr><td>Digital twin: measured joint angles</td><td><span class="st todo">In progress</span></td><td>Calibration attempted on 24 Oct and not completed: markers were lost or read too much motion.</td></tr>
+          <tr><td>Joint angle from the servo’s own potentiometer</td><td><span class="st des">Written</span></td><td>Two one-servo test sketches from 19 Oct. No results recorded yet.</td></tr>
+          <tr><td>MATLAB dynamics model and controller comparison</td><td><span class="st sim">Simulation</span></td><td>All 18 checks pass (re-run 5 Nov 2026), on placeholder masses and dimensions.</td></tr>
+          <tr><td>6-DOF stage: upper-arm links and <a href="cycloidal-reducer.html">5:1 cycloidal reducers</a></td><td><span class="st des">Designed</span></td><td>SolidWorks assemblies. Not built.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Hardware</div>
+    <div class="body prose">
+      <h2>The arm as built</h2>
+      <p>A servo drives a pinion that meshes with a ring gear printed inside the base. That stage is 2.6:1 and reversed, so the servo’s full 0-180° becomes 0-69.2° at the joint, with home at 34.6°. Everything above it is direct drive on aluminium brackets.</p>
+      <table class="data">
+        <tbody>
+          <tr><td>Joints</td><td>Base yaw, shoulder, elbow, wrist pitch; no gripper</td></tr>
+          <tr><td>Upper arm</td><td>103.5 mm, shoulder to elbow</td></tr>
+          <tr><td>Forearm</td><td>98 mm, elbow to wrist</td></tr>
+          <tr><td>Wrist to camera panel</td><td>102 mm along, 68.5 mm across (modelled as one 123 mm link)</td></tr>
+          <tr><td>Servos</td><td>Standard metal-gear hobby servos, 1501MG class: 15.5 kg·cm stall and 0.16 s per 60° at 4.8 V, 17 kg·cm and 0.14 s per 60° at 6 V</td></tr>
+          <tr><td>Electronics</td><td>Arduino Nano and PCA9685 PWM driver; separate 5-6 V servo supply of at least 3 A</td></tr>
+          <tr><td>Wrist camera</td><td>Logitech C920, 640 × 480 at 30 fps, 62° horizontal field of view</td></tr>
+          <tr><td>Firmware</td><td>100 Hz speed- and acceleration-limited profile; checksummed serial at 115200 baud</td></tr>
+          <tr><td>Mass</td><td>1.233 kg with base, servos and wiring</td></tr>
+        </tbody>
+      </table>
+      <div class="jrow">
+        <figure style="--ar:0.7500">
+          <img class="zoom" data-zoom data-group="fig" data-title="From above: the servo-driven pinion beside the turntable." src="../media/work/arm/base-gear-top.webp" width="960" height="1280" alt="The printed base from above, with a servo pinion beside the turntable" loading="lazy" decoding="async">
+          <figcaption>From above: the servo-driven pinion beside the turntable.</figcaption>
+        </figure>
+        <figure style="--ar:0.7500">
+          <img class="zoom" data-zoom data-group="fig" data-title="Turned over: the ring gear inside the base." src="../media/work/arm/base-bearing.webp" width="960" height="1280" alt="The printed base turned over, showing the ring gear inside" loading="lazy" decoding="async">
+          <figcaption>Turned over: the ring gear inside the base.</figcaption>
+        </figure>
+        <figure style="--ar:0.7500">
+          <img class="zoom" data-zoom data-group="fig" data-title="Extended, on the bench." src="../media/work/arm/arm-bench.webp" width="1200" height="1600" alt="The arm extended on the bench" loading="lazy" decoding="async">
+          <figcaption>Extended, on the bench.</figcaption>
+        </figure>
+        <figure style="--ar:0.5625">
+          <img class="zoom" data-zoom data-group="fig" data-title="On the lab scale with its base, servos and wiring: 1.233 kg." src="../media/work/arm/weighing.webp" width="900" height="1600" alt="The whole arm standing on a lab scale reading 1.233 kg" loading="lazy" decoding="async">
+          <figcaption>On the lab scale: 1.233 kg.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Tracking</div>
+    <div class="body prose">
+      <h2>Build log: eye-in-hand tracking</h2>
+      <p>Eye-in-hand means the camera rides on the arm, so moving a joint moves the view. The task is to keep a target at the centre of that view.</p>
+      <figure class="fig">
+        <video src="../media/video/arm-tracking-test.mp4" poster="../media/work/arm/arm-tracking-test.webp" width="848" height="478" controls playsinline preload="none" aria-label="A test run of the arm tracking a hand with its wrist camera"></video>
+        <figcaption>A test run of the tracking at mPragati.</figcaption>
+      </figure>
+      <ol class="log">
+        <li>
+          <span class="when">July 2026</span>
+          <h3>V1 to V3: PD control in pixels</h3>
+          <p>MediaPipe finds the target, an index fingertip in testing, and the error is its pixel offset from the image centre. The first versions ran PD control at 20 Hz (Kp 18, Kd 3.5, Ki 0, anti-windup limit 0.5) with a 20 px dead zone and an exponential filter (α = 0.8). V2 added a small state machine (no target, acquiring for 0.3 s, then tracking), and V3 added monocular depth from Depth Anything V2 (ViT-S).</p>
+        </li>
+        <li>
+          <span class="when">17-18 October 2026</span>
+          <h3>A rewrite: error in degrees, control in velocity</h3>
+          <p>The current software converts the pixel offset to an angle and runs velocity P control at 30 Hz: 2.5 deg/s per degree of error, a 1° dead band, and speed caps of 60°/s in pan and 90°/s in tilt. All calibration lives on the PC and is pushed to the Arduino at every connection, so the firmware never drives a servo until it has been told where the arm starts.</p>
+          <figure class="code"><figcaption>armctl/tracker.py</figcaption><pre><code>pan_err = math.degrees(math.atan((sx - W / 2) / focal))
+tilt_err = math.degrees(math.atan((sy - H / 2) / focal))
+
+pan_err = 0.0 if abs(pan_err) &lt; t["deadband_deg"] else pan_err
+tilt_err = 0.0 if abs(tilt_err) &lt; t["deadband_deg"] else tilt_err
+
+vp = _clamp(t["pan_kp"] * pan_err, -t["pan_max_speed"], t["pan_max_speed"])
+vt = _clamp(t["tilt_kp"] * tilt_err, -t["tilt_max_speed"], t["tilt_max_speed"])
+
+if "base" in arm.names:
+    arm.move("base", t["pan_sign"] * vp * dt)
+tilt.step(t["tilt_sign"] * vt, abs(tilt_err), dt)</code></pre></figure>
+          <p>From the controller’s side the servos are open loop: it sends an angle and gets nothing back. Inside, each servo still runs its own position loop on its potentiometer. The tracker integrates its velocity command into a target angle and streams that to the Arduino, which passes it through a speed- and acceleration-limited profile at 100 Hz. The servo then follows a setpoint that moves smoothly, and the vision loop sits outside it.</p>
+          <figure class="code"><figcaption>firmware/arm4dof/arm4dof.ino</figcaption><pre><code>void stepSlot(uint8_t j, float dt)
+{
+  float vm = vMax[j] * speedScale;
+  float am = aMax[j] * speedScale;
+
+  float dist = target[j] - position[j];
+  float vStop = sqrt(2.0 * am * fabs(dist));
+  float vDes = constrain(dist &gt; 0 ? vStop : -vStop, -vm, vm);
+
+  velocity[j] += constrain(vDes - velocity[j], -am * dt, am * dt);
+
+  float step = velocity[j] * dt;
+  if (fabs(step) &gt;= fabs(dist)) { position[j] = target[j]; velocity[j] = 0; }
+  else                          { position[j] += step; }
+}</code></pre></figure>
+          <p>The 30 fps camera caps the loop rate. I haven’t yet measured the latency through MediaPipe and the serial link, or how the servo’s response limits stability.</p>
+          <p>On the first run the arm moved away from my finger, so both direction signs were flipped in the calibration file. I still have to establish which axis was actually reversed.</p>
+        </li>
+        <li>
+          <span class="when">24 October 2026</span>
+          <h3>Splitting the tilt between three joints</h3>
+          <p>Shoulder, elbow and wrist all tilt the camera about the same axis, and camera pitch is simply the sum of the three angles. That makes the tilt redundant, so it can be shared out with no inverse kinematics solve per frame.</p>
+          <p>Below 4° of error the wrist corrects alone, which is light and fast and barely shakes the arm. From 4° to 15° the shoulder and elbow take a growing share, up to 60%. The elbow takes 65% of that share and the shoulder the rest, capped at 30°/s. Anything a joint can’t do, at a limit or a speed cap, passes to the others. The video at the top of this page shows the split live: its second line reads, for example, “wrist + 25% elbow/shoulder”.</p>
+          <figure class="fig">
+            <img class="plot" src="../media/work/arm/tilt-share.svg" width="640" height="300" alt="Stacked chart: below 4 degrees of error the wrist does all the correction; by 15 degrees the elbow and shoulder together do 60 percent" loading="lazy" decoding="async">
+            <figcaption>The split as designed, plotted from the parameters in the code. Design law, not a measurement.</figcaption>
+          </figure>
+          <p>When the wrist drifts more than 12° from home it eases back at 8°/s while the shoulder and elbow counter-rotate. The camera’s view stays where it is, and the wrist gets its range back for fine work.</p>
+          <figure class="code"><figcaption>armctl/coordination.py</figcaption><pre><code>target = _smoothstep(self.p["fine_band_deg"], self.p["coarse_band_deg"], err_abs) \
+    * self.p["lower_share"] if self.lower else 0.0
+tau = max(self.p.get("share_time_s", 0.3), 1e-3)
+self.share += (target - self.share) * min(1.0, dt / tau)
+
+cap = self.p["lower_max_speed"] * dt
+used = {n: 0.0 for n in self.lower}
+
+<span class="c"># coarse joints take their share (speed capped)</span>
+want = total * self.share
+for n in self.lower:
+    used[n] += self._apply(n, _clamp(want * self.frac[n], -cap, cap))
+
+<span class="c"># the wrist does the rest</span>
+rest = total - sum(used.values())
+rest -= self._apply(self.fine, rest)
+
+<span class="c"># wrist at a limit: hand the remainder to the coarse joints</span>
+for n in self.lower:
+    if abs(rest) &lt; 1e-9:
+        break
+    room = _clamp(used[n] + rest, -cap, cap) - used[n]
+    done = self._apply(n, room)
+    used[n] += done
+    rest -= done</code></pre></figure>
+        </li>
+      </ol>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Twin</div>
+    <div class="body prose">
+      <h2>Build log: measuring the joints</h2>
+      <p>Tracking only says where the target is in the image. To know where the joints actually are, I’m trying two routes: an external camera that watches the arm (eye-to-hand), and the potentiometer already inside each servo.</p>
+      <ol class="log">
+        <li>
+          <span class="when">19 October 2026</span>
+          <h3>Tapping the servo’s own potentiometer</h3>
+          <p>A hobby servo measures its shaft with a potentiometer and keeps the reading to itself. Two test sketches bring the wiper out to the Arduino’s ADC through a 1 kΩ resistor and a 100 nF capacitor. The first sweeps one servo and records commanded angle against ADC counts as a calibration table. The second calibrates itself with its own sweep the first time it starts, then reads live position at 100 Hz, plots commanded, measured and error, and adds push-to-move: when someone forces the shaft more than 4° off its command for 60 ms, it gives way and follows the hand, then holds wherever it is left still.</p>
+          <figure class="code"><figcaption>firmware/servo_live/servo_live.ino</figcaption><pre><code>void updateYield(unsigned long now)
+{
+  if (mode == HOLD)
+  {
+    float err = cmdDeg - posDeg;
+    if (now &lt; graceUntil || fabs(err) &lt; PUSH_DEG) { pushSince = 0; return; }
+    if (!pushSince) pushSince = now;
+    if (now - pushSince &gt;= PUSH_MS) enterFollow(now);
+  }
+  else if (mode == FOLLOW)
+  {
+    <span class="c">// compliant: keep the command just behind the hand so the servo gives way</span>
+    if (!FOLLOW_LIMP &amp;&amp; fabs(posDeg - cmdDeg) &gt; FOLLOW_DEG) aim(posDeg);
+
+    if (fabs(posDeg - stillRef) &gt; STILL_DEG) { stillRef = posDeg; stillSince = now; }
+    else if (now - stillSince &gt;= STILL_MS)
+    {
+      enterHold(posDeg);
+      Serial.println(F("# holding"));
+    }
+  }
+}</code></pre></figure>
+          <p>Both sketches are written for a single test servo. The folder holds no results from them yet.</p>
+        </li>
+        <li>
+          <span class="when">24 October 2026</span>
+          <h3>A digital twin from an external camera</h3>
+          <p>A phone over DroidCam (1280 × 720) watches 40 mm ArUco markers fixed to each link. OpenCV detects them with sub-pixel corner refinement and solves each marker’s pose with solvePnP (IPPE-square). A joint’s angle is the relative rotation between the markers on its parent and child links, smoothed with an exponential filter. It reuses the camera-based pose approach from <a href="surgeon-motion.html">my work at QuEST Lab</a>.</p>
+          <figure class="code"><figcaption>armctl/vision.py</figcaption><pre><code>def joint_angle(R_rel, R_ref, axis, home):
+    """Joint angle (deg) from the relative rotation, see module doc."""
+    rv = rodrigues(R_rel @ R_ref.T)
+    return home + math.degrees(float(np.dot(rv, axis)))</code></pre></figure>
+          <p>Commanded angles arrive from the controller over UDP at 30 Hz. A live viewer shows the 3D arm, measured against commanded, along with joint plots and an estimated servo load, and everything is logged to CSV for MATLAB.</p>
+          <figure class="fig">
+            <video src="../media/video/arm-twin-tracking.mp4" poster="../media/work/arm/arm-twin-tracking.webp" width="1280" height="692" controls playsinline preload="none" aria-label="The digital twin window updating while the wrist camera tracks a hand"></video>
+            <figcaption>The twin running alongside tracking. Its plots and table follow the commanded angles; the measured column stays empty until calibration works.</figcaption>
+          </figure>
+          <p>Calibration nudges each joint by +15° and compares what the markers see. It hasn’t worked yet. In one attempt on 24 October the base read 21.4° and the shoulder 26.8° for a 15° move, the software flagged other joints changing at the same time and asked whether a marker was loose, and the elbow’s marker was lost while it moved. My guesses at the causes, still to test: no camera calibration yet (the field of view is assumed to be 70°), markers seen at a steep angle, and markers not stuck down flat.</p>
+          <figure class="fig">
+            <video src="../media/video/arm-twin-calibration.mp4" poster="../media/work/arm/arm-twin-calibration.webp" width="1280" height="720" controls playsinline preload="none" aria-label="Setting up the twin calibration: pressing ArUco markers onto the arm's links in view of a phone camera"></video>
+            <figcaption>Setting up the calibration: markers on each link, seen from the phone. Green outlines are markers it has found.</figcaption>
+          </figure>
+          <figure class="fig">
+            <img class="plot" src="../media/work/arm/commanded-run.svg" width="680" height="470" alt="Four stacked plots of commanded base, shoulder, elbow and wrist angle over about 125 seconds" loading="lazy" decoding="async">
+            <figcaption>Commanded angles from one log, 125 s of tracking. You can see the joint limits at work: the elbow sits at 120° and the shoulder at 20° for stretches.</figcaption>
+          </figure>
+          <p>The twin also computes static gravity torque per joint from the pose. In this log the shoulder estimate peaks at 0.70 N·m, about 46% of the servo’s 1.52 N·m stall at 4.8 V, or 42% of 1.67 N·m at 6 V. The link masses behind it (110, 100 and 200 g) are my estimates, so this figure is rough until I weigh the links.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">6-DOF</div>
+    <div class="body prose">
+      <h2>The next stage: 6 DOF, in CAD and in MATLAB</h2>
+      <ol class="log">
+        <li>
+          <span class="when">September to October 2026</span>
+          <h3>The upper arm and a base in CAD</h3>
+          <p>The 6-DOF upper arm in SolidWorks has five links (upper arm, forearm, wrist link and tool arm, each with a lid, then a tool flange). The same CAD folder holds a base assembly in which a pinion on the motor turns an internal spur gear under a moving plate. The <a href="cycloidal-reducer.html">5:1 cycloidal reducer</a> belongs to the same stage.</p>
+          <div class="jrow">
+            <figure style="--ar:1.1070">
+              <img class="zoom" data-zoom data-group="fig" data-title="The 6-DOF upper arm assembly in SolidWorks." src="../media/work/arm/six-dof-arm-cad.webp" width="1004" height="907" alt="SolidWorks render of a dark grey printed robot arm with five link segments on a round base" loading="lazy" decoding="async">
+              <figcaption>The 6-DOF upper arm in SolidWorks.</figcaption>
+            </figure>
+            <figure style="--ar:1.1224">
+              <img class="zoom" data-zoom data-group="fig" data-title="The base assembly, exploded: motor and pinion, top lid, and the base with its internal gear." src="../media/work/arm/base-gear-cad.webp" width="1018" height="907" alt="Exploded SolidWorks render of the base: a yellow motor bracket with pinion, a ring-shaped top lid and the base with an internal gear" loading="lazy" decoding="async">
+              <figcaption>The base assembly, exploded: motor and pinion, top lid, and the internal gear.</figcaption>
+            </figure>
+          </div>
+        </li>
+        <li>
+          <span class="when">October 2026</span>
+          <h3>Kinematics, dynamics and three controllers</h3>
+          <p>I worked through a full model of the 6-DOF arm in MATLAB: DH forward kinematics, the geometric Jacobian and its singularities, damped-least-squares inverse kinematics, Euler-Lagrange and recursive Newton-Euler dynamics, and joint friction. In a 1 kHz simulated loop it compares PD with gravity compensation, computed-torque control, and task-space control with a remote centre of motion, where the tool pivots about a fixed point.</p>
+          <p>The model still holds placeholder masses and dimensions, a bench-top arm with a PUMA-like layout. Its checks therefore test the equations, against the Robotics System Toolbox, finite differences and energy conservation, and they say nothing yet about my arm.</p>
+          <figure class="code">
+            <figcaption>run_all_checks, last 8 of 18 lines. Run on 5 Nov 2026; all 18 passed.</figcaption>
+            <pre><code>M positive definite (1 = smallest eigenvalue &lt;= 0)       0.00e+00  (tol 5e-01)  ok
+Christoffel C*qd equals Newton-Euler C*qd                1.54e-10  (tol 1e-05)  ok
+Mdot - 2C is skew-symmetric                              4.40e-10  (tol 1e-05)  ok
+Energy drift of free arm / peak kinetic energy           1.45e-09  (tol 1e-05)  ok
+Computed torque, exact model: max joint error [rad]      5.76e-05  (tol 1e-04)  ok
+Surgical task: max tip error [m]                         1.33e-05  (tol 1e-04)  ok
+Surgical task: max shaft offset at incision [m]          6.85e-06  (tol 1e-04)  ok
+
+All 18 checks passed.</code></pre>
+          </figure>
+          <figure class="code"><figcaption>control/ctrl_task_space.m</figcaption><pre><code>T  = fkine(q, mdl);
+J  = jacobian_geo(q, mdl);
+xd = J * qd;
+e  = [ref.p - T(1:3,4); rot_error(ref.R, T(1:3,1:3))];
+ed = [ref.v - xd(1:3); ref.w - xd(4:6)];
+a_star   = [ref.a; ref.dw] + Kd*ed + Kp*e;
+qdd_star = dls_inverse(J, 0.02, 0.05) * (a_star - jacobian_dot_qd(q, qd, mdl));
+tau = mass_matrix(q, mdl) * qdd_star + rnea(q, qd, zeros(mdl.n, 1), mdl) + joint_friction(qd, mdl);</code></pre></figure>
+          <figure class="fig square">
+            <img class="zoom plot" data-zoom data-group="fig" data-title="The remote-centre-of-motion task on the placeholder arm: the shaft pivots about the red ring while the tip follows its path." src="../media/work/arm/rcm-task.webp" width="733" height="743" alt="Animation of a simulated six-joint arm moving a tool shaft through a fixed point on a plane" loading="lazy" decoding="async">
+            <figcaption>The remote-centre task on the placeholder arm, in simulation. This isn’t my hardware.</figcaption>
+          </figure>
+          <p>Computed-torque control needs torque-controlled joints and hobby servos are position controlled. So on this arm the dynamics are for sizing actuators (worst-case holding torque, then peak and RMS torque over a task), and inverse kinematics generates the angles the servos track.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Next</div>
+    <div class="body prose">
+      <h2>What’s next</h2>
+      <ul>
+        <li>Calibrate the external camera properly, fix the markers flat, and get the twin calibration through. That gives joint error in degrees for the first time.</li>
+        <li>Weigh the links, put the arm’s real masses and dimensions into the MATLAB model, and re-run the actuator sizing.</li>
+        <li>Build the 6-DOF stage around the cycloidal reducer.</li>
+      </ul>
+    </div>
+  </section>
+  <nav class="sec" aria-label="More work">
+    <div class="body">
+      <div class="next">
+        <a href="wind-tunnel.html"><span class="small">&larr; Previous</span><span class="t">A tabletop subsonic wind tunnel</span></a>
+        <a class="fwd" href="cycloidal-reducer.html"><span class="small">Next &rarr;</span><span class="t">A 5:1 cycloidal reducer for a hobby servo</span></a>
+      </div>
+    </div>
+  </nav>
+  <footer class="sec foot" id="contact">
+    <div class="mark fine" aria-hidden="true">Fine</div>
+    <div class="body">
+      <p class="small">Write to me</p>
+      <a class="email" href="mailto:pranjalsinghsesodia@gmail.com">pranjalsinghsesodia@gmail.com</a>
+      <p>If your lab works on surgical robots, actuators or mechanisms and takes undergraduate researchers, I’d like to hear about it.</p>
+      <ul class="links">
+        <li><a href="../cv.html" target="_blank" rel="noopener">CV</a></li>
+        <li><a href="https://www.linkedin.com/in/pranjalsinghsesodia/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://scholar.google.com/citations?hl=en&amp;user=K10pZz0AAAAJ" target="_blank" rel="noopener">Google Scholar</a></li>
+        <li><a href="https://www.instagram.com/hipranjal_/" target="_blank" rel="noopener">Instagram</a></li>
+      </ul>
+    </div>
+  </footer>
+</main>
+<dialog class="lb" aria-label="Enlarged image">
+  <figure class="lb-fig"><img alt=""></figure>
+  <p class="lb-cap"><span class="t"></span><span class="m"></span></p>
+  <button class="lb-x" type="button">Close</button>
+  <button class="lb-p" type="button" aria-label="Previous">&larr;</button>
+  <button class="lb-n" type="button" aria-label="Next">&rarr;</button>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="../js/roll.js" defer></script>
+<script src="../js/site.js" defer></script>
+</body>
+</html>

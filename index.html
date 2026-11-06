@@ -16,7 +16,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#f0e8d8">
+<meta name="theme-color" content="#f1efea">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,23 +39,20 @@
 <main class="page">
   <header class="hero">
     <div class="body" data-fog>
-      <h1 class="name intro"><span>Pranjal Singh</span><span>Sesodia</span></h1>
-      <div class="hero-row">
-        <div class="lede intro">
-          <p>I’m a mechanical engineering student at NSUT in New Delhi. Right now I’m at mPragati, IIT Delhi, building a surgical arm that uses cameras to work out where its own joints are, and checking implants and prosthetic knees for the motion they promise.</p>
-          <p>I like building a mechanism and then poking at it until I’m sure it works. Away from that, I’m usually at the piano or out with a camera.</p>
-        </div>
-        <dl class="now intro">
-          <dt>Now</dt><dd>R&amp;D intern, mPragati, IIT Delhi</dd>
-          <dt>Before</dt><dd>Research intern, QuEST Lab, IIT Delhi</dd>
-          <dt>Studying</dt><dd>B.Tech. Mechanical Engineering, NSUT, 2024–28</dd>
-          <dt>Published</dt><dd>First-author review, Next Research (Elsevier), 2026</dd>
-          <dt>Looking for</dt><dd>Research internships and lab work</dd>
-        </dl>
+      <h1 class="name intro"><span>Pranjal Singh</span> <span>Sesodia</span></h1>
+      <div class="lede intro">
+        <p>I’m a mechanical engineering student at NSUT in New Delhi. Right now I’m at mPragati, IIT Delhi, building an arm that keeps a camera on a moving target using vision in place of joint encoders, and checking implants and prosthetic knees for the motion they promise.</p>
+        <p>I like building a mechanism and then poking at it until I’m sure it works. Away from that, I’m usually at the piano or out with a camera.</p>
       </div>
+      <dl class="facts-row intro">
+        <div><dt>Now</dt><dd>R&amp;D intern, mPragati, IIT Delhi</dd></div>
+        <div><dt>Before</dt><dd>Research intern, QuEST Lab, IIT Delhi</dd></div>
+        <div><dt>Studying</dt><dd>B.Tech. Mechanical Engineering, NSUT, 2024-28</dd></div>
+        <div><dt>Published</dt><dd>First-author review, <i>Next Research</i> (Elsevier), 2026</dd></div>
+      </dl>
       <ul class="links">
         <li><a href="mailto:pranjalsinghsesodia@gmail.com">Email</a></li>
-        <li><a href="cv.pdf" target="_blank" rel="noopener">CV</a></li>
+        <li><a href="cv.html" target="_blank" rel="noopener">CV</a></li>
         <li><a href="https://www.linkedin.com/in/pranjalsinghsesodia/" target="_blank" rel="noopener">LinkedIn</a></li>
         <li><a href="https://scholar.google.com/citations?hl=en&amp;user=K10pZz0AAAAJ" target="_blank" rel="noopener">Google Scholar</a></li>
       </ul>
@@ -68,62 +65,85 @@
 
   <section class="sec" id="work" aria-labelledby="h-work">
     <div class="mark" aria-hidden="true">Work</div>
-    <div class="body">
+    <div class="body" data-tabs>
       <h2 id="h-work">Work</h2>
-      <ul class="cards">
-        <li data-reveal><a class="card" href="work/surgical-arm.html">
-          <span class="card-img"><img src="media/work/arm/arm-camera.webp" width="1200" height="1600" alt="" style="object-position:50% 32%" loading="lazy" decoding="async"></span>
-          <span class="meta small"><span class="tag">Robotics</span><span>mPragati, IIT Delhi</span><span>Since 2026</span></span>
-          <h3>A surgical arm that finds its own joints with cameras</h3>
-          <p>Two camera feedback loops for a 6-DOF arm whose servos can’t say where they are. mPragati, IIT Delhi.</p>
-        </a></li>
-        <li data-reveal><a class="card" href="work/elbow-and-knee.html">
-          <span class="card-img"><img src="media/work/knee/knee-print-vs-cad.webp" width="900" height="1600" alt="" style="object-position:50% 45%" loading="lazy" decoding="async"></span>
-          <span class="meta small"><span class="tag">Mechanisms</span><span>mPragati, IIT Delhi</span><span>Since 2026</span></span>
-          <h3>Checking a patented elbow implant, and freeing a knee that jammed</h3>
-          <p>Multi-body dynamics showed a patented hinge moving differently from its intended path; re-sized links freed a locked four-bar knee.</p>
-        </a></li>
-        <li data-reveal><a class="card" href="work/levitation-gap.html">
-          <span class="card-img diagram"><img src="media/work/maglev/ems-principle.webp" width="549" height="404" alt="" style="object-position:50% 50%" loading="lazy" decoding="async"></span>
-          <span class="meta small"><span class="tag">Paper</span><span>Next Research (Elsevier)</span><span>2026</span></span>
-          <h3>Robust real-time levitation gap estimation for hyperloop pods</h3>
-          <p>A first-author review of gap sensing and state estimation for maglev, in Next Research (Elsevier).</p>
-        </a></li>
-        <li data-reveal><a class="card" href="work/wind-tunnel.html">
-          <span class="card-img"><img src="media/work/tunnel/tunnel-card.webp" width="1600" height="1200" alt="" loading="lazy" decoding="async"></span>
-          <span class="meta small"><span class="tag">Fluids</span><span>NSUT, New Delhi</span><span>Since 2026</span></span>
-          <h3>A tabletop subsonic wind tunnel, designed end to end</h3>
-          <p>Sizing, contraction CFD, structural FEA and electronics for a 6:1 tunnel, on a ₹10,000 university grant.</p>
-        </a></li>
-        <li data-reveal><a class="card" href="work/deskmilo.html">
-          <span class="card-img"><img src="media/work/milo/cover.webp" width="1600" height="900" alt="" style="object-position:50% 50%" loading="lazy" decoding="async"></span>
-          <span class="meta small"><span class="tag">Personal</span><span>A personal build</span><span>2026</span></span>
-          <h3>DeskMilo, a desk companion that turns to look at you</h3>
-          <p>A Raspberry Pi assistant with a two-motor head. Three sketches, one mechanism.</p>
-        </a></li>
-        <li data-reveal><a class="card" href="work/surgeon-motion.html">
-          <span class="card-img"><img src="media/work/motion/depth-live-hand.webp" width="1600" height="631" alt="" style="object-position:42% 50%" loading="lazy" decoding="async"></span>
-          <span class="meta small"><span class="tag">Vision</span><span>QuEST Lab, IIT Delhi</span><span>2025–26</span></span>
-          <h3>Measuring how surgeons move, with two ordinary webcams</h3>
-          <p>Pose estimation for live joint angles, and a calibrated stereo pair up to 95–96% accurate. QuEST Lab, IIT Delhi.</p>
-        </a></li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="sec" id="also" aria-labelledby="h-also">
-    <div class="mark" aria-hidden="true">Smaller things</div>
-    <div class="body">
-      <h2 id="h-also">Smaller things</h2>
-      <ul class="smalls">
-        <li data-reveal><span class="small">2025–26</span><b>A catalytic converter for Team Daedalus Racing</b><p>Junior engineer on the BAJA SAEINDIA team. Developed the converter with lower-cost catalyst materials and analysed its manufacturing emissions and sustainability in Ansys Granta Selector. Part of the entry that won 1st nationally (₹30,000) at the mBAJA 2026 Sustainability Event.</p></li>
-        <li data-reveal><span class="small">2026</span><b>Saline management for minimally invasive surgery</b><p>Co-developed a pump and lining system for managing saline during minimally invasive surgery, in a team of four at QuEST Lab.</p></li>
-        <li data-reveal><span class="small">2024–25</span><b>Drinking straws from stubble</b><p>A research poster on turning wheat-straw waste into biodegradable straws, at the NSUT Research Conclave.</p></li>
-        <li data-reveal><span class="small">2024–26</span><b>Teaching, mentoring and running things</b><p>Taught 60 students in a two-day, hands-on 3D-printing workshop at the NSUT Innovation and Incubation Foundation (September 2026). Guided eight students to a working Li-ion battery upcycling prototype in three weeks at Change.Maker 2.0, Design Department, IIT Delhi (2025). Founded Team Daedalus’s Piston Cup Challenge and organised events at three college fests, 250+ participants each.</p></li>
-        <li data-reveal><span class="small">2022</span><b>EYEAR, speech to sign language</b><p>A real-time speech-to-sign device on a Raspberry Pi, built at school. Indian provisional patent; top 350 nationally in the ATL Marathon; Smart India Hackathon Junior finalist; shown to the Union Minister of Education at the IBM Under-18 Internship showcase.</p></li>
-        <li data-reveal><span class="small">2022</span><b>A quadruped in fourteen days</b><p>One of 25 school students chosen nationally for Change.Makers at IIT Delhi; led the build of a servo-driven quadruped: mechanism, actuation, gait.</p></li>
-        <li data-reveal><span class="small">Now and then</span><b>Printed because I wanted to see them</b><p>A peristaltic pump rotor, a small walking robot, and plenty of resin.</p><div class="thumbs"><button type="button" data-zoom data-group="prints" data-title="A peristaltic pump rotor, dimensioned in CAD" data-full="media/work/prints/pump-rotor.webp" aria-label="A peristaltic pump rotor, dimensioned in CAD"><img src="media/work/prints/pump-rotor.webp" width="124" height="70" alt="A peristaltic pump rotor, dimensioned in CAD" loading="lazy"></button><button type="button" data-zoom data-group="prints" data-title="A small printed walking robot" data-full="media/work/prints/walker.webp" aria-label="A small printed walking robot"><img src="media/work/prints/walker.webp" width="90" height="70" alt="A small printed walking robot" loading="lazy"></button><button type="button" data-zoom data-group="prints" data-title="At the resin printer" data-full="media/work/prints/sla-printer.webp" aria-label="At the resin printer"><img src="media/work/prints/sla-printer.webp" width="39" height="70" alt="At the resin printer" loading="lazy"></button></div></li>
-      </ul>
+      <div class="tabs" role="tablist" aria-label="Kinds of work">
+        <button type="button" role="tab" id="tab-robotics" aria-controls="p-robotics" aria-selected="true">Robotics<span class="n">2</span></button>
+        <button type="button" role="tab" id="tab-biomechanics" aria-controls="p-biomechanics" aria-selected="false">Biomechanics<span class="n">3</span></button>
+        <button type="button" role="tab" id="tab-fluids" aria-controls="p-fluids" aria-selected="false">Fluids<span class="n">1</span></button>
+        <button type="button" role="tab" id="tab-publications" aria-controls="p-publications" aria-selected="false">Publications<span class="n">1</span></button>
+        <button type="button" role="tab" id="tab-team" aria-controls="p-team" aria-selected="false">Team and school<span class="n">3</span></button>
+      </div>
+      <div class="panel" id="p-robotics" role="tabpanel" aria-labelledby="tab-robotics">
+        <h3 class="panel-h">Robotics</h3>
+        <ul class="cards">
+          <li><a class="card" href="work/robotic-arm.html">
+            <span class="card-img"><img src="media/work/arm/arm-camera.webp" width="1200" height="1600" alt="" style="object-position:50% 32%" loading="lazy" decoding="async"></span>
+            <span class="meta small"><span>mPragati, IIT Delhi</span><span>Since 2026</span></span>
+            <h3>A vision-guided robot arm on servos with no encoders</h3>
+            <p>A 4-DOF arm that keeps a wrist camera on target: visual servoing, a coarse-fine split between joints, a digital twin and a 6-DOF successor in CAD.</p>
+          </a></li>
+          <li><a class="card" href="work/cycloidal-reducer.html">
+            <span class="card-img diagram"><img src="media/work/reducer/disk-profile.svg" width="460" height="460" alt="" loading="lazy" decoding="async"></span>
+            <span class="meta small"><span>mPragati, IIT Delhi</span><span>2026</span></span>
+            <h3>A 5:1 cycloidal reducer for a hobby servo</h3>
+            <p>An exact-profile 5:1 drive for the arm’s next stage, drawn for FDM, SLA and resin, with the pin clearance checked over a full revolution.</p>
+          </a></li>
+        </ul>
+      </div>
+      <div class="panel" id="p-biomechanics" role="tabpanel" aria-labelledby="tab-biomechanics">
+        <h3 class="panel-h">Biomechanics</h3>
+        <ul class="cards">
+          <li><a class="card" href="work/elbow-implant.html">
+            <span class="card-img"><img src="media/work/elbow/test-jig.webp" width="1062" height="712" alt="" style="object-position:40% 50%" loading="lazy" decoding="async"></span>
+            <span class="meta small"><span>mPragati, IIT Delhi</span><span>Since 2026</span><span class="wip">Page in progress</span></span>
+            <h3>Checking a patented elbow implant against its intended path</h3>
+            <p>Multi-body dynamics found the ulna’s path jumping at 90° of flexion. Then a hinge redesign, a test jig and a five-test protocol.</p>
+          </a></li>
+          <li><a class="card" href="work/prosthetic-knee.html">
+            <span class="card-img"><img src="media/work/knee/knee-print-vs-cad.webp" width="900" height="1600" alt="" style="object-position:50% 45%" loading="lazy" decoding="async"></span>
+            <span class="meta small"><span>mPragati, IIT Delhi</span><span>2026</span><span class="wip">Page in progress</span></span>
+            <h3>Freeing a polycentric knee that couldn’t finish its flexion</h3>
+            <p>A four-bar knee that jammed, traced to its link proportions and resized until a printed prototype reached full flexion.</p>
+          </a></li>
+          <li><a class="card" href="work/surgeon-motion.html">
+            <span class="card-img"><img src="media/work/motion/depth-live-hand.webp" width="1600" height="631" alt="" style="object-position:42% 50%" loading="lazy" decoding="async"></span>
+            <span class="meta small"><span>QuEST Lab, IIT Delhi</span><span>2025-26</span><span class="wip">Page in progress</span></span>
+            <h3>Measuring how surgeons move, with two ordinary webcams</h3>
+            <p>Markerless motion capture with a 7 cm stereo pair, pose estimation through occlusions, and monocular depth.</p>
+          </a></li>
+        </ul>
+      </div>
+      <div class="panel" id="p-fluids" role="tabpanel" aria-labelledby="tab-fluids">
+        <h3 class="panel-h">Fluids</h3>
+        <ul class="cards">
+          <li><a class="card" href="work/wind-tunnel.html">
+            <span class="card-img"><img src="media/work/tunnel/tunnel-card.webp" width="1600" height="1200" alt="" loading="lazy" decoding="async"></span>
+            <span class="meta small"><span>NSUT, New Delhi</span><span>Since 2026</span><span class="wip">Page in progress</span></span>
+            <h3>A tabletop subsonic wind tunnel</h3>
+            <p>A 150 mm test section and a 6:1 Bell-Mehta contraction, sized by hand, refined in Fluent and lightened with FEA.</p>
+          </a></li>
+        </ul>
+      </div>
+      <div class="panel" id="p-publications" role="tabpanel" aria-labelledby="tab-publications">
+        <h3 class="panel-h">Publications</h3>
+        <ul class="cards">
+          <li><a class="card" href="work/levitation-gap.html">
+            <span class="card-img diagram"><img src="media/work/maglev/force-gap.svg" width="580" height="320" alt="" loading="lazy" decoding="async"></span>
+            <span class="meta small"><span>Next Research (Elsevier)</span><span>2026</span><span class="wip">Page in progress</span></span>
+            <h3>Robust real-time levitation gap estimation for Hyperloop pods</h3>
+            <p>A first-author review of sensors and estimators for the gap between a maglev pod and its rail.</p>
+          </a></li>
+        </ul>
+      </div>
+      <div class="panel" id="p-team" role="tabpanel" aria-labelledby="tab-team">
+        <h3 class="panel-h">Team and school</h3>
+        <ul class="cards smalls">
+          <li class="card-text"><span class="meta small"><span>Team Daedalus Racing</span><span>Nov 2025 to Mar 2026</span></span><h3>BAJA SAEINDIA: drivetrain and catalytic converter</h3><p>Changed the drivetrain reduction from 11:1 to 8:1 for low-gradient endurance conditions: at equal engine RPM, 37.5% more output speed for 27% less wheel torque. Developed the team’s catalytic converter with lower-cost catalyst materials and analysed its manufacturing emissions in Ansys Granta Selector. The sustainability entry won 1st place nationally at the mBAJA 2026 Sustainability Event (₹30,000).</p></li>
+          <li class="card-text"><span class="meta small"><span>NSUT and IIT Delhi</span><span>2024-26</span></span><h3>Teaching and mentoring</h3><p>Taught 60 students in a two-day, hands-on 3D-printing workshop at the NSUT Innovation and Incubation Foundation (September 2026). Guided eight students to a Li-ion battery upcycling prototype in three weeks at Change.Makers 2.0, IIT Delhi (2025). Founded Team Daedalus’s Piston Cup Challenge and organised events at three college fests, 250+ participants each.</p></li>
+          <li class="card-text"><span class="meta small"><span>Army Public School</span><span>2021-22</span></span><h3>EYEAR, speech to sign language</h3><p>A real-time speech-to-sign device for deaf and hard-of-hearing users, built on a Raspberry Pi in Python. Indian provisional patent filed in 2022, and presented to the Union Minister of Education. Smart India Hackathon Junior finalist; top 350 nationally in the ATL Marathon.</p></li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -140,11 +160,11 @@
         <figure class="portrait"><img src="media/me/portrait.jpeg" width="510" height="907" alt="Pranjal, smiling, standing outside a university building" loading="lazy"><figcaption>That’s me.</figcaption></figure>
       </div>
       <dl class="facts" data-reveal>
-        <dt>Studying</dt><dd>B.Tech. Mechanical Engineering, NSUT, 2024–28. CGPA 8.07, 19th of 198 in the department.</dd>
-        <dt>Coursework</dt><dd>Thermodynamics, Theory of Machines, Solid Mechanics, Control Systems, Fluid Mechanics, Numerical Methods. This term: Robotics, Machine Design.</dd>
-        <dt>Tools</dt><dd>SolidWorks; ANSYS Fluent, FEA and multi-body dynamics; Ansys Granta Selector; MuJoCo and ROS 2; PID control, computer vision, pose estimation, stereo calibration, depth estimation; Python (OpenCV, NumPy), MATLAB, C; Raspberry Pi, ESP32, Arduino; linkage synthesis, tolerancing, DFM; FDM and SLA printing.</dd>
+        <dt>Studying</dt><dd>B.Tech. Mechanical Engineering, NSUT (formerly NSIT), 2024-28. CGPA 8.07, in the top 10% of the department.</dd>
+        <dt>Coursework</dt><dd>Theory of Machines, Control Systems, Strength of Materials, Engineering Mechanics, Numerical Methods, Analog and Digital Electronics. This term: Robotics, Machine Design.</dd>
+        <dt>Tools</dt><dd>SolidWorks; ANSYS Fluent, FEA and multi-body dynamics; Ansys Granta Selector; MATLAB; PID control, visual servoing, pose estimation, stereo calibration, depth estimation; Python (OpenCV, NumPy, MediaPipe), C; Raspberry Pi, ESP32, Arduino; linkage synthesis, tolerancing, DFM; FDM and SLA printing.</dd>
         <dt>Drawn to</dt><dd>Simulation for robotics; heat in actuators and grippers; gripper dynamics (contact, compliance, slip); surgical and rehabilitation devices.</dd>
-        <dt>Reading</dt><dd>For a literature review on heat in robotic actuators and grippers.</dd>
+        <dt>Reading</dt><dd>Toward a literature review on heat in robotic actuators and grippers.</dd>
         <dt>School</dt><dd>Army Public School, Shankar Vihar, New Delhi: CBSE Class XII (PCM) 90%, Class X 90%.</dd>
       </dl>
     </div>
@@ -221,9 +241,9 @@
     <div class="body">
       <p class="small">Write to me</p>
       <a class="email" href="mailto:pranjalsinghsesodia@gmail.com">pranjalsinghsesodia@gmail.com</a>
-      <p>If you’re building something that needs both a wide look and a careful one, in a lab, a studio or a team, I’d like to hear about it.</p>
+      <p>If your lab works on surgical robots, actuators or mechanisms and takes undergraduate researchers, I’d like to hear about it.</p>
       <ul class="links">
-        <li><a href="cv.pdf" target="_blank" rel="noopener">CV</a></li>
+        <li><a href="cv.html" target="_blank" rel="noopener">CV</a></li>
         <li><a href="https://www.linkedin.com/in/pranjalsinghsesodia/" target="_blank" rel="noopener">LinkedIn</a></li>
         <li><a href="https://scholar.google.com/citations?hl=en&amp;user=K10pZz0AAAAJ" target="_blank" rel="noopener">Google Scholar</a></li>
         <li><a href="https://www.instagram.com/hipranjal_/" target="_blank" rel="noopener">Instagram</a></li>
