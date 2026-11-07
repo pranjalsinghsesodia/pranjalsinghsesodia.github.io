@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai">
 <title>A vision-guided robot arm on servos with no encoders · Pranjal Singh Sesodia</title>
 <meta name="description" content="A 4-DOF arm I designed and built that keeps a wrist camera on a moving target using vision in place of joint encoders, with a digital twin that is still being improved, a MATLAB model and a 6-DOF successor in CAD.">
 <meta property="og:title" content="A vision-guided robot arm on servos with no encoders · Pranjal Singh Sesodia">
@@ -150,7 +151,7 @@
           <span class="when">17-18 October 2026</span>
           <h3>A rewrite: error in degrees, control in velocity</h3>
           <p>The current software converts the pixel offset to an angle and runs velocity P control at 30 Hz: 2.5 deg/s per degree of error, a 1° dead band, and speed caps of 60°/s in pan and 90°/s in tilt. All calibration lives on the PC and is pushed to the Arduino at every connection, so the firmware never drives a servo until it has been told where the arm starts.</p>
-          <figure class="code"><figcaption>armctl/tracker.py</figcaption><pre><code>pan_err = math.degrees(math.atan((sx - W / 2) / focal))
+          <figure class="code"><figcaption>From pixel offset to angle error and joint speed</figcaption><pre><code>pan_err = math.degrees(math.atan((sx - W / 2) / focal))
 tilt_err = math.degrees(math.atan((sy - H / 2) / focal))
 
 pan_err = 0.0 if abs(pan_err) &lt; t["deadband_deg"] else pan_err
@@ -163,7 +164,7 @@ if "base" in arm.names:
     arm.move("base", t["pan_sign"] * vp * dt)
 tilt.step(t["tilt_sign"] * vt, abs(tilt_err), dt)</code></pre></figure>
           <p>From the controller’s side the servos are open loop: it sends an angle and gets nothing back. Inside, each servo still runs its own position loop on its potentiometer. The tracker integrates its velocity command into a target angle and streams that to the Arduino, which passes it through a speed- and acceleration-limited profile at 100 Hz. The servo then follows a setpoint that moves smoothly, and the vision loop sits outside it.</p>
-          <figure class="code"><figcaption>firmware/arm4dof/arm4dof.ino</figcaption><pre><code>void stepSlot(uint8_t j, float dt)
+          <figure class="code"><figcaption>Speed- and acceleration-limited motion profile, run at 100 Hz on the Arduino</figcaption><pre><code>void stepSlot(uint8_t j, float dt)
 {
   float vm = vMax[j] * speedScale;
   float am = aMax[j] * speedScale;
@@ -191,7 +192,7 @@ tilt.step(t["tilt_sign"] * vt, abs(tilt_err), dt)</code></pre></figure>
             <figcaption>The split as designed, plotted from the parameters in the code. Design law, not a measurement.</figcaption>
           </figure>
           <p>When the wrist drifts more than 12° from home it eases back at 8°/s while the shoulder and elbow counter-rotate. The camera’s view stays where it is, and the wrist gets its range back for fine work.</p>
-          <figure class="code"><figcaption>armctl/coordination.py</figcaption><pre><code>target = _smoothstep(self.p["fine_band_deg"], self.p["coarse_band_deg"], err_abs) \
+          <figure class="code"><figcaption>Splitting the camera tilt between wrist, elbow and shoulder</figcaption><pre><code>target = _smoothstep(self.p["fine_band_deg"], self.p["coarse_band_deg"], err_abs) \
     * self.p["lower_share"] if self.lower else 0.0
 tau = max(self.p.get("share_time_s", 0.3), 1e-3)
 self.share += (target - self.share) * min(1.0, dt / tau)
@@ -199,16 +200,13 @@ self.share += (target - self.share) * min(1.0, dt / tau)
 cap = self.p["lower_max_speed"] * dt
 used = {n: 0.0 for n in self.lower}
 
-<span class="c"># coarse joints take their share (speed capped)</span>
 want = total * self.share
 for n in self.lower:
     used[n] += self._apply(n, _clamp(want * self.frac[n], -cap, cap))
 
-<span class="c"># the wrist does the rest</span>
 rest = total - sum(used.values())
 rest -= self._apply(self.fine, rest)
 
-<span class="c"># wrist at a limit: hand the remainder to the coarse joints</span>
 for n in self.lower:
     if abs(rest) &lt; 1e-9:
         break
@@ -230,7 +228,7 @@ for n in self.lower:
           <span class="when">19 October 2026</span>
           <h3>Tapping the servo’s own potentiometer</h3>
           <p>A hobby servo measures its shaft with a potentiometer and keeps the reading to itself. Two test sketches bring the wiper out to the Arduino’s ADC through a 1 kΩ resistor and a 100 nF capacitor. The first sweeps one servo and records commanded angle against ADC counts as a calibration table. The second calibrates itself with its own sweep the first time it starts, then reads live position at 100 Hz, plots commanded, measured and error, and adds push-to-move: when someone forces the shaft more than 4° off its command for 60 ms, it gives way and follows the hand, then holds wherever it is left still.</p>
-          <figure class="code"><figcaption>firmware/servo_live/servo_live.ino</figcaption><pre><code>void updateYield(unsigned long now)
+          <figure class="code"><figcaption>Push-to-move: hold, give way when pushed, then hold again</figcaption><pre><code>void updateYield(unsigned long now)
 {
   if (mode == HOLD)
   {
@@ -241,7 +239,7 @@ for n in self.lower:
   }
   else if (mode == FOLLOW)
   {
-    <span class="c">// compliant: keep the command just behind the hand so the servo gives way</span>
+
     if (!FOLLOW_LIMP &amp;&amp; fabs(posDeg - cmdDeg) &gt; FOLLOW_DEG) aim(posDeg);
 
     if (fabs(posDeg - stillRef) &gt; STILL_DEG) { stillRef = posDeg; stillSince = now; }
@@ -258,8 +256,7 @@ for n in self.lower:
           <span class="when">24 October 2026</span>
           <h3>A digital twin from an external camera</h3>
           <p>A phone over DroidCam (1280 × 720) watches 40 mm ArUco markers fixed to each link. OpenCV detects them with sub-pixel corner refinement and solves each marker’s pose with solvePnP (IPPE-square). A joint’s angle is the relative rotation between the markers on its parent and child links, smoothed with an exponential filter. It reuses the camera-based pose approach from <a href="surgeon-motion.html">my work at QuEST Lab</a>.</p>
-          <figure class="code"><figcaption>armctl/vision.py</figcaption><pre><code>def joint_angle(R_rel, R_ref, axis, home):
-    """Joint angle (deg) from the relative rotation, see module doc."""
+          <figure class="code"><figcaption>Joint angle from the relative rotation of two markers</figcaption><pre><code>def joint_angle(R_rel, R_ref, axis, home):
     rv = rodrigues(R_rel @ R_ref.T)
     return home + math.degrees(float(np.dot(rv, axis)))</code></pre></figure>
           <p>Commanded angles arrive from the controller over UDP at 30 Hz. A live viewer is meant to show the 3D arm, measured against commanded, along with joint plots and an estimated servo load, and everything is logged to CSV for MATLAB.</p>
@@ -308,7 +305,7 @@ for n in self.lower:
           <p>I worked through a full model of the 6-DOF arm in MATLAB: DH forward kinematics, the geometric Jacobian and its singularities, damped-least-squares inverse kinematics, Euler-Lagrange and recursive Newton-Euler dynamics, and joint friction. In a 1 kHz simulated loop it compares PD with gravity compensation, computed-torque control, and task-space control with a remote centre of motion, where the tool pivots about a fixed point.</p>
           <p>The model still holds placeholder masses and dimensions, a bench-top arm with a PUMA-like layout. Its checks therefore test the equations, against the Robotics System Toolbox, finite differences and energy conservation, and they say nothing yet about my arm.</p>
           <figure class="code">
-            <figcaption>run_all_checks, last 8 of 18 lines. Run on 5 Nov 2026; all 18 passed.</figcaption>
+            <figcaption>Checks of the model against the Robotics System Toolbox, finite differences and energy conservation: the last 8 of 18, run on 5 Nov 2026. All 18 passed.</figcaption>
             <pre><code>M positive definite (1 = smallest eigenvalue &lt;= 0)       0.00e+00  (tol 5e-01)  ok
 Christoffel C*qd equals Newton-Euler C*qd                1.54e-10  (tol 1e-05)  ok
 Mdot - 2C is skew-symmetric                              4.40e-10  (tol 1e-05)  ok
@@ -319,7 +316,7 @@ Surgical task: max shaft offset at incision [m]          6.85e-06  (tol 1e-04)  
 
 All 18 checks passed.</code></pre>
           </figure>
-          <figure class="code"><figcaption>control/ctrl_task_space.m</figcaption><pre><code>T  = fkine(q, mdl);
+          <figure class="code"><figcaption>Task-space control law with a remote centre of motion</figcaption><pre><code>T  = fkine(q, mdl);
 J  = jacobian_geo(q, mdl);
 xd = J * qd;
 e  = [ref.p - T(1:3,4); rot_error(ref.R, T(1:3,1:3))];
