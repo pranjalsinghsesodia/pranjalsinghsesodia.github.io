@@ -240,7 +240,6 @@ img, video { max-width: 100%; }
   margin: 0 0 .5em;
 }
 /* one line where it fits; where it wraps, both lines start at the same edge */
-.name span + span { font-style: italic; font-weight: 270; }
 
 /* the photo in a round frame on the left, the name and introduction on the right */
 .intro-row {
