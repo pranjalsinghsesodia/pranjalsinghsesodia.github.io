@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai">
 <title>Checking a patented elbow implant against its intended path · Pranjal Singh Sesodia</title>
-<meta name="description" content="Multi-body dynamics showed a total elbow implant’s ulnar path departing from its specification at 90° of flexion. I redesigned the hinge kinematics and wrote the mechanical test protocol for the machined implants.">
+<meta name="description" content="A patented total elbow implant is specified to move the ulna along an elliptical path. In multibody dynamics simulation the path came out as two circular arcs with an offset jump at 90° of flexion, so I redesigned the hinge kinematics.">
 <meta property="og:title" content="Checking a patented elbow implant against its intended path · Pranjal Singh Sesodia">
-<meta property="og:description" content="Multi-body dynamics showed a total elbow implant’s ulnar path departing from its specification at 90° of flexion. I redesigned the hinge kinematics and wrote the mechanical test protocol for the machined implants.">
+<meta property="og:description" content="A patented total elbow implant is specified to move the ulna along an elliptical path. In multibody dynamics simulation the path came out as two circular arcs with an offset jump at 90° of flexion, so I redesigned the hinge kinematics.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Pranjal Singh Sesodia">
 <meta property="og:url" content="https://pranjalsinghsesodia.github.io/work/elbow-implant.html">
@@ -44,11 +44,11 @@
       <div class="kicker small intro"><span class="tag">Biomechanics</span><span>mPragati, IIT Delhi</span><span>June 2026 to now</span></div>
       <h1 class="p-title intro">Checking a patented elbow implant against its intended path</h1>
       <div class="hero-row">
-        <p class="dek intro">Multi-body dynamics showed a total elbow implant’s ulnar path departing from its specification at <b class="key">90° of flexion</b>. I redesigned the hinge kinematics and wrote the mechanical test protocol for the machined implants.</p>
+        <p class="dek intro">A patented total elbow implant is specified to move the ulna along an elliptical path. In simulation the path came out as two circular arcs with an offset jump at <b class="key">90° of flexion</b>, so I redesigned the hinge kinematics.</p>
         <dl class="now intro">
           <dt>With</dt><dd>Dr. Dinesh Kalyanasundaram (supervisor)</dd>
-          <dt>Tools</dt><dd>SolidWorks, ANSYS Mechanical (multi-body dynamics, static structural)</dd>
-          <dt>Status</dt><dd>Page under development</dd>
+          <dt>Tool</dt><dd>ANSYS Multibody Dynamics</dd>
+          <dt>My part</dt><dd>Motion simulation, hinge kinematics redesign</dd>
         </dl>
       </div>
       <div class="roll-cap">
@@ -58,16 +58,53 @@
     </div>
   </header>
   <div id="text"></div>
-  <section class="sec lead">
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Work</div>
     <div class="body prose">
-      <div class="wip-note">
-        <p class="small wip">Page under development</p>
-        <p>I’m writing up the build log for this project, with its figures and data. Until it’s ready, my <a href="../cv.html" target="_blank" rel="noopener">CV</a> has a summary, and I’m happy to talk it through by email.</p>
-        <p>The <a href="robotic-arm.html">robot arm</a> is written up in full.</p>
-      </div>
+      <h2>The work</h2>
+      <p>The specification for this patented total elbow implant calls for an elliptical ulnar path with a 2-4 mm offset. I checked whether the joint actually moves that way.</p>
       <figure class="fig">
-        <img class="zoom" src="../media/work/elbow/test-jig.webp" width="1062" height="712" alt="Exploded CAD of the implant test jig: T-slot rails, a riser plate, two angle plates and a potting cup" loading="eager" decoding="async">
+        <img class="zoom" data-zoom data-group="fig" data-title="An earlier iteration of the implant test jig, exploded. Iterative data; the final could not be disclosed." src="../media/work/elbow/test-jig.webp" width="1062" height="712" alt="Exploded CAD of the implant test jig: T-slot rails, a riser plate, two angle plates and a potting cup" loading="lazy" decoding="async">
+        <figcaption>An earlier iteration of the implant test jig, exploded. Iterative data; the final could not be disclosed.</figcaption>
       </figure>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Method</div>
+    <div class="body prose">
+      <h2>How I checked it</h2>
+      <p>I simulated the implant’s motion in ANSYS Multibody Dynamics and compared the path the ulna took with the one in the specification.</p>
+      <figure class="fig">
+        <img class="zoom" data-zoom data-group="fig" data-title="Motion simulation of the joint through flexion, with the paths traced. Iterative data; the final could not be disclosed." src="../media/work/elbow/motion.webp" width="1050" height="530" alt="Side view of the elbow joint part way through flexion, with curved lines tracing the paths of its moving parts" loading="lazy" decoding="async">
+        <figcaption>Motion simulation of the joint through flexion, with the paths traced. Iterative data; the final could not be disclosed.</figcaption>
+      </figure>
+      <figure class="fig square">
+        <img class="zoom" data-zoom data-group="fig" data-title="The meshed model of the joint. Iterative data; the final could not be disclosed." src="../media/work/elbow/mesh.webp" width="665" height="565" alt="Finite element mesh of the elbow joint and its stems" loading="lazy" decoding="async">
+        <figcaption>The meshed model of the joint. Iterative data; the final could not be disclosed.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img class="zoom" data-zoom data-group="fig" data-title="Equivalent stress on one implant component. Iterative data; the final could not be disclosed." src="../media/work/elbow/stress.webp" width="1104" height="256" alt="Stress contour plot along one implant component, with the peak marked near the neck of the stem" loading="lazy" decoding="async">
+        <figcaption>Equivalent stress on one implant component. Iterative data; the final could not be disclosed.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img class="zoom" data-zoom data-group="fig" data-title="Total deformation of the model. Iterative data; the final could not be disclosed." src="../media/work/elbow/deformation.webp" width="1210" height="340" alt="Deformation contour plot of the joint, shaded from blue where it is fixed to yellow at the far end" loading="lazy" decoding="async">
+        <figcaption>Total deformation of the model. Iterative data; the final could not be disclosed.</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Outcome</div>
+    <div class="body prose">
+      <h2>What came out of it</h2>
+      <p>The two paths didn’t match.</p>
+      <table class="data">
+        <thead><tr><th></th><th>Specified ulnar path</th><th>Simulated ulnar path</th></tr></thead>
+        <tbody>
+          <tr><td>Shape</td><td>Elliptical</td><td>Two circular arcs</td></tr>
+          <tr><td>Offset</td><td>2-4 mm</td><td>Jumps at 90° of flexion</td></tr>
+        </tbody>
+      </table>
+      <p>I then redesigned the hinge kinematics. The final design and the details of the redesign aren’t shared on this page.</p>
     </div>
   </section>
   <nav class="sec" aria-label="More work">
