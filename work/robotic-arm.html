@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fragment+Mono&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap">
-<link rel="stylesheet" href="../css/site.css?v=20261108c">
+<link rel="stylesheet" href="../css/site.css?v=20261108d">
 <script>(function (d) {
   // 'js' lets entrance animations take over; the loading screen shows once per visit
   d.classList.add('js');
@@ -44,7 +44,7 @@
       <div class="kicker small intro"><span class="tag">Robotics</span><span>mPragati, IIT Delhi</span><span>June 2026 to now</span></div>
       <h1 class="p-title intro">A vision-guided robot arm on servos with no encoders</h1>
       <div class="hero-row">
-        <p class="dek intro">A 4-DOF arm I designed and built to keep a wrist camera on a moving target. Its hobby servos report nothing back, so feedback has to come from cameras. It is groundwork for later research toward a medical arm, so the questions here are general ones: cheap actuation, visual servoing and estimating joint state.</p>
+        <p class="dek intro">A 4-DOF arm I designed and built to <mark>keep a wrist camera on a moving target</mark>. Its hobby servos report nothing back, so feedback has to come from cameras. It is groundwork for later research toward a medical arm, so the questions here are general ones: cheap actuation, visual servoing and estimating joint state.</p>
         <dl class="now intro">
           <dt>With</dt><dd>Dr. Dinesh Kalyanasundaram (supervisor); Bavath D. and Yogesh Sahu (mentors)</dd>
           <dt>My part</dt><dd>Mechanical design and build, firmware, tracking control, digital twin, MATLAB model, 6-DOF design</dd>
@@ -185,7 +185,7 @@ tilt.step(t["tilt_sign"] * vt, abs(tilt_err), dt)</code></pre></figure>
         <li>
           <span class="when">24 October 2026</span>
           <h3>Splitting the tilt between three joints</h3>
-          <p>Shoulder, elbow and wrist all tilt the camera about the same axis, and camera pitch is simply the sum of the three angles. That makes the tilt redundant, so it can be shared out with no inverse kinematics solve per frame.</p>
+          <p>Shoulder, elbow and wrist all tilt the camera about the same axis, and <mark>camera pitch is simply the sum of the three angles</mark>. That makes the tilt redundant, so it can be shared out with no inverse kinematics solve per frame.</p>
           <p>Below 4° of error the wrist corrects alone, which is light and fast and barely shakes the arm. From 4° to 15° the shoulder and elbow take a growing share, up to 60%. The elbow takes 65% of that share and the shoulder the rest, capped at 30°/s. Anything a joint can’t do, at a limit or a speed cap, passes to the others. The video at the top of this page shows the split live: its second line reads, for example, “wrist + 25% elbow/shoulder”.</p>
           <figure class="fig">
             <img class="plot" src="../media/work/arm/tilt-share.svg" width="640" height="300" alt="Stacked chart: below 4 degrees of error the wrist does all the correction; by 15 degrees the elbow and shoulder together do 60 percent" loading="lazy" decoding="async">
@@ -348,7 +348,7 @@ tau = mass_matrix(q, mdl) * qdd_star + rnea(q, qd, zeros(mdl.n, 1), mdl) + joint
   <nav class="sec" aria-label="More work">
     <div class="body">
       <div class="next">
-        <a href="wind-tunnel.html"><span class="small">&larr; Previous</span><span class="t">A tabletop subsonic wind tunnel</span></a>
+        <a href="eyear.html"><span class="small">&larr; Previous</span><span class="t">EYEAR, speech to sign language</span></a>
         <a class="fwd" href="cycloidal-reducer.html"><span class="small">Next &rarr;</span><span class="t">A 5:1 cycloidal reducer for a hobby servo</span></a>
       </div>
     </div>
@@ -378,7 +378,7 @@ tau = mass_matrix(q, mdl) * qdd_star + rnea(q, qd, zeros(mdl.n, 1), mdl) + joint
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
-<script src="../js/roll.js?v=20261108c" defer></script>
-<script src="../js/site.js?v=20261108c" defer></script>
+<script src="../js/roll.js?v=20261108d" defer></script>
+<script src="../js/site.js?v=20261108d" defer></script>
 </body>
 </html>

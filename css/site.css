@@ -263,6 +263,8 @@ img, video { max-width: 100%; }
 
 /* the info strip under the introduction */
 .key { color: var(--felt); font-weight: 500; }  /* important data, wherever it appears */
+/* a marker over the most important lines of a project page; same wash as text selection */
+mark { background: var(--felt-wash); color: inherit; padding: .06em .16em; border-radius: 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .facts-row {
   display: grid;
   grid-template-columns: repeat(3, auto);
@@ -352,6 +354,8 @@ html.js .tabs-on .panel-h { display: none; }
 }
 .wip { color: var(--felt); }
 .smalls.cards .card-text { border-top: 1px solid var(--rule); padding-top: .95rem; }
+.smalls.cards .meta { display: flex; flex-wrap: wrap; gap: .2rem 1rem; }
+.smalls.cards .card-text .card h3 { font-size: 1.17em; font-weight: 700; line-height: 1.6; margin: 1em 0; }
 .card { display: block; text-decoration: none; }
 .card-img { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--rule-2); }
 .card-img img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s cubic-bezier(.2, .7, .2, 1); }
