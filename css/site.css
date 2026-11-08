@@ -600,15 +600,18 @@ pre.cite {
   cursor: auto;
 }
 .lb::backdrop { background: transparent; }
-.lb[open] { display: grid; grid-template-rows: 1fr auto; }
+.lb[open] { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr auto; }
 .lb-fig { margin: 0; display: grid; place-items: center; min-height: 0; padding: 56px 64px 0; }
-.lb-fig img { max-width: 100%; max-height: calc(100dvh - 150px); width: auto; height: auto; object-fit: contain; display: block; }
+.lb-frame { position: relative; line-height: 0; }  /* shrinks to the photo, so the close button sits on its corner */
+.lb-fig img { max-width: calc(100vw - 128px); max-height: calc(100dvh - 150px); width: auto; height: auto; object-fit: contain; display: block; }
 .lb-cap { text-align: center; padding: 14px 24px 22px; line-height: 1.5; min-height: 72px; margin: 0; }
 .lb-cap .t { font-style: italic; display: block; }
 .lb-cap .m { font-family: var(--mono); font-size: .7rem; color: var(--ink-3); }
 .lb button { font: inherit; background: none; border: 0; color: var(--ink-2); cursor: pointer; position: absolute; padding: 10px 14px; }
 .lb button:hover { color: var(--felt); }
-.lb-x { top: 10px; right: 14px; font-family: var(--mono); font-size: .75rem; }
+.lb .lb-x { top: 10px; right: 10px; width: 40px; height: 40px; padding: 0; display: grid; place-items: center; border-radius: 50%; background: var(--paper); color: var(--ink); box-shadow: 0 1px 8px rgba(30, 25, 20, .3); }
+.lb .lb-x:hover { color: var(--felt); }
+.lb-x svg { width: 16px; height: 16px; display: block; }
 .lb-p, .lb-n { top: 50%; transform: translateY(-50%); font-size: 1.5rem; line-height: 1; }
 .lb-p { left: 8px; }
 .lb-n { right: 8px; }
@@ -681,6 +684,7 @@ pre.cite {
   .next { grid-template-columns: minmax(0, 1fr); }
   .next .fwd { text-align: left; }
   .lb-fig { padding: 52px 12px 0; }
+  .lb-fig img { max-width: calc(100vw - 24px); }
   .lb-p, .lb-n { top: auto; bottom: 18px; transform: none; }
 }
 
