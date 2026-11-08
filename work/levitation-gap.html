@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai">
 <title>Robust real-time levitation gap estimation for Hyperloop pods · Pranjal Singh Sesodia</title>
-<meta name="description" content="A first-author review with Dr. Vandana Dabass of the sensors and estimators that measure the gap between a maglev pod and its rail.">
+<meta name="description" content="A first-author review with Vandana Dabass of the sensors and estimators that measure the gap between a maglev pod and its rail.">
 <meta property="og:title" content="Robust real-time levitation gap estimation for Hyperloop pods · Pranjal Singh Sesodia">
-<meta property="og:description" content="A first-author review with Dr. Vandana Dabass of the sensors and estimators that measure the gap between a maglev pod and its rail.">
+<meta property="og:description" content="A first-author review with Vandana Dabass of the sensors and estimators that measure the gap between a maglev pod and its rail.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Pranjal Singh Sesodia">
 <meta property="og:url" content="https://pranjalsinghsesodia.github.io/work/levitation-gap.html">
@@ -44,12 +44,11 @@
       <div class="kicker small intro"><span class="tag">Publication</span><span>Next Research (Elsevier)</span><span>Vol. 13, 2026</span></div>
       <h1 class="p-title intro">Robust real-time levitation gap estimation for Hyperloop pods</h1>
       <div class="hero-row">
-        <p class="dek intro">A first-author review with Dr. Vandana Dabass of the <mark>sensors and estimators that measure the gap</mark> between a maglev pod and its rail.</p>
+        <p class="dek intro">A first-author review with Vandana Dabass of the <mark>sensors and estimators that measure the gap</mark> between a maglev pod and its rail.</p>
         <dl class="now intro">
-          <dt>Authors</dt><dd>P. S. Sesodia, V. Dabass</dd>
+          <dt>Authors</dt><dd>Pranjal Singh Sesodia (first and corresponding); Vandana Dabass</dd>
           <dt>Read it</dt><dd><a href="https://doi.org/10.1016/j.nexres.2026.102384" target="_blank" rel="noopener">doi:10.1016/j.nexres.2026.102384</a></dd>
-          <dt>Status</dt><dd>Page under development</dd>
-        </dl>
+</dl>
       </div>
       <div class="roll-cap">
         <p class="roll-hint">This page is a piano roll. Its keys run down the left edge: click one, or click the paper to punch a note. Scrolling plays it.</p>
@@ -60,12 +59,13 @@
   <div id="text"></div>
   <section class="sec lead">
     <div class="body prose">
-      <div class="wip-note">
-        <p class="small wip">Page under development</p>
-        <p>I’m writing up the build log for this project, with its figures and data. Until it’s ready, my <a href="../cv.html" target="_blank" rel="noopener">CV</a> has a summary, and I’m happy to talk it through by email.</p>
-      </div>
-      <figure class="fig">
-        <img class="plot" src="../media/work/maglev/force-gap.svg" width="580" height="320" alt="Plot of magnet pull divided by weight against gap, falling as one over gap squared" loading="eager" decoding="async">
+      <h2>About the paper</h2>
+      <p>A Hyperloop pod levitates inside a near-vacuum tube, and the controller holding it up needs a precise, continuous measure of the gap between its magnets and the rail. This review covers the sensors that measure that gap (inductive, capacitive, optical, Hall-effect and UWB radar) and the real-time estimators that work from their signals, including nonlinear Kalman filters, sliding-mode observers, model-predictive estimation and machine-learning observers.</p>
+      <p>It also looks at fusing several sensors, at open problems such as sensor saturation, magnetic field distortion and thermal expansion, and at directions for future work.</p>
+      <p>Read the full paper at <a href="https://doi.org/10.1016/j.nexres.2026.102384" target="_blank" rel="noopener">doi.org/10.1016/j.nexres.2026.102384</a>.</p>
+      <figure class="fig square">
+        <img class="zoom" data-zoom data-group="fig" data-title="EMI coupling pathways affecting levitation-gap sensors, Fig. 2 of the paper. © 2023 by the authors, licensee MDPI, as reproduced there." src="../media/work/maglev/fig2-ems-gap-sensor.webp" width="544" height="389" alt="Diagram of a maglev bogie and guideway showing the electromagnet, gap sensor, linear induction motor, guiderail and girder" loading="eager" decoding="async">
+        <figcaption>EMI coupling pathways affecting levitation-gap sensors, Fig. 2 of the paper. © 2023 by the authors, licensee MDPI, as reproduced there.</figcaption>
       </figure>
     </div>
   </section>
