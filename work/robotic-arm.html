@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fragment+Mono&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap">
-<link rel="stylesheet" href="../css/site.css?v=20261108">
+<link rel="stylesheet" href="../css/site.css?v=20261108c">
 <script>(function (d) {
   // 'js' lets entrance animations take over; the loading screen shows once per visit
   d.classList.add('js');
@@ -150,7 +150,7 @@
         <li>
           <span class="when">17-18 October 2026</span>
           <h3>A rewrite: error in degrees, control in velocity</h3>
-          <p>The current software converts the pixel offset to an angle and runs velocity P control at 30 Hz: 2.5 deg/s per degree of error, a 1° dead band, and speed caps of 60°/s in pan and 90°/s in tilt. All calibration lives on the PC and is pushed to the Arduino at every connection, so the firmware never drives a servo until it has been told where the arm starts.</p>
+          <p>The current software converts the pixel offset to an angle and runs velocity P control at <b class="key">30 Hz</b>: 2.5 deg/s per degree of error, a 1° dead band, and speed caps of 60°/s in pan and 90°/s in tilt. All calibration lives on the PC and is pushed to the Arduino at every connection, so the firmware never drives a servo until it has been told where the arm starts.</p>
           <figure class="code"><figcaption>From pixel offset to angle error and joint speed</figcaption><pre><code>pan_err = math.degrees(math.atan((sx - W / 2) / focal))
 tilt_err = math.degrees(math.atan((sy - H / 2) / focal))
 
@@ -378,7 +378,7 @@ tau = mass_matrix(q, mdl) * qdd_star + rnea(q, qd, zeros(mdl.n, 1), mdl) + joint
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
-<script src="../js/roll.js?v=20261108" defer></script>
-<script src="../js/site.js?v=20261108" defer></script>
+<script src="../js/roll.js?v=20261108c" defer></script>
+<script src="../js/site.js?v=20261108c" defer></script>
 </body>
 </html>

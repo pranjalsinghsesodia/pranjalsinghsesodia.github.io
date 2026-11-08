@@ -49,14 +49,34 @@
     });
   }
 
-  // ---------- photographs rise gently into place, a row at a time, one after another along it ----------
+  // ---------- photographs: each strip slides forever; its second half is a copy, so the loop has no seam ----------
+  // The copies are hidden from screen readers and the keyboard, and a click on one opens the original.
+
+  if (!reduced) {
+    document.querySelectorAll('.strip').forEach((strip) => {
+      const track = strip.querySelector('.track');
+      [...track.children].forEach((ph) => {
+        const copy = ph.cloneNode(true);
+        copy.removeAttribute('data-zoom');
+        copy.tabIndex = -1;
+        copy.setAttribute('aria-hidden', 'true');
+        copy.addEventListener('click', () => ph.click());
+        track.appendChild(copy);
+      });
+      strip.classList.add('sliding');
+      // tabbing to a photo scrolls the strip to it; put that back when focus moves on
+      strip.addEventListener('focusout', () => { strip.scrollLeft = 0; });
+    });
+  }
+
+  // ---------- photographs rise gently into place, a strip at a time, one after another along it ----------
   // The CSS does the moving (.ph.pre); the photo and its watercolour frame move together but separately,
   // so the frame keeps blending into the paper all the way.
 
   if (motion && ST) {
-    const rows = [...document.querySelectorAll('.rows .row')];
+    const rows = [...document.querySelectorAll('.rows .strip')];
     rows.forEach((row) => row.querySelectorAll('.ph').forEach((ph, i) => {
-      ph.style.setProperty('--d', (i * .05).toFixed(2) + 's');
+      ph.style.setProperty('--d', (Math.min(i, 8) * .05).toFixed(2) + 's');
       ph.classList.add('pre');
     }));
     void document.body.offsetHeight; // settle the hidden state first, or a row already in view would skip its entrance
@@ -171,6 +191,8 @@
     try { start = Math.max(0, tabs.findIndex((t) => t.id === sessionStorage.getItem(KEY))); } catch (e) { /* fine */ }
     tabs.forEach((t, i) => {
       t.addEventListener('click', () => pick(i));
+      // with a mouse, pointing at a tab is enough; touch screens still tap
+      t.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse' && t.getAttribute('aria-selected') !== 'true') pick(i); });
       t.addEventListener('keydown', (e) => {
         const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
         if (d) { e.preventDefault(); pick((i + d + tabs.length) % tabs.length, true); }

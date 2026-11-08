@@ -10,9 +10,8 @@
   --ink-3: #69655f;
   --rule: #d4d0c8;
   --rule-2: #e4e1da;
-  --brass: #6b5834;
-  --felt: #963a2f;
-  --felt-wash: rgba(150, 58, 47, .13);
+  --felt: #8a3329;  /* the one accent, the red of the felt beside the keys: important data, the current tab, hovers */
+  --felt-wash: rgba(138, 51, 41, .13);
   --mat: #fafaf7;
 
   --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
@@ -93,9 +92,9 @@ img, video { max-width: 100%; }
   transform: translateY(-50%);
   display: flex;
   justify-content: center;
-  border: 1px solid var(--brass);
+  border: 1px solid var(--ink-3);
   background: var(--paper);
-  color: var(--brass);
+  color: var(--ink-3);
   font-family: var(--mono);
   font-size: .7rem;
   letter-spacing: .1em;
@@ -117,8 +116,8 @@ img, video { max-width: 100%; }
 /* a little more to press than the tab shows */
 .oct::before { content: ""; position: absolute; inset: -4px -4px; }
 .oct:hover { color: var(--felt); border-color: var(--felt); }
-.oct.on { background: var(--brass); color: var(--paper); }
-.oct.on:hover { color: var(--paper); background: var(--felt); }
+.oct.on { background: var(--felt); border-color: var(--felt); color: var(--paper); }
+.oct.on:hover { color: var(--paper); background: var(--ink); border-color: var(--ink); }
 /* the part's name slides out on hover */
 .oct::after {
   content: attr(data-name);
@@ -145,7 +144,7 @@ img, video { max-width: 100%; }
   position: fixed;
   z-index: 3;
   left: calc(var(--kb) + 44px);  /* clear of the octave tabs */
-  top: 22px;
+  bottom: 34px;  /* just above the roll's own caption */
   width: calc(var(--stage) - 68px);
   max-width: 16rem;
   font-family: var(--mono);
@@ -200,13 +199,13 @@ img, video { max-width: 100%; }
   justify-self: end;
   align-self: start;
   position: sticky;
-  top: 26vh;  /* below the caption in the corner */
+  top: 26vh;
   margin: .5rem clamp(18px, 3vw, 54px) 0 0;
   padding: 1rem .55rem;
   writing-mode: vertical-rl;
   transform: rotate(180deg);  /* read from the bottom up */
-  border: 1px solid var(--brass);
-  color: var(--brass);
+  border: 1px solid var(--ink-3);
+  color: var(--ink-3);
   background: var(--paper);
   font-family: var(--mono);
   font-size: .72rem;
@@ -229,7 +228,7 @@ img, video { max-width: 100%; }
 .sec-note { color: var(--ink-2); margin: -1.2rem 0 2rem; max-width: 36rem; }
 
 .small { font-family: var(--mono); font-size: .7rem; line-height: 1.5; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3); font-variant-numeric: normal; }
-.tag { color: var(--brass); }
+.tag { color: var(--ink-3); }
 
 /* ---------- hero ---------- */
 
@@ -243,38 +242,40 @@ img, video { max-width: 100%; }
 /* one line where it fits; where it wraps, both lines start at the same edge */
 .name span + span { font-style: italic; font-weight: 270; }
 
-/* the name and introduction, with the photo in a round frame beside them */
+/* the photo in a round frame on the left, the name and introduction on the right */
 .intro-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
   gap: 1.6rem clamp(1.6rem, 4vw, 4.5rem);
-  align-items: start;
+  align-items: center;
 }
-.hero-photo { margin: 0; width: clamp(170px, 21vw, 340px); }
+.hero-photo { order: -1; margin: 0; width: clamp(170px, 21vw, 340px); }
 .hero-photo img {
   display: block;
   width: 100%;
   height: auto;
   border-radius: 50%;
-  border: 1px solid var(--brass);
+  border: 1px solid var(--ink-3);
   padding: 6px;
   box-sizing: border-box;
   background: var(--paper);
 }
 
-/* what I'm doing, laid out as one row under the introduction */
+/* the info strip under the introduction */
+.key { color: var(--felt); font-weight: 500; }  /* important data, wherever it appears */
 .facts-row {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.2rem clamp(1.4rem, 2.6vw, 2.8rem);
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  gap: 1.2rem clamp(1.8rem, 3vw, 3.2rem);
   max-width: 68rem;
   margin: 2.2rem 0 0;
   padding-top: 1.1rem;
   border-top: 1px solid var(--rule);
-  font-size: .95rem;
+  font-size: 1.16rem;
   line-height: 1.42;
 }
-.facts-row dt { font-family: var(--mono); font-size: .66rem; letter-spacing: .07em; text-transform: uppercase; color: var(--brass); margin-bottom: .35rem; }
+.facts-row dt { font-family: var(--mono); font-size: .78rem; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); margin-bottom: .35rem; }
 .facts-row dd { margin: 0; }
 
 .hero-row {
@@ -293,7 +294,7 @@ img, video { max-width: 100%; }
   font-size: .93rem;
   line-height: 1.42;
 }
-.now dt { font-family: var(--mono); font-size: .66rem; letter-spacing: .07em; text-transform: uppercase; color: var(--brass); padding-top: .3em; }
+.now dt { font-family: var(--mono); font-size: .66rem; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); padding-top: .3em; }
 .now dd { margin: 0; }
 
 .links {
@@ -332,10 +333,10 @@ img, video { max-width: 100%; }
   transition: color .2s, border-color .2s, background .2s;
 }
 .tabs button:hover { color: var(--felt); border-color: var(--felt); }
-.tabs button[aria-selected="true"] { background: var(--brass); border-color: var(--brass); color: var(--paper); }
+.tabs button[aria-selected="true"] { background: var(--felt); border-color: var(--felt); color: var(--paper); }
 .tabs .n { opacity: .7; margin-left: .45em; }
 /* without the script every category shows, each under its own heading */
-.panel-h { font-family: var(--mono); font-size: .72rem; font-weight: 400; letter-spacing: .07em; text-transform: uppercase; color: var(--brass); margin: 2.6rem 0 1.2rem; }
+.panel-h { font-family: var(--mono); font-size: .72rem; font-weight: 400; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); margin: 2.6rem 0 1.2rem; }
 html.js .tabs-on .panel-h { display: none; }
 .tabs:not(.on) { display: none; }
 .panel:not([hidden]) { animation: panel-in .35s ease-out; }
@@ -390,17 +391,34 @@ html.js .tabs-on .panel-h { display: none; }
 .thumbs button { padding: 0; border: 0; background: var(--rule-2); cursor: zoom-in; height: 70px; }
 .thumbs img { height: 70px; width: auto; display: block; }
 
-/* ---------- photographs: justified rows, and one readout like a viewfinder's info line ---------- */
+/* ---------- photographs: two strips sliding opposite ways, and one readout like a viewfinder's info line ---------- */
 
 /* Each photograph sits in a watercolour wash: a pale glaze in the photo's own colours, ragged at the edge,
    darker where the pigment dried, reaching a few pixels past the print. The masks are in media/frames/. */
-.rows { --pgap: 18px; display: flex; flex-direction: column; gap: var(--pgap); padding: 10px 0; }
-.row { display: flex; gap: var(--pgap); }
+.rows { --pgap: 18px; --pht: clamp(150px, 16.5vw, 250px); display: flex; flex-direction: column; gap: 4px; }
+/* without the script, or with reduced motion, a strip is simply scrolled by hand */
+.strip {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px 0;
+  scrollbar-width: none;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+.strip::-webkit-scrollbar { display: none; }
+.track { display: flex; gap: var(--pgap); width: max-content; padding-right: var(--pgap); }
+/* js/site.js doubles each track, so sliding by half of it comes back to where it began */
+.strip.sliding { overflow: hidden; }
+.strip.sliding .track { animation: strip-slide 80s linear infinite; }
+.strip.sliding + .strip.sliding .track { animation-direction: reverse; }
+@keyframes strip-slide { to { transform: translateX(-50%); } }
+@media (hover: hover) { .strip.sliding:hover .track { animation-play-state: paused; } }
+.strip.sliding:has(.ph:focus-visible) .track { animation-play-state: paused; }
 .ph {
   position: relative;
-  flex: var(--ar) 1 0;
-  aspect-ratio: var(--ar);
-  min-width: 0;
+  flex: none;
+  height: var(--pht);
+  width: calc(var(--pht) * var(--ar));
   margin: 0;
   padding: 0;
   border: 0;
@@ -423,7 +441,7 @@ html.js .tabs-on .panel-h { display: none; }
   transition: opacity .55s var(--rise) var(--d, 0s), transform .55s var(--rise) var(--d, 0s);
 }
 .ph img { position: relative; width: 100%; height: 100%; object-fit: cover; display: block; background: var(--rule-2); transition: filter .6s, opacity .55s var(--rise) var(--d, 0s), transform .55s var(--rise) var(--d, 0s); }
-/* photographs rise gently into place as their row comes into view (js/site.js adds .pre, then lifts it) */
+/* photographs rise gently into place as their strip comes into view (js/site.js adds .pre, then lifts it) */
 .ph.pre img, .ph.pre::before { opacity: 0; transform: translateY(26px) scale(.97); }
 .rows:hover .ph img { filter: saturate(.8) brightness(.94); }
 .rows .ph:hover img, .rows .ph:focus-visible img { filter: none; }
@@ -450,10 +468,11 @@ html.js .tabs-on .panel-h { display: none; }
 
 /* ---------- about ---------- */
 
-.about { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 2rem clamp(2rem, 4.5vw, 4.5rem); align-items: start; }
+.about { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 2rem clamp(2rem, 4.5vw, 4.5rem); align-items: center; }
 .about p { font-size: 1.12rem; margin: 0 0 1em; }
-.portrait { margin: .3rem 0 0; max-width: 270px; }
-.portrait img { width: 100%; height: auto; display: block; filter: saturate(.85); }
+.about p:last-child { margin-bottom: 0; }
+.portrait { margin: 0; max-width: 320px; }
+.portrait img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; object-position: 50% 78%; border-radius: 18px; display: block; filter: saturate(.85); }
 .portrait figcaption { margin-top: .5rem; }
 
 .facts {
@@ -466,7 +485,7 @@ html.js .tabs-on .panel-h { display: none; }
   font-size: .95rem;
   line-height: 1.5;
 }
-.facts dt { font-family: var(--mono); font-size: .66rem; letter-spacing: .07em; text-transform: uppercase; color: var(--brass); padding-top: .35em; }
+.facts dt { font-family: var(--mono); font-size: .66rem; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); padding-top: .35em; }
 .facts dd { margin: 0; }
 
 /* ---------- the end ---------- */
@@ -525,21 +544,21 @@ pre.cite {
 /* ---------- build logs: what's true so far, dated entries, code and data ---------- */
 
 .ledger, .data { width: 100%; max-width: 60rem; border-collapse: collapse; margin: 1.4rem 0 2rem; font-size: .93rem; line-height: 1.45; font-variant-numeric: lining-nums; }
-.ledger th, .data th { text-align: left; font-family: var(--mono); font-size: .66rem; font-weight: 400; letter-spacing: .07em; text-transform: uppercase; color: var(--brass); padding: 0 1rem .5rem 0; border-bottom: 1px solid var(--rule); }
+.ledger th, .data th { text-align: left; font-family: var(--mono); font-size: .66rem; font-weight: 400; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); padding: 0 1rem .5rem 0; border-bottom: 1px solid var(--rule); }
 .ledger td, .data td { vertical-align: top; padding: .62rem 1rem .62rem 0; border-bottom: 1px solid var(--rule-2); }
 .ledger td:last-child, .data td:last-child, .ledger th:last-child, .data th:last-child { padding-right: 0; }
 .data td:first-child { color: var(--ink-2); }
 .st { display: inline-block; white-space: nowrap; font-family: var(--mono); font-size: .64rem; letter-spacing: .04em; line-height: 1.5; padding: .05rem .42rem; border: 1px solid currentColor; }
-.st.hw { background: var(--brass); border-color: var(--brass); color: var(--paper); }
-.st.sim { color: var(--brass); }
+.st.hw { background: var(--ink-2); border-color: var(--ink-2); color: var(--paper); }
+.st.sim { color: var(--ink-3); }
 .st.des { color: var(--ink-2); }
 .st.todo { color: var(--felt); }
 
 .log { list-style: none; margin: 0; padding: 0; }
 .log > li { position: relative; margin: 0; padding: 0 0 2.6rem 1.35rem; border-left: 1px solid var(--rule); }
-.log > li::before { content: ""; position: absolute; left: -4px; top: .42rem; width: 7px; height: 7px; background: var(--brass); }
+.log > li::before { content: ""; position: absolute; left: -4px; top: .42rem; width: 7px; height: 7px; background: var(--ink-3); }
 .log > li:last-child { padding-bottom: .4rem; }
-.log .when { display: block; font-family: var(--mono); font-size: .7rem; letter-spacing: .05em; color: var(--brass); margin: 0 0 .25rem; }
+.log .when { display: block; font-family: var(--mono); font-size: .7rem; letter-spacing: .05em; color: var(--ink-3); margin: 0 0 .25rem; }
 .log h3 { font-size: 1.28rem; font-weight: 400; line-height: 1.25; margin: 0 0 .6rem; }
 .prose h3 { font-weight: 400; }
 
@@ -626,7 +645,7 @@ pre.cite {
   .hero { padding-top: 10vh; }
   .lede p { font-size: 1.1rem; }
   .intro-row { grid-template-columns: minmax(0, 1fr); }
-  .hero-photo { order: -1; width: 140px; }
+  .hero-photo { width: 140px; }
   .cards, .smalls { grid-template-columns: minmax(0, 1fr); }
   .cards { gap: 3rem; }
   .tabs { gap: .4rem; }
@@ -710,5 +729,8 @@ html.js .intro { opacity: 0; animation: show-anyway 0s 2.2s forwards; }
   .roll-paper, .roll-canvas, .fog, .keys-hit, .roll-cap, .readout, .skip, .lb, .mark { display: none !important; }
   .page { margin: 0; padding: 0; }
   .hero, .sec { display: block; }
+  .strip { overflow: visible; -webkit-mask: none; mask: none; }
+  .track { flex-wrap: wrap; width: auto; animation: none !important; }
+  .track [aria-hidden] { display: none; }
   body { background: #fff; color: #000; }
 }
