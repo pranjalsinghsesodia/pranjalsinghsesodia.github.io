@@ -793,10 +793,10 @@
     }
     label();
     hint.textContent = coarse
-      ? (on ? 'Tap a key to hear it. The roll plays as you scroll.'
-            : 'This page is a piano roll, with its keys down the left edge. Turn the sound on and tap a key to hear it; the named tabs beside them jump between sections.')
-      : (on ? 'Click the keys, or play A to ; on your keyboard. A note you punch plays once as it reaches the keys.'
-            : 'This page is a piano roll. Click the paper to punch a note, which plays once as it reaches the keys, or play the keys themselves; the named tabs beside them jump between sections.');
+      ? (on ? 'Tap on the keys to interact :)'
+            : 'Tap on the keys to interact :)\n(ps: turn the sound on to hear them)')
+      : (on ? 'Click on the keys to interact :)\n(ps: you can also use a-;)'
+            : 'Click on the keys to interact :)\n(ps: with sound on, you can also use a-;)'); // the typing keys only play with sound on
     try { localStorage.setItem(SOUND, on ? '1' : '0'); } catch (e) { /* fine */ }
   }
 
