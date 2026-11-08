@@ -145,7 +145,7 @@ img, video { max-width: 100%; }
   z-index: 3;
   left: calc(var(--kb) + 44px);  /* clear of the octave tabs */
   bottom: 34px;  /* just above the roll's own caption */
-  width: calc(var(--stage) - 68px);
+  width: calc(var(--stage) - 94px - clamp(18px, 3vw, 54px));  /* stops short of the section marks */
   max-width: 16rem;
   font-family: var(--mono);
   font-size: .68rem;
