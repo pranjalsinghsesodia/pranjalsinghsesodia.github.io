@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai">
+<title>A 5:1 cycloidal reducer for a hobby servo · Pranjal Singh Sesodia</title>
+<meta name="description" content="A printed 5:1 cycloidal reducer for a hobby servo, designed in SolidWorks and analysed in simulation. Detailed results are held back for publication.">
+<meta property="og:title" content="A 5:1 cycloidal reducer for a hobby servo · Pranjal Singh Sesodia">
+<meta property="og:description" content="A printed 5:1 cycloidal reducer for a hobby servo, designed in SolidWorks and analysed in simulation. Detailed results are held back for publication.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Pranjal Singh Sesodia">
+<meta property="og:url" content="https://pranjalsinghsesodia.github.io/work/cycloidal-reducer.html">
+<link rel="canonical" href="https://pranjalsinghsesodia.github.io/work/cycloidal-reducer.html">
+<!-- Link previews need a full address here: once the site is live, change this to https://<your-domain>/media/og.jpg -->
+<meta property="og:image" content="https://pranjalsinghsesodia.github.io/media/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f1efea">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fragment+Mono&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap">
+<link rel="stylesheet" href="../css/site.css?v=20261109d">
+<script>(function (d) {
+  // 'js' lets entrance animations take over; the loading screen shows once per visit
+  d.classList.add('js');
+  try { if (sessionStorage.getItem('pss-seen')) d.classList.add('seen'); else { sessionStorage.setItem('pss-seen', '1'); d.classList.add('loader-on'); } }
+  catch (e) { d.classList.add('seen'); }
+})(document.documentElement)</script>
+</head>
+<body class="work-page">
+<div class="loader" aria-hidden="true"><div class="loader-keys"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><b style="--x:1"></b><b style="--x:2"></b><b style="--x:4"></b><b style="--x:5"></b><b style="--x:6"></b></div><p>Pranjal Singh Sesodia</p></div>
+<canvas class="roll-paper" aria-hidden="true"></canvas>
+<canvas class="roll-canvas" aria-hidden="true"></canvas>
+<div class="fog" aria-hidden="true"></div>
+<div class="keys-hit" aria-hidden="true" title="Piano keys: click to play"></div>
+<a class="skip" href="#text">Skip to the text</a>
+<main class="page">
+  <header class="hero">
+    <div class="body" data-fog>
+      <p class="crumb intro"><a href="../index.html">&larr; Pranjal Singh Sesodia</a></p>
+      <div class="kicker small intro"><span class="tag">Mechanisms</span><span>mPragati, IIT Delhi</span><span>October to November 2026</span></div>
+      <h1 class="p-title intro">A 5:1 cycloidal reducer for a hobby servo</h1>
+      <div class="hero-row">
+        <p class="dek intro">A reducer for the 6-DOF stage of the arm that mounts on a standard metal-gear hobby servo. I designed it in SolidWorks and <mark>analysed in simulation how a printed version behaves under load</mark>.</p>
+        <dl class="now intro">
+          <dt>My part</dt><dd>CAD, contact modelling, simulation</dd>
+          <dt>Tools</dt><dd>SolidWorks, ANSYS Mechanical, Python</dd>
+          <dt>Ratio</dt><dd>5:1, output reversed</dd>
+          <dt>Status</dt><dd>Designed and analysed in simulation. No physical tests yet.</dd>
+        </dl>
+      </div>
+      <div class="roll-cap">
+        <p class="roll-hint">This page is a piano roll. Its keys run down the left edge: click one, or click the paper to punch a note. Scrolling plays it.</p>
+        <div class="ctl"><button class="roll-sound" type="button" aria-pressed="false">Sound off</button><button class="roll-clear" type="button" hidden>Clear your notes</button></div>
+      </div>
+    </div>
+  </header>
+  <div id="text"></div>
+  <section class="sec lead">
+    <div class="body">
+      <div class="jrow">
+        <figure style="--ar:1.0849">
+          <img class="zoom" data-zoom data-group="fig" data-title="The resin version, with every pin printed." src="../media/work/reducer/v4-assembly.webp" width="984" height="907" alt="SolidWorks render of the resin version of the reducer" loading="eager" decoding="async">
+          <figcaption>The resin version, with every pin printed.</figcaption>
+        </figure>
+        <figure style="--ar:1.1422">
+          <img class="zoom" data-zoom data-group="fig" data-title="The first version, exploded, with steel pins and a bearing." src="../media/work/reducer/v1-exploded.webp" width="1036" height="907" alt="Exploded SolidWorks render of the first version with steel pins and a bearing" loading="lazy" decoding="async">
+          <figcaption>The first version, exploded, with steel pins and a bearing.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Design</div>
+    <div class="body prose">
+      <h2>The design</h2>
+      <p>In a cycloidal drive, an eccentric input rolls a lobed disk around a ring of fixed pins, and output pins sitting in holes in the disk turn the output slowly the other way. Mine gives 5:1 and uses an epitrochoid profile that stays free of interference over a full input revolution.</p>
+      <p>I took it through several versions in SolidWorks, from steel pins and FDM printing to SLA and resin versions with every pin printed. Each process has its own running clearance, between 0.15 and 0.3 mm.</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Analysis</div>
+    <div class="body prose">
+      <h2>The analysis</h2>
+      <p>CAD can show that a reducer moves. How much torque a printed one carries, how much play it has and how much of the servo’s power reaches the joint all depend on contact between the pins and the disks. So I built a contact model in Python and checked it against a separate contact analysis in ANSYS.</p>
+      <p>Together they cover load sharing, the strength of the printed features, backlash and print tolerance, efficiency, heat and wear. The practical conclusion for the arm is that <mark>a printed version can’t take the servo’s full torque</mark>, so the joint needs a torque limit in the controller.</p>
+      <p>I’m keeping the models and detailed results for a paper, so this page gives only the outline.</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Next</div>
+    <div class="body prose">
+      <h2>What’s next</h2>
+      <p>All of this is simulation so far. The next step is to print the resin version and measure how it performs.</p>
+    </div>
+  </section>
+  <nav class="sec" aria-label="More work">
+    <div class="body">
+      <div class="next">
+        <a href="robotic-arm.html"><span class="small">&larr; Previous</span><span class="t">A vision-guided robot arm on servos with no encoders</span></a>
+        <a class="fwd" href="elbow-implant.html"><span class="small">Next &rarr;</span><span class="t">Total Elbow Implant Study</span></a>
+      </div>
+    </div>
+  </nav>
+  <footer class="sec foot" id="contact">
+    <div class="mark fine" aria-hidden="true">Let’s connect</div>
+    <div class="body">
+      <p class="small">Write to me</p>
+      <a class="email" href="mailto:pranjalsinghsesodia@gmail.com">pranjalsinghsesodia@gmail.com</a>
+      <p>I would love to connect.</p>
+      <ul class="links icons">
+        <li><a href="../cv.html" target="_blank" rel="noopener" aria-label="CV" title="CV"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 1.8h10.8l4.2 4.2v16.2h-15z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><path d="M15 2v4.3h4.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><text x="12" y="17.6" text-anchor="middle" font-family="Fragment Mono, monospace" font-size="8.2" fill="currentColor">CV</text></svg></a></li>
+        <li><a href="https://www.linkedin.com/in/pranjalsinghsesodia/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+        <li><a href="https://www.instagram.com/hipranjal_/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.2" y="2.2" width="19.6" height="19.6" rx="5.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><circle cx="17.5" cy="6.5" r="1.25" fill="currentColor"/></svg></a></li>
+      </ul>
+    </div>
+  </footer>
+</main>
+<dialog class="lb" aria-label="Enlarged image">
+  <figure class="lb-fig"><div class="lb-frame"><img alt=""><button class="lb-x" type="button" aria-label="Close" title="Close"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 2l12 12M14 2L2 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div></figure>
+  <p class="lb-cap"><span class="t"></span><span class="m"></span></p>
+  <button class="lb-p" type="button" aria-label="Previous">&larr;</button>
+  <button class="lb-n" type="button" aria-label="Next">&rarr;</button>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="../js/roll.js?v=20261109d" defer></script>
+<script src="../js/site.js?v=20261109d" defer></script>
+</body>
+</html>
