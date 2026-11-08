@@ -625,8 +625,10 @@ pre.cite {
   .roll-cap { position: static; width: auto; max-width: 34rem; margin-top: 2.2rem; text-shadow: none; }
   .roll-cap .roll-sound { padding: .5rem .85rem; border: 1px solid var(--rule); border-radius: 999px; }
   .roll-cap .roll-sound:hover, .roll-cap .roll-sound[aria-pressed="true"] { border-color: var(--felt); }
-  /* on a project page it would sit between the title and the first figure: the home page has it */
-  .work-page .roll-cap { display: none; }
+  /* off the wide layout the sound switch floats in the bottom corner, on every page, so it is always in reach */
+  .roll-cap .ctl { position: fixed; z-index: 30; right: calc(14px + env(safe-area-inset-right, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); margin: 0; justify-content: flex-end; }
+  .roll-cap .ctl button { background: var(--paper); border: 1px solid var(--rule); border-radius: 999px; padding: .5rem .85rem; min-height: 40px; box-shadow: 0 2px 10px rgba(30, 25, 20, .14); }
+  .work-page .roll-cap { margin: 0; }
 }
 
 @media (max-width: 1100px) {
@@ -639,20 +641,22 @@ pre.cite {
 @media (max-width: 759px) {
   :root { --kb: 30px; --stage: 0px; --gap: 6px; }
   body { font-size: 17px; }
-  .page { padding: 0 18px 0 26px; }
+  .page { padding: 0 16px 0 38px; }  /* clears the keys and their section tabs */
   .hero, .sec { grid-template-columns: minmax(0, 1fr); }
   .hero > .body, .sec > .body { grid-column: 1; grid-row: 2; }
   /* the heading right below already says it; only the closing Let’s connect stays, written across */
   .mark { display: none; }
   .mark.fine { display: block; position: static; grid-row: 1; justify-self: start; margin: 0 0 .9rem; writing-mode: horizontal-tb; transform: none; font-size: 1.2rem; }
-  .hero { padding-top: 10vh; }
+  .hero { padding-top: 7vh; }
   .lede p { font-size: 1.1rem; }
   .intro-row { grid-template-columns: minmax(0, 1fr); }
   .hero-photo { width: 140px; }
   .cards, .smalls { grid-template-columns: minmax(0, 1fr); }
   .cards { gap: 3rem; }
   .tabs { gap: .4rem; }
-  .tabs button { padding: .6rem .7rem .55rem; }
+  .tabs button { padding: .6rem .7rem .55rem; min-height: 42px; }
+  .facts-row { grid-template-columns: minmax(0, 1fr); gap: 1.1rem; }
+  .foot .email { font-size: min(5.9vw, 30px); }
   /* on a phone the tabs sit just beside the keys, in the page's margin, and leave the keys free to play */
   .oct { left: calc(var(--kb) + 2px); width: 20px; padding: 6px 0; font-size: .6rem; letter-spacing: .08em; }
   .oct::before { inset: -4px -2px -4px -3px; }
