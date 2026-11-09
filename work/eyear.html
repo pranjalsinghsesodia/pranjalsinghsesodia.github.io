@@ -49,7 +49,7 @@
           <dt>Stack</dt><dd>Python, Raspberry Pi, OLED display; ESP32 in later versions</dd>
           <dt>Patent</dt><dd>Indian provisional patent, 2022</dd>
           <dt>Selected by</dt><dd>IBM, to present to the then Union Minister of Education</dd>
-          <dt>Title</dt><dd>Patent Pioneer, from my school</dd>
+          <dt>Title</dt><dd>Patent Pioneer, APS Shankar Vihar</dd>
         </dl>
       </div>
       <div class="roll-cap">
@@ -63,15 +63,14 @@
     <div class="mark" aria-hidden="true">Problem</div>
     <div class="body prose">
       <h2>The problem</h2>
-      <p>I watched my neighbour work hard just to lip-read a conversation, and it made me look into how many people live with this. India has more than 63 million people with hearing impairment. Between 1.8 and 7 million of them use sign language, and the national directory listed <b class="key">only 304 certified interpreters</b>. Worldwide, WHO puts the number of people with hearing impairment above 430 million.</p>
-      <p>The existing devices don’t close the gap. A hearing aid amplifies certain frequencies and helps only with sensorineural hearing loss. A cochlear implant has 4 to 20 electrodes doing the work of more than 12,000 hair cells, so speech comes through distorted and monotone. Subtitles fall short in a live conversation, and sign language is the medium its users prefer.</p>
+      <p>I had seen my neighbour struggle to follow people by lip-reading. India has between 1.8 and 7 million sign language users and <b class="key">only 304 certified interpreters</b>. Hearing aids just amplify sound, cochlear implants make speech distorted and monotone, and subtitles are a poor way to follow someone talking. I wanted a device that worked in sign language, the medium its users prefer.</p>
     </div>
   </section>
   <section class="sec">
     <div class="mark" aria-hidden="true">Solution</div>
     <div class="body prose">
       <h2>Speech in, sign language out</h2>
-      <p>I chose glasses because people already wear them, which can’t be said of most healthcare devices. Here is what happens between someone speaking and the wearer seeing it:</p>
+      <p>I chose glasses because people already wear them, which can’t be said of most healthcare devices. Here’s what happens during the translation, laid out in five broad steps:</p>
       <ol>
         <li>A microphone on the Raspberry Pi picks up the speech.</li>
         <li>Noise is removed, and Python’s SpeechRecognition library turns the speech into text.</li>
