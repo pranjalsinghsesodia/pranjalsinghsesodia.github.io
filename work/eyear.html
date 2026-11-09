@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai">
 <title>EYEAR: AI Hearing Assistant · Pranjal Singh Sesodia</title>
-<meta name="description" content="Glasses for people who are hard of hearing. They translate speech into sign language and turn other sounds into sensations, in real time.">
+<meta name="description" content="Glasses I built at school that turn speech into sign language on a small display. Indian provisional patent, 2022.">
 <meta property="og:title" content="EYEAR: AI Hearing Assistant · Pranjal Singh Sesodia">
-<meta property="og:description" content="Glasses for people who are hard of hearing. They translate speech into sign language and turn other sounds into sensations, in real time.">
+<meta property="og:description" content="Glasses I built at school that turn speech into sign language on a small display. Indian provisional patent, 2022.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Pranjal Singh Sesodia">
 <meta property="og:url" content="https://pranjalsinghsesodia.github.io/work/eyear.html">
@@ -44,10 +44,11 @@
       <div class="kicker small intro"><span class="tag">School project</span><span>Army Public School, Shankar Vihar</span><span>2021-22</span></div>
       <h1 class="p-title intro">EYEAR: AI Hearing Assistant</h1>
       <div class="hero-row">
-        <p class="dek intro">Glasses for people who are hard of hearing. They <mark>translate speech into sign language</mark> and turn other sounds into sensations, in real time.</p>
+        <p class="dek intro">I built these glasses at school after watching my neighbour struggle to lip-read. They <mark>listen to speech and show it as sign language in front of the wearer’s eyes</mark>, and they earned an Indian provisional patent.</p>
         <dl class="now intro">
-          <dt>Stack</dt><dd>Python, Raspberry Pi, ESP32</dd>
+          <dt>Stack</dt><dd>Python, Raspberry Pi, OLED display; ESP32 in later versions</dd>
           <dt>Patent</dt><dd>Indian provisional patent, 2022</dd>
+          <dt>Selected by</dt><dd>IBM, to present to the then Union Minister of Education</dd>
           <dt>Title</dt><dd>Patent Pioneer, from my school</dd>
         </dl>
       </div>
@@ -62,14 +63,22 @@
     <div class="mark" aria-hidden="true">Problem</div>
     <div class="body prose">
       <h2>The problem</h2>
-      <p>People who are hard of hearing get little useful feedback from the sound around them, and that leaves a wide gap in communication. India has a large population with hearing loss and, when we built this, only 304 certified sign language interpreters. Hearing aids don’t close the gap either: a common complaint is feedback or whistling from the device.</p>
+      <p>I watched my neighbour work hard just to lip-read a conversation, and it made me look into how many people live with this. India has more than 63 million people with hearing impairment. Between 1.8 and 7 million of them use sign language, and the national directory listed <b class="key">only 304 certified interpreters</b>. Worldwide, WHO puts the number of people with hearing impairment above 430 million.</p>
+      <p>The existing devices don’t close the gap. A hearing aid amplifies certain frequencies and helps only with sensorineural hearing loss. A cochlear implant has 4 to 20 electrodes doing the work of more than 12,000 hair cells, so speech comes through distorted and monotone. Subtitles fall short in a live conversation, and sign language is the medium its users prefer.</p>
     </div>
   </section>
   <section class="sec">
     <div class="mark" aria-hidden="true">Solution</div>
     <div class="body prose">
-      <h2>The solution</h2>
-      <p>EYEAR is a pair of glasses. Microphones on the frame pick up the sound around the wearer, the device processes it, and the result reaches the wearer as sign language for speech and as sensations for other sounds.</p>
+      <h2>Speech in, sign language out</h2>
+      <p>I chose glasses because people already wear them, which can’t be said of most healthcare devices. Here is what happens between someone speaking and the wearer seeing it:</p>
+      <ol>
+        <li>A microphone on the Raspberry Pi picks up the speech.</li>
+        <li>Noise is removed, and Python’s SpeechRecognition library turns the speech into text.</li>
+        <li>Each word is looked up in a sign language dictionary I built in Python.</li>
+        <li>A word that isn’t in the dictionary is split up and shown letter by letter.</li>
+        <li>The sign appears on the OLED display on the glasses.</li>
+      </ol>
       <figure class="fig">
         <div class="jrow" style="margin:0">
           <figure style="--ar:1.8778"><img class="zoom" data-zoom data-group="fig" data-title="The prototype glasses." src="../media/work/eyear/device-front.webp" width="415" height="221" alt="The prototype on a table, with its wiring and touch sensor" loading="lazy" decoding="async"></figure>
@@ -92,17 +101,30 @@
       <h2>Tech stack</h2>
       <table class="data">
         <tbody>
-          <tr><td>Software</td><td>Python and related libraries</td></tr>
-          <tr><td>Hardware</td><td>Raspberry Pi, ESP32</td></tr>
+          <tr><td>Software</td><td>Python, SpeechRecognition, Adafruit_SSD1306, my own sign language dictionary</td></tr>
+          <tr><td>Hardware</td><td>Raspberry Pi, microphone, OLED display; ESP32 in later versions</td></tr>
         </tbody>
       </table>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Next</div>
+    <div class="body prose">
+      <h2>What I planned next</h2>
+      <p>A display in front of your eye all day gets annoying, so the next version was to use a thinner LCD and then a clear one you can see through. I also planned a camera to read facial expressions and body language, and a vibration module so the wearer could feel sounds like a car horn, a dog barking or the bass in a song.</p>
     </div>
   </section>
   <section class="sec">
     <div class="mark" aria-hidden="true">Recognition</div>
     <div class="body prose">
       <h2>Recognition</h2>
-      <p>My school gave me the title of <mark>Patent Pioneer</mark> for EYEAR. The device has an Indian provisional patent, filed in 2022. IBM selected me to present it to the then Union Minister of Education, and it was a Smart India Hackathon Junior finalist in 2022.</p>
+      <ul>
+        <li>Indian provisional patent, filed in 2022.</li>
+        <li>The title of <mark>Patent Pioneer</mark> from my school, the first among 137 Army Public Schools across India to file provisional patents for innovation.</li>
+        <li>Selected by IBM to present it to the then Union Minister of Education.</li>
+        <li>Smart India Hackathon Junior finalist, 2022.</li>
+        <li>Top 350 nationally in the ATL Marathon.</li>
+      </ul>
       <figure class="fig">
         <img class="zoom" data-zoom data-group="fig" data-title="Patent Pioneer, Student Technocrat Awards 2022." src="../media/work/eyear/patent-pioneer.webp" width="1280" height="719" alt="The Patent Pioneers board from the Student Technocrat Awards 2022, with Pranjal Singh Sesodia listed for the AI Hearing Assistant" loading="lazy" decoding="async">
         <figcaption>Patent Pioneer, Student Technocrat Awards 2022.</figcaption>
