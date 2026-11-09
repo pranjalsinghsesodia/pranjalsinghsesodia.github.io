@@ -617,6 +617,13 @@ pre.cite {
 .lb-n { right: 8px; }
 .lb[data-single] .lb-p, .lb[data-single] .lb-n { display: none; }
 
+/* coursework: one row per term, label on the left */
+.courses { display: grid; gap: .75rem; }
+.term { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 0 1rem; }
+.term-h { font-weight: 700; }
+.o { color: var(--felt); font-weight: 600; margin-left: .1em; }
+.o-note { margin: .1rem 0 0; font-size: .9rem; color: var(--ink-2); }
+
 /* ---------- narrower ---------- */
 
 /* the roll is explained once, on the home page; a project page keeps only the sound switch */
@@ -671,6 +678,7 @@ pre.cite {
   .jrow > figure:has(video) { flex-basis: 100%; }
   .facts { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
   .facts dd { margin-bottom: .7rem; }
+  .term { grid-template-columns: minmax(0, 1fr); }
   .eq { padding-left: 0; }
   /* a three-column ledger won't fit a phone: each row stacks, its state on a line of its own */
   .ledger, .ledger tbody, .ledger tr, .ledger td { display: block; width: auto; }
