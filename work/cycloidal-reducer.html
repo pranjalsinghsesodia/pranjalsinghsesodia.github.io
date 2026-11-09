@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai">
 <title>5:1 Cycloidal Gearbox · Pranjal Singh Sesodia</title>
-<meta name="description" content="A printed 5:1 cycloidal reducer for a Power HD 1501MG servo, designed in SolidWorks and analysed in simulation. Detailed results are held back for publication.">
+<meta name="description" content="A printed 5:1 cycloidal reducer for a Power HD 1501MG servo, designed in SolidWorks and analysed in simulation.">
 <meta property="og:title" content="5:1 Cycloidal Gearbox · Pranjal Singh Sesodia">
-<meta property="og:description" content="A printed 5:1 cycloidal reducer for a Power HD 1501MG servo, designed in SolidWorks and analysed in simulation. Detailed results are held back for publication.">
+<meta property="og:description" content="A printed 5:1 cycloidal reducer for a Power HD 1501MG servo, designed in SolidWorks and analysed in simulation.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Pranjal Singh Sesodia">
 <meta property="og:url" content="https://pranjalsinghsesodia.github.io/work/cycloidal-reducer.html">
@@ -92,7 +92,45 @@
       <h2>The analysis</h2>
       <p>CAD can show that a reducer moves. How much torque a printed one carries, how much play it has and how much of the servo’s power reaches the joint all depend on contact between the pins and the disks. So I built a contact model in Python and checked it against a separate contact analysis in ANSYS.</p>
       <p>Together they cover load sharing, the strength of the printed features, backlash and print tolerance, efficiency, heat and wear. The practical conclusion for the arm is that <mark>a printed version can’t take the servo’s full torque</mark>, so the joint needs a torque limit in the controller.</p>
-      <p>I’m keeping the models and detailed results for a paper, so this page gives only the outline.</p>
+      <p>The headline numbers, from simulation with generic SLA resin properties:</p>
+      <table class="data">
+        <tbody>
+          <tr><td>Safe output torque in printed resin</td><td>about 0.6 N·m</td></tr>
+          <tr><td>Backlash at 0.2 mm clearance</td><td>8°</td></tr>
+          <tr><td>Efficiency at a friction coefficient of 0.1</td><td>44%</td></tr>
+        </tbody>
+      </table>
+      <p>My Python model and ANSYS agreed on the output-pin force within <b class="key">0.2%</b>.</p>
+      <div class="jrow">
+        <figure style="--ar:1.2024"><img class="zoom" data-zoom data-group="fig" data-title="Stress in one disk from the ANSYS contact model. Only two ring pins and one output pin carry load in this position." src="../media/work/reducer/ansys-disk-stress.webp" width="1200" height="998" alt="ANSYS stress plot of the cycloid disk, mostly dark with bright spots where two ring pins and one output pin press on it" loading="lazy" decoding="async"><figcaption>Stress in one disk from the ANSYS contact model. Only two ring pins and one output pin carry load in this position.</figcaption></figure>
+        <figure style="--ar:1.2222"><img class="zoom" data-zoom data-group="fig" data-title="Stress where a ring pin meets the disk. The peak sits just below the surface." src="../media/work/reducer/ansys-contact-stress.webp" width="1100" height="900" alt="ANSYS stress close-up at the ring-pin contact, with the brightest stress just below the contact surface" loading="lazy" decoding="async"><figcaption>Stress where a ring pin meets the disk. The peak sits just below the surface.</figcaption></figure>
+      </div>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Results</div>
+    <div class="body prose">
+      <h2>Some of the results</h2>
+      <p>The two disks don’t share the load equally. <mark>The disk nearer the carrier takes about 83% of it</mark> at every load and clearance, because the printed output pins bend more where the far disk presses on them.</p>
+      <figure class="fig">
+        <img class="zoom" data-zoom data-group="fig" data-title="Ring-pin forces over one 60° meshing period at the servo’s stall torque. The disk nearer the carrier (right) does most of the work." src="../media/work/reducer/s1-ring-pin-forces.webp" width="1149" height="481" alt="Two plots of ring-pin force against input angle: disk 1 peaks below 200 N, disk 2 peaks near 700 N" loading="lazy" decoding="async">
+        <figcaption>Ring-pin forces over one 60° meshing period at the servo’s stall torque. The disk nearer the carrier (right) does most of the work.</figcaption>
+      </figure>
+      <p>The clearances add up to a lot of play: 6.0° at 0.15 mm, 8.0° at 0.2 mm and 12.1° at 0.3 mm.</p>
+      <figure class="fig">
+        <img class="zoom" data-zoom data-group="fig" data-title="Backlash over a meshing period, and torque against twist with its dead zone." src="../media/work/reducer/s2-backlash-stiffness.webp" width="1334" height="463" alt="Left: backlash flat at about 360, 480 and 720 arcmin for the three clearances. Right: torque against twist with a wide flat dead zone in the middle" loading="lazy" decoding="async">
+        <figcaption>Backlash over a meshing period, and torque against twist with its dead zone.</figcaption>
+      </figure>
+      <p>A printer doesn’t place pins exactly, so I ran a Monte Carlo study of random print errors. With a printer good to ±0.1 mm, 0.15 mm binds about one time in twenty and 0.2 mm almost never, which makes 0.2 mm the right clearance for the resin version.</p>
+      <figure class="fig">
+        <img class="zoom" data-zoom data-group="fig" data-title="Smallest gap per sample (below zero binds) and the backlash spread." src="../media/work/reducer/s5-montecarlo.webp" width="1405" height="474" alt="Two histograms: smallest gap per sample, with a few samples below zero at 0.15 mm, and backlash per sample clustered by clearance" loading="lazy" decoding="async">
+        <figcaption>Smallest gap per sample (below zero binds) and the backlash spread.</figcaption>
+      </figure>
+      <p>Efficiency depends almost entirely on friction. More than half the loss is the cam sliding in its plain bore, and a rolling bearing there would lift efficiency at μ = 0.1 from 44% to 68%.</p>
+      <figure class="fig">
+        <img class="zoom plot" data-zoom data-group="fig" data-title="Efficiency against friction coefficient. The shaded band is greased resin on resin." src="../media/work/reducer/s4-efficiency.webp" width="707" height="492" alt="Efficiency falling from about 85% at mu 0.02 to about 10% at 0.25 as built, and from about 92% to 34% with a bearing on the cam" loading="lazy" decoding="async">
+        <figcaption>Efficiency against friction coefficient. The shaded band is greased resin on resin.</figcaption>
+      </figure>
     </div>
   </section>
   <section class="sec">
