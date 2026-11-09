@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai">
-<title>CV · Pranjal Singh Sesodia</title>
-<meta name="description" content="CV of Pranjal Singh Sesodia, mechanical engineering undergraduate at NSUT, New Delhi.">
+<title>Resume · Pranjal Singh Sesodia</title>
+<meta name="description" content="Resume of Pranjal Singh Sesodia, mechanical engineering undergraduate at NSUT, New Delhi.">
 <meta name="theme-color" content="#f1efea">
 <link rel="canonical" href="https://pranjalsinghsesodia.github.io/cv.html">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -32,21 +32,21 @@
   <div class="cv-bar">
     <div>
       <p class="crumb" style="margin:0"><a href="index.html">&larr; Pranjal Singh Sesodia</a></p>
-      <h1>Curriculum vitae</h1>
+      <h1>Resume</h1>
     </div>
     <ul class="links">
-      <li><a href="cv.pdf" download="Pranjal_Singh_Sesodia_CV.pdf">Download PDF</a></li>
+      <li><a href="cv.pdf" download="Pranjal_Singh_Sesodia_Resume.pdf">Download PDF</a></li>
       <li><a href="mailto:pranjalsinghsesodia@gmail.com">Email</a></li>
     </ul>
   </div>
-  <div id="pages" aria-live="polite"><p class="cv-msg small">Loading the CV…</p></div>
-  <noscript><p class="cv-msg">This page draws the CV with JavaScript. <a href="cv.pdf">Open the PDF</a> instead.</p></noscript>
+  <div id="pages" aria-live="polite"><p class="cv-msg small">Loading the resume…</p></div>
+  <noscript><p class="cv-msg">This page draws the resume with JavaScript. <a href="cv.pdf">Open the PDF</a> instead.</p></noscript>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 (() => {
   const box = document.getElementById('pages');
-  const fail = () => { box.innerHTML = '<p class="cv-msg">The CV couldn’t be shown here. <a href="cv.pdf">Open the PDF</a> instead.</p>'; };
+  const fail = () => { box.innerHTML = '<p class="cv-msg">The resume couldn’t be shown here. <a href="cv.pdf">Open the PDF</a> instead.</p>'; };
   if (!window.pdfjsLib) return fail();
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   let pdf = null, width = 0;
@@ -68,7 +68,7 @@
       cv.width = Math.floor(vp.width);
       cv.height = Math.floor(vp.height);
       cv.setAttribute('role', 'img');
-      cv.setAttribute('aria-label', `CV, page ${n} of ${pdf.numPages}`);
+      cv.setAttribute('aria-label', `Resume, page ${n} of ${pdf.numPages}`);
       sheet.appendChild(cv);
       // 'print' draws in one pass without waiting for animation frames, so a CV opened in a background tab is ready when you switch to it
       await page.render({ canvasContext: cv.getContext('2d'), viewport: vp, intent: 'print' }).promise;

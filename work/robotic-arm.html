@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai">
 <title>Vision-Guided Robotic Arm · Pranjal Singh Sesodia</title>
-<meta name="description" content="A 4-DOF arm I designed and built that keeps a wrist camera on a moving target using vision in place of joint encoders, with a digital twin that is still being improved, a MATLAB model and a 6-DOF successor in CAD.">
+<meta name="description" content="A 4-DOF arm I designed and built that keeps a wrist camera on a moving target using vision in place of joint encoders.">
 <meta property="og:title" content="Vision-Guided Robotic Arm · Pranjal Singh Sesodia">
-<meta property="og:description" content="A 4-DOF arm I designed and built that keeps a wrist camera on a moving target using vision in place of joint encoders, with a digital twin that is still being improved, a MATLAB model and a 6-DOF successor in CAD.">
+<meta property="og:description" content="A 4-DOF arm I designed and built that keeps a wrist camera on a moving target using vision in place of joint encoders.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Pranjal Singh Sesodia">
 <meta property="og:url" content="https://pranjalsinghsesodia.github.io/work/robotic-arm.html">
@@ -46,11 +46,11 @@
       <div class="hero-row">
         <p class="dek intro">A 4-DOF arm I designed and built to <mark>keep a wrist camera on a moving target</mark>. Its hobby servos report nothing back, so feedback has to come from cameras. It is groundwork for later research toward a medical arm, so the questions here are general ones: cheap actuation, visual servoing and estimating joint state.</p>
         <dl class="now intro">
-          <dt>With</dt><dd>Dr. Dinesh Kalyanasundaram (supervisor); Bavath D. (mentors)</dd>
-          <dt>My part</dt><dd>Mechanical design and build, firmware, tracking control, digital twin, MATLAB model, 6-DOF design</dd>
-          <dt>Tools</dt><dd>Python (OpenCV, MediaPipe, NumPy), Arduino, MATLAB, SolidWorks, FDM printing</dd>
-          <dt>In numbers</dt><dd>4 DOF built · 30 Hz tracking loop · 100 Hz firmware motion profile · 1.233 kg</dd>
-          <dt>Status</dt><dd>Tracking runs on the arm. The digital twin is being improved, and joint error in degrees isn’t measured yet.</dd>
+          <dt>With</dt><dd>Dr. Dinesh Kalyanasundaram (supervisor); Bavath D. (mentor)</dd>
+          <dt>My part</dt><dd>Mechanical design and build, firmware, tracking control, digital twin</dd>
+          <dt>Tools</dt><dd>Python (OpenCV, MediaPipe, NumPy), Arduino, SolidWorks, FDM printing</dd>
+          <dt>In numbers</dt><dd>4 DOF built · 30 Hz tracking loop · 1.233 kg</dd>
+          <dt>Status</dt><dd>Tracking runs on the arm. The digital twin is being improved.</dd>
         </dl>
       </div>
       <div class="roll-cap">
@@ -75,179 +75,80 @@
     </div>
   </section>
   <section class="sec">
-    <div class="mark" aria-hidden="true">Status</div>
-    <div class="body prose">
-      <h2>Where it stands</h2>
-      <p>Part of this runs on the arm and part of it only in simulation or CAD. This table says which is which.</p>
-      <table class="ledger">
-        <thead><tr><th>Work</th><th>State</th><th>Evidence</th></tr></thead>
-        <tbody>
-          <tr><td>4-DOF arm: base yaw, shoulder, elbow, wrist pitch</td><td><span class="st hw">On hardware</span></td><td>Photos and videos on this page.</td></tr>
-          <tr><td>Fingertip tracking with PD control (V1 to V3)</td><td><span class="st hw">On hardware</span></td><td>My test runs. I kept no logs from these versions, so they have no error figures.</td></tr>
-          <tr><td>Eye-in-hand tracking with velocity control and coordinated tilt</td><td><span class="st hw">On hardware</span></td><td>Screen recording. Tracking error not measured yet.</td></tr>
-          <tr><td>Digital twin: live 3D view, load estimate, CSV logging</td><td><span class="st todo">Being improved</span></td><td>Runs alongside tracking (recording and four logs), but its 3D view is not yet in sync with the arm’s real pose.</td></tr>
-          <tr><td>Digital twin: measured joint angles</td><td><span class="st todo">In progress</span></td><td>Calibration attempted and not completed: markers were lost or read too much motion.</td></tr>
-          <tr><td>Joint angle from the servo’s own potentiometer</td><td><span class="st des">Written</span></td><td>Two one-servo test sketches. No results recorded yet.</td></tr>
-          <tr><td>MATLAB dynamics model and controller comparison</td><td><span class="st sim">Simulation</span></td><td>All 18 checks pass, on placeholder masses and dimensions.</td></tr>
-          <tr><td>6-DOF stage: upper-arm links and <a href="cycloidal-reducer.html">5:1 cycloidal reducers</a></td><td><span class="st des">Designed</span></td><td>SolidWorks assemblies. Not built.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-  <section class="sec">
     <div class="mark" aria-hidden="true">Hardware</div>
     <div class="body prose">
-      <h2>The arm as built</h2>
-      <p>A servo drives a pinion that meshes with a ring gear printed inside the base. That stage is 2.6:1 and reversed, so the servo’s full 0-180° becomes 0-69.2° at the joint, with home at 34.6°. Everything above it is direct drive on aluminium brackets.</p>
+      <h2>The arm</h2>
+      <p>A servo drives a pinion that meshes with a ring gear printed inside the base, a 2.6:1 stage. Everything above it is direct drive on aluminium brackets.</p>
       <table class="data">
         <tbody>
-          <tr><td>Joints</td><td>Base yaw, shoulder, elbow, wrist pitch; no gripper</td></tr>
-          <tr><td>Upper arm</td><td>103.5 mm, shoulder to elbow</td></tr>
-          <tr><td>Forearm</td><td>98 mm, elbow to wrist</td></tr>
-          <tr><td>Wrist to camera panel</td><td>102 mm along, 68.5 mm across (modelled as one 123 mm link)</td></tr>
-          <tr><td>Servos</td><td>Standard metal-gear hobby servos, 1501MG class: 15.5 kg·cm stall and 0.16 s per 60° at 4.8 V, 17 kg·cm and 0.14 s per 60° at 6 V</td></tr>
-          <tr><td>Electronics</td><td>Arduino Nano and PCA9685 PWM driver; separate 5-6 V servo supply of at least 3 A</td></tr>
-          <tr><td>Wrist camera</td><td>Logitech C920, 640 × 480 at 30 fps, 62° horizontal field of view</td></tr>
-          <tr><td>Firmware</td><td>100 Hz speed- and acceleration-limited profile; checksummed serial at 115200 baud</td></tr>
+          <tr><td>Joints</td><td>Base yaw, shoulder, elbow, wrist pitch</td></tr>
+          <tr><td>Servos</td><td>Power HD 1501MG</td></tr>
+          <tr><td>Electronics</td><td>Arduino Nano and PCA9685 PWM driver</td></tr>
+          <tr><td>Wrist camera</td><td>Logitech C920</td></tr>
           <tr><td>Mass</td><td>1.233 kg with base, servos and wiring</td></tr>
         </tbody>
       </table>
       <div class="jrow">
-        <figure style="--ar:0.7500">
-          <img class="zoom" data-zoom data-group="fig" data-title="From above: the servo-driven pinion beside the turntable." src="../media/work/arm/base-gear-top.webp" width="960" height="1280" alt="The printed base from above, with a servo pinion beside the turntable" loading="lazy" decoding="async">
-          <figcaption>From above: the servo-driven pinion beside the turntable.</figcaption>
-        </figure>
-        <figure style="--ar:0.7500">
-          <img class="zoom" data-zoom data-group="fig" data-title="Turned over: the ring gear inside the base." src="../media/work/arm/base-bearing.webp" width="960" height="1280" alt="The printed base turned over, showing the ring gear inside" loading="lazy" decoding="async">
-          <figcaption>Turned over: the ring gear inside the base.</figcaption>
-        </figure>
-        <figure style="--ar:0.7500">
-          <img class="zoom" data-zoom data-group="fig" data-title="Extended, on the bench." src="../media/work/arm/arm-bench.webp" width="1200" height="1600" alt="The arm extended on the bench" loading="lazy" decoding="async">
-          <figcaption>Extended, on the bench.</figcaption>
-        </figure>
-        <figure style="--ar:0.5625">
-          <img class="zoom" data-zoom data-group="fig" data-title="On the lab scale with its base, servos and wiring: 1.233 kg." src="../media/work/arm/weighing.webp" width="900" height="1600" alt="The whole arm standing on a lab scale reading 1.233 kg" loading="lazy" decoding="async">
-          <figcaption>On the lab scale: 1.233 kg.</figcaption>
-        </figure>
+        <figure style="--ar:0.7500"><img class="zoom" data-zoom data-group="fig" data-title="From above: the pinion beside the turntable." src="../media/work/arm/base-gear-top.webp" width="960" height="1280" alt="The printed base from above, with a servo pinion beside the turntable" loading="lazy" decoding="async"><figcaption>From above: the pinion beside the turntable.</figcaption></figure>
+        <figure style="--ar:0.7500"><img class="zoom" data-zoom data-group="fig" data-title="Turned over: the ring gear inside the base." src="../media/work/arm/base-bearing.webp" width="960" height="1280" alt="The printed base turned over, showing the ring gear inside" loading="lazy" decoding="async"><figcaption>Turned over: the ring gear inside the base.</figcaption></figure>
+        <figure style="--ar:0.7500"><img class="zoom" data-zoom data-group="fig" data-title="Extended, on the bench." src="../media/work/arm/arm-bench.webp" width="1200" height="1600" alt="The arm extended on the bench" loading="lazy" decoding="async"><figcaption>Extended, on the bench.</figcaption></figure>
+        <figure style="--ar:0.5625"><img class="zoom" data-zoom data-group="fig" data-title="On the lab scale." src="../media/work/arm/weighing.webp" width="900" height="1600" alt="The whole arm standing on a lab scale reading 1.233 kg" loading="lazy" decoding="async"><figcaption>On the lab scale.</figcaption></figure>
       </div>
     </div>
   </section>
   <section class="sec">
     <div class="mark" aria-hidden="true">Tracking</div>
     <div class="body prose">
-      <h2>Build log: eye-in-hand tracking</h2>
-      <p>Eye-in-hand means the camera rides on the arm, so moving a joint moves the view. The task is to keep a target at the centre of that view.</p>
+      <h2>Keeping the target in view</h2>
+      <p>The camera rides on the arm, so moving a joint moves the view. MediaPipe finds the target, my fingertip in testing, and the software turns its offset from the image centre into joint speeds at <b class="key">30 Hz</b>. The Arduino then moves each servo through a speed- and acceleration-limited profile at 100 Hz. The first versions used PD control in pixels. On the very first run the arm moved away from my finger, so I flipped both direction signs in the calibration file.</p>
+      <p><b>Objective:</b> keep a moving target at the centre of the wrist camera’s view.<br><span class="st hw">Achieved</span></p>
+      <figure class="fig"><video src="../media/video/arm-tracking-test.mp4" poster="../media/work/arm/arm-tracking-test.webp" width="848" height="478" controls playsinline preload="none" aria-label="A test run of the arm tracking a hand with its wrist camera"></video><figcaption>A test run of the tracking at mPragati.</figcaption></figure>
+      <h3>Splitting the tilt between three joints</h3>
+      <p>Shoulder, elbow and wrist all tilt the camera about the same axis, and <mark>camera pitch is the sum of the three angles</mark>, so the tilt can be shared between them with no inverse kinematics solve per frame. For small errors the wrist corrects alone, which barely shakes the arm. For larger ones the shoulder and elbow take up to 60% of the correction. When the wrist drifts too far from home it eases back while the other two counter-rotate, which keeps the view still and gives the wrist its range back.</p>
       <figure class="fig">
-        <video src="../media/video/arm-tracking-test.mp4" poster="../media/work/arm/arm-tracking-test.webp" width="848" height="478" controls playsinline preload="none" aria-label="A test run of the arm tracking a hand with its wrist camera"></video>
-        <figcaption>A test run of the tracking at mPragati.</figcaption>
+        <img class="plot" src="../media/work/arm/tilt-share.svg" width="640" height="300" alt="Stacked chart: below 4 degrees of error the wrist does all the correction; by 15 degrees the elbow and shoulder together do 60 percent" loading="lazy" decoding="async">
+        <figcaption>The split as designed.</figcaption>
       </figure>
-      <ol class="log">
-        <li>
-          <h3>V1 to V3: PD control in pixels</h3>
-          <p>MediaPipe finds the target, an index fingertip in testing, and the error is its pixel offset from the image centre. The first versions ran PD control at 20 Hz (Kp 18, Kd 3.5, Ki 0, anti-windup limit 0.5) with a 20 px dead zone and an exponential filter (α = 0.8). V2 added a small state machine (no target, acquiring for 0.3 s, then tracking), and V3 added monocular depth from Depth Anything V2 (ViT-S).</p>
-        </li>
-        <li>
-          <h3>A rewrite: error in degrees, control in velocity</h3>
-          <p>The current software converts the pixel offset to an angle and runs velocity P control at <b class="key">30 Hz</b>: 2.5 deg/s per degree of error, a 1° dead band, and speed caps of 60°/s in pan and 90°/s in tilt. All calibration lives on the PC and is pushed to the Arduino at every connection, so the firmware never drives a servo until it has been told where the arm starts.</p>
-          <p><b>Objective:</b> turn the target’s position in the camera image into a speed for each joint.<br><span class="st hw">Achieved</span> It runs on the arm and the arm follows the target. Tracking error isn’t measured yet.</p>
-          <p>From the controller’s side the servos are open loop: it sends an angle and gets nothing back. Inside, each servo still runs its own position loop on its potentiometer. The tracker integrates its velocity command into a target angle and streams that to the Arduino, which passes it through a speed- and acceleration-limited profile at 100 Hz. The servo then follows a setpoint that moves smoothly, and the vision loop sits outside it.</p>
-          <p><b>Objective:</b> keep each servo’s motion smooth by limiting its speed and acceleration.<br><span class="st hw">Achieved</span> It runs on the Arduino during tracking. I haven’t measured the smoothness.</p>
-          <p>The 30 fps camera caps the loop rate. I haven’t yet measured the latency through MediaPipe and the serial link, or how the servo’s response limits stability.</p>
-          <p>On the first run the arm moved away from my finger, so both direction signs were flipped in the calibration file. I still have to establish which axis was actually reversed.</p>
-        </li>
-        <li>
-          <h3>Splitting the tilt between three joints</h3>
-          <p>Shoulder, elbow and wrist all tilt the camera about the same axis, and <mark>camera pitch is simply the sum of the three angles</mark>. That makes the tilt redundant, so it can be shared out with no inverse kinematics solve per frame.</p>
-          <p>Below 4° of error the wrist corrects alone, which is light and fast and barely shakes the arm. From 4° to 15° the shoulder and elbow take a growing share, up to 60%. The elbow takes 65% of that share and the shoulder the rest, capped at 30°/s. Anything a joint can’t do, at a limit or a speed cap, passes to the others. The video at the top of this page shows the split live: its second line reads, for example, “wrist + 25% elbow/shoulder”.</p>
-          <figure class="fig">
-            <img class="plot" src="../media/work/arm/tilt-share.svg" width="640" height="300" alt="Stacked chart: below 4 degrees of error the wrist does all the correction; by 15 degrees the elbow and shoulder together do 60 percent" loading="lazy" decoding="async">
-            <figcaption>The split as designed, plotted from its design values. Design law, not a measurement.</figcaption>
-          </figure>
-          <p>When the wrist drifts more than 12° from home it eases back at 8°/s while the shoulder and elbow counter-rotate. The camera’s view stays where it is, and the wrist gets its range back for fine work.</p>
-          <p><b>Objective:</b> share the camera’s tilt between wrist, elbow and shoulder without solving inverse kinematics every frame.<br><span class="st hw">Achieved</span> The video at the top of this page shows the split live. I haven’t measured how much it helps.</p>
-        </li>
-      </ol>
+      <p><b>Objective:</b> share the camera’s tilt between the three joints.<br><span class="st hw">Achieved</span> The video at the top of this page shows the split live.</p>
     </div>
   </section>
   <section class="sec">
     <div class="mark" aria-hidden="true">Twin</div>
     <div class="body prose">
-      <h2>Build log: measuring the joints</h2>
-      <p>Tracking only says where the target is in the image. To know where the joints actually are, I’m trying two routes: an external camera that watches the arm (eye-to-hand), and the potentiometer already inside each servo.</p>
-      <ol class="log">
-        <li>
-          <h3>Tapping the servo’s own potentiometer</h3>
-          <p>A hobby servo measures its shaft with a potentiometer and keeps the reading to itself. Two test sketches bring the wiper out to the Arduino’s ADC through a 1 kΩ resistor and a 100 nF capacitor. The first sweeps one servo and records commanded angle against ADC counts as a calibration table. The second calibrates itself with its own sweep the first time it starts, then reads live position at 100 Hz, plots commanded, measured and error, and adds push-to-move: when someone forces the shaft more than 4° off its command for 60 ms, it gives way and follows the hand, then holds wherever it is left still.</p>
-          <p><b>Objective:</b> let a servo give way when someone pushes it, then hold wherever it is left.<br><span class="st todo">Not yet</span> It is written for one test servo, with no results recorded.</p>
-        </li>
-        <li>
-          <h3>A digital twin from an external camera</h3>
-          <p>A phone over DroidCam (1280 × 720) watches 40 mm ArUco markers fixed to each link. OpenCV detects them with sub-pixel corner refinement and solves each marker’s pose with solvePnP (IPPE-square). A joint’s angle is the relative rotation between the markers on its parent and child links, smoothed with an exponential filter. It reuses the camera-based pose approach from <a href="surgeon-motion.html">my work at QuEST Lab</a>.</p>
-          <p><b>Objective:</b> read each joint’s real angle from the markers on its two links.<br><span class="st todo">Not yet</span> Calibration hasn’t worked, so there are no measured angles yet.</p>
-          <p>Commanded angles arrive from the controller over UDP at 30 Hz. A live viewer is meant to show the 3D arm, measured against commanded, along with joint plots and an estimated servo load, and everything is logged to CSV for MATLAB.</p>
-          <p>The twin isn’t accurate yet, and I’m improving it. In the recording below its 3D arm is not in sync with the real arm. With no measured angles, it draws the commanded angles, through kinematics whose direction signs and reference pose I haven’t yet calibrated against the arm.</p>
-          <figure class="fig">
-            <video src="../media/video/arm-twin-tracking.mp4" poster="../media/work/arm/arm-twin-tracking.webp" width="1280" height="692" controls playsinline preload="none" aria-label="The digital twin window updating while the wrist camera tracks a hand"></video>
-            <figcaption>The twin running alongside tracking, in the version I’m improving. Its 3D view does not match the real arm’s pose, and the measured column stays empty until calibration works.</figcaption>
-          </figure>
-          <p>Calibration nudges each joint by +15° and compares what the markers see. It hasn’t worked yet. In one attempt the base read 21.4° and the shoulder 26.8° for a 15° move, the software flagged other joints changing at the same time and asked whether a marker was loose, and the elbow’s marker was lost while it moved. My guesses at the causes, still to test: no camera calibration yet (the field of view is assumed to be 70°), markers seen at a steep angle, and markers not stuck down flat.</p>
-          <figure class="fig">
-            <video src="../media/video/arm-twin-calibration.mp4" poster="../media/work/arm/arm-twin-calibration.webp" width="1280" height="720" controls playsinline preload="none" aria-label="Setting up the twin calibration: pressing ArUco markers onto the arm's links in view of a phone camera"></video>
-            <figcaption>Setting up the calibration: markers on each link, seen from the phone. Green outlines are markers it has found.</figcaption>
-          </figure>
-          <figure class="fig">
-            <img class="plot" src="../media/work/arm/commanded-run.svg" width="680" height="470" alt="Four stacked plots of commanded base, shoulder, elbow and wrist angle over about 125 seconds" loading="lazy" decoding="async">
-            <figcaption>Commanded angles from one log, 125 s of tracking. You can see the joint limits at work: the elbow sits at 120° and the shoulder at 20° for stretches.</figcaption>
-          </figure>
-          <p>The twin also computes static gravity torque per joint from the pose it draws, which for now is the commanded pose. In this log the shoulder estimate peaks at 0.70 N·m, about 46% of the servo’s 1.52 N·m stall at 4.8 V, or 42% of 1.67 N·m at 6 V. The link masses behind it (110, 100 and 200 g) are my estimates, and the pose isn’t measured, so this figure is rough until both are fixed.</p>
-        </li>
-      </ol>
-    </div>
-  </section>
-  <section class="sec">
-    <div class="mark" aria-hidden="true">6-DOF</div>
-    <div class="body prose">
-      <h2>The next stage: 6 DOF, in CAD and in MATLAB</h2>
-      <ol class="log">
-        <li>
-          <h3>The upper arm and a base in CAD</h3>
-          <p>The 6-DOF upper arm in SolidWorks has five links (upper arm, forearm, wrist link and tool arm, each with a lid, then a tool flange). The same CAD folder holds a base assembly in which a pinion on the motor turns an internal spur gear under a moving plate. The <a href="cycloidal-reducer.html">5:1 cycloidal reducer</a> belongs to the same stage.</p>
-          <div class="jrow">
-            <figure style="--ar:1.1070">
-              <img class="zoom" data-zoom data-group="fig" data-title="The 6-DOF upper arm assembly in SolidWorks." src="../media/work/arm/six-dof-arm-cad.webp" width="1004" height="907" alt="SolidWorks render of a dark grey printed robot arm with five link segments on a round base" loading="lazy" decoding="async">
-              <figcaption>The 6-DOF upper arm in SolidWorks.</figcaption>
-            </figure>
-            <figure style="--ar:1.1224">
-              <img class="zoom" data-zoom data-group="fig" data-title="The base assembly, exploded: motor and pinion, top lid, and the base with its internal gear." src="../media/work/arm/base-gear-cad.webp" width="1018" height="907" alt="Exploded SolidWorks render of the base: a yellow motor bracket with pinion, a ring-shaped top lid and the base with an internal gear" loading="lazy" decoding="async">
-              <figcaption>The base assembly, exploded: motor and pinion, top lid, and the internal gear.</figcaption>
-            </figure>
-          </div>
-        </li>
-        <li>
-          <h3>Kinematics, dynamics and three controllers</h3>
-          <p>I worked through a full model of the 6-DOF arm in MATLAB: DH forward kinematics, the geometric Jacobian and its singularities, damped-least-squares inverse kinematics, Euler-Lagrange and recursive Newton-Euler dynamics, and joint friction. In a 1 kHz simulated loop it compares PD with gravity compensation, computed-torque control, and task-space control with a remote centre of motion, where the tool pivots about a fixed point.</p>
-          <p>The model still holds placeholder masses and dimensions, a bench-top arm with a PUMA-like layout. Its checks therefore test the equations, against the Robotics System Toolbox, finite differences and energy conservation, and they say nothing yet about my arm.</p>
-          <p><b>Objective:</b> confirm the model’s equations against the Robotics System Toolbox, finite differences and energy conservation.<br><span class="st sim">In simulation</span> All 18 checks passed, on placeholder masses and dimensions, so they say nothing yet about my arm.</p>
-          <p><b>Objective:</b> make the tool pivot about a fixed point while its tip follows a path.<br><span class="st sim">In simulation</span> It works on the placeholder arm. It hasn’t run on hardware.</p>
-          <figure class="fig square">
-            <img class="zoom plot" data-zoom data-group="fig" data-title="The remote-centre-of-motion task on the placeholder arm: the shaft pivots about the red ring while the tip follows its path." src="../media/work/arm/rcm-task.webp" width="733" height="743" alt="Animation of a simulated six-joint arm moving a tool shaft through a fixed point on a plane" loading="lazy" decoding="async">
-            <figcaption>The remote-centre task on the placeholder arm, in simulation. This isn’t my hardware.</figcaption>
-          </figure>
-          <p>Computed-torque control needs torque-controlled joints and hobby servos are position controlled. So on this arm the dynamics are for sizing actuators (worst-case holding torque, then peak and RMS torque over a task), and inverse kinematics generates the angles the servos track.</p>
-        </li>
-      </ol>
+      <h2>Measuring the joints</h2>
+      <p>Tracking only says where the target is in the image. To find where the joints are, I’m trying two routes.</p>
+      <h3>The servo’s own potentiometer</h3>
+      <p>A hobby servo measures its shaft with a potentiometer and keeps the reading to itself. On one test servo I brought that signal out to the Arduino and wrote a push-to-move mode: pushed off its command, the servo gives way, follows the hand and holds where it’s left.</p>
+      <p><b>Objective:</b> read the servo’s real position and let it give way when pushed.<br><span class="st todo">Not yet</span> Written for one test servo, with no results recorded.</p>
+      <h3>A digital twin from an external camera</h3>
+      <p>A phone camera watches ArUco markers on each link, and OpenCV turns the relative rotation of two markers into a joint angle. It builds on my <a href="surgeon-motion.html">pose work at QuEST Lab</a>. The twin is being improved: its 3D view doesn’t match the arm’s real pose yet.</p>
+      <p>Calibration nudges each joint by 15° and compares what the markers see. In one attempt the base read 21.4° and the shoulder 26.8°, and the elbow’s marker was lost while it moved. My guesses at the causes, still to test: no camera calibration yet, markers seen at a steep angle, and markers not stuck down flat.</p>
+      <p><b>Objective:</b> read each joint’s real angle from its markers.<br><span class="st todo">Not yet</span> Calibration hasn’t worked so far.</p>
+      <figure class="fig"><video src="../media/video/arm-twin-tracking.mp4" poster="../media/work/arm/arm-twin-tracking.webp" width="1280" height="692" controls playsinline preload="none" aria-label="The digital twin window updating while the wrist camera tracks a hand"></video><figcaption>The twin running alongside tracking.</figcaption></figure>
+      <figure class="fig"><video src="../media/video/arm-twin-calibration.mp4" poster="../media/work/arm/arm-twin-calibration.webp" width="1280" height="720" controls playsinline preload="none" aria-label="Setting up the twin calibration: pressing ArUco markers onto the arm links in view of a phone camera"></video><figcaption>Setting up the calibration, with markers on each link.</figcaption></figure>
     </div>
   </section>
   <section class="sec">
     <div class="mark" aria-hidden="true">Next</div>
     <div class="body prose">
       <h2>What’s next</h2>
-      <ul>
-        <li>Calibrate the twin’s kinematics against the real arm so its 3D view matches the arm’s pose.</li>
-        <li>Calibrate the external camera properly, fix the markers flat, and get the twin’s vision calibration through. That gives joint error in degrees for the first time.</li>
-        <li>Weigh the links, put the arm’s real masses and dimensions into the MATLAB model, and re-run the actuator sizing.</li>
-        <li>Build the 6-DOF stage around the cycloidal reducer.</li>
-      </ul>
+      <p>First I need to calibrate the camera and the twin, so I can measure joint error in degrees. The long-term aim is an arm that holds a surgical camera. A 6-DOF version with the <a href="cycloidal-reducer.html">cycloidal gearbox</a> is under development, and I’m not sharing its design or results yet.</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="mark" aria-hidden="true">Status</div>
+    <div class="body prose">
+      <h2>Where it stands</h2>
+      <table class="ledger">
+        <thead><tr><th>Work</th><th>State</th></tr></thead>
+        <tbody>
+          <tr><td>4-DOF arm and fingertip tracking (tracking error not measured yet)</td><td><span class="st hw">On hardware</span></td></tr>
+          <tr><td>Tilt split between three joints</td><td><span class="st hw">On hardware</span></td></tr>
+          <tr><td>Digital twin and measured joint angles</td><td><span class="st todo">Being improved</span></td></tr>
+          <tr><td>Reading the servo’s potentiometer</td><td><span class="st des">Written</span></td></tr>
+          <tr><td>6-DOF arm</td><td><span class="st todo">Under development</span></td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
   <nav class="sec" aria-label="More work">
@@ -265,7 +166,7 @@
       <a class="email" href="mailto:pranjalsinghsesodia@gmail.com">pranjalsinghsesodia@gmail.com</a>
       <p>I would love to connect.</p>
       <ul class="links icons">
-        <li><a href="../cv.html" target="_blank" rel="noopener" aria-label="CV" title="CV"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 1.8h10.8l4.2 4.2v16.2h-15z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><path d="M15 2v4.3h4.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><text x="12" y="17.6" text-anchor="middle" font-family="Fragment Mono, monospace" font-size="8.2" fill="currentColor">CV</text></svg></a></li>
+        <li><a href="../cv.html" target="_blank" rel="noopener" aria-label="Resume" title="Resume"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 1.8h10.8l4.2 4.2v16.2h-15z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><path d="M15 2v4.3h4.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><path d="M8 12h8M8 15.5h8M8 19h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></a></li>
         <li><a href="https://www.linkedin.com/in/pranjalsinghsesodia/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
         <li><a href="https://www.instagram.com/hipranjal_/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.2" y="2.2" width="19.6" height="19.6" rx="5.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><circle cx="17.5" cy="6.5" r="1.25" fill="currentColor"/></svg></a></li>
       </ul>
