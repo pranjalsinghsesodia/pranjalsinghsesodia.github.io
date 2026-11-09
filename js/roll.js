@@ -174,7 +174,7 @@
     c.fillText('Adagio, dolce', beatPx * .4, lineY(beatPx * .4) - 9);
     c.font = '400 8px "Fragment Mono", ui-monospace, monospace';
     if ('letterSpacing' in c) c.letterSpacing = '2px';
-    c.fillText('ROLL Nº 1 · WALTZ IN D · ♩ = 56 · FOR P. S. SESODIA', beatPx * 1.2, H - 6);
+    c.fillText('ROLL Nº 1 · WALTZ IN D · ♩ = 56', beatPx * 1.2, H - 6);
     if ('letterSpacing' in c) c.letterSpacing = '0px';
 
     holes.forEach((h) => cut(c, h));
