@@ -904,7 +904,7 @@
   let lastW = 0, lastH = 0;
   const relayout = () => {
     const w = canvas.clientWidth, h = canvas.clientHeight;
-    if (w === lastW && h === lastH) { placeFog(); return; }
+    if (w === lastW && h === lastH) { if (W) placeFog(); return; }
     lastW = w; lastH = h;
     layout();
   };
