@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fragment+Mono&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap">
 <link rel="stylesheet" href="css/site.css?v=20261109h">
+<link rel="stylesheet" href="css/refresh.css?v=20261111h">
 <style>
   /* the CV is drawn into the page from cv.pdf, so the browser shows it instead of saving it */
   body { cursor: auto; }
@@ -36,13 +37,14 @@
       <h1>Resume</h1>
     </div>
     <ul class="links">
-      <li><a href="cv.pdf" download="Pranjal_Singh_Sesodia_Resume.pdf">Download PDF</a></li>
-      <li><a href="mailto:pranjalsinghsesodia@gmail.com">Email</a></li>
+      <li><a class="btn" href="cv.pdf" download="Pranjal_Singh_Sesodia_Resume.pdf">Download PDF</a></li>
+      <li><a class="btn" href="mailto:pranjalsinghsesodia@gmail.com">Email</a></li>
     </ul>
   </div>
   <div id="pages" aria-live="polite"><p class="cv-msg small">Loading the resume…</p></div>
   <noscript><p class="cv-msg">This page draws the resume with JavaScript. <a href="cv.pdf">Open the PDF</a> instead.</p></noscript>
 </main>
+<footer class="mini-foot"><a href="mailto:pranjalsinghsesodia@gmail.com">pranjalsinghsesodia@gmail.com</a><span>© 2026 Pranjal Singh Sesodia. All rights reserved.</span></footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 (() => {

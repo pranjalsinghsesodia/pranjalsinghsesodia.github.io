@@ -1,0 +1,390 @@
+/* Refresh, November 2026. Loaded after site.css.
+   Same piano roll, keys and felt; stronger type, and sections that change ground as the page goes down:
+   roll paper for the opening and the work, ivory for About, a warmer sand for the photographs,
+   and matte black (ebony) only once, for the closing section.
+   Buttons are keys: the work tabs hang from a strip of felt, and the chosen one is the ebony key.
+   Everything here overrides site.css, so it can be read (or removed) on its own. */
+
+:root {
+  --ebony: #171614;        /* matte black, the sharps */
+  --ivory: #f9f7f2;        /* the naturals */
+  --sand: #e9e2d3;         /* the ground under the photographs */
+  --brass: #d6a55c;        /* the accent on ebony, where felt red would be too dark to read */
+  --brass-ink: #8a6420;    /* the same brass, dark enough to read on paper */
+  --moss: #2c5a4b;         /* done, running, achieved */
+  --page-r: clamp(20px, 3vw, 56px);
+  --page-l: 0px;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+.page { padding-right: var(--page-r); }
+
+/* ---------- bands: a section with its own ground, running from the keys to the right edge ---------- */
+
+#about, #photographs, .foot { position: relative; z-index: 0; padding-top: clamp(4.2rem, 11vh, 7.5rem); padding-bottom: clamp(4.2rem, 11vh, 7.5rem); margin-top: clamp(5.5rem, 13vh, 9rem); }
+#about::before, #photographs::before, .foot::before { content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: calc(var(--page-l) * -1); right: calc(var(--page-r) * -1); background: var(--paper); }
+#about { --paper: var(--ivory); }
+#about::before { box-shadow: 0 -1px 0 var(--rule); }
+#photographs { --paper: var(--sand); --rule: #cbc2b0; --rule-2: #dad2c2; }
+/* inside the ebony band the same variables turn over, so labels, rules and links follow by themselves */
+.foot, .lb {
+  --paper: var(--ebony);
+  --ink: #f3f0ea;
+  --ink-2: #cbc6bc;
+  --ink-3: #99938a;
+  --rule: #3b3733;
+  --rule-2: #2a2724;
+  --mat: #201e1c;
+  --felt: var(--brass);
+  --felt-wash: rgba(214, 165, 92, .22);
+  color: var(--ink);
+}
+#about + #photographs, #photographs + .foot { margin-top: 0; }
+.foot { padding-bottom: clamp(5rem, 16vh, 9rem); }
+
+/* ---------- type ---------- */
+
+.name { font-size: clamp(46px, 6.6vw, 124px); font-weight: 280; letter-spacing: -.034em; line-height: .96; }
+.name span:last-child { font-style: italic; font-weight: 300; }
+.sec h2 { font-size: clamp(34px, 3.7vw, 58px); font-weight: 300; letter-spacing: -.02em; line-height: 1.04; margin-bottom: 1.6rem; }
+/* a strip of felt over each heading */
+.sec h2::before { content: ""; display: block; width: 2.4rem; height: 3px; background: var(--ink); margin-bottom: 1.15rem; }
+.sec-note { margin: -.6rem 0 2.2rem; font-size: 1.12rem; font-style: italic; color: var(--ink-2); max-width: 36rem; }
+.lede p { font-size: clamp(1.14rem, 1.5vw, 1.34rem); line-height: 1.5; }
+
+/* ---------- buttons, tags and chips ---------- */
+
+/* The work tabs are ivory keys hanging from a strip of felt. Pointing at one eases it down; the chosen one stays down, in felt red. */
+.tabs { gap: 4px; align-items: flex-start; border-top: 3px solid var(--felt); margin-bottom: 2.6rem; }
+.tabs button {
+  position: relative;
+  padding: .95rem 1.05rem .8rem;
+  color: var(--ink-2);
+  background-color: #f8f6f1;
+  border: 1px solid #d3cec3;
+  border-top: 0;
+  border-radius: 0 0 6px 6px;
+  box-shadow: inset 0 -4px 0 #e3dfd5, 0 2px 5px rgba(40, 34, 24, .07);
+  transition: color .5s ease, background-color .6s ease, border-color .6s ease, box-shadow .6s var(--ease), transform .6s var(--ease);
+}
+.tabs button:hover { color: var(--ink); border-color: #d3cec3; transform: translateY(1.5px); box-shadow: inset 0 -3px 0 #e3dfd5, 0 1px 3px rgba(40, 34, 24, .07); }
+.tabs button:active { transform: translateY(2.5px); }
+.tabs button[aria-selected="true"] { color: #f8f6f1; background-color: var(--felt); border-color: var(--felt); box-shadow: inset 0 -3px 0 #6f271f, 0 1px 2px rgba(40, 34, 24, .12); transform: translateY(3px); }
+.tabs .n { opacity: 1; margin-left: .5em; color: var(--felt); transition: color .5s ease; }
+.tabs button[aria-selected="true"] .n { color: #f8f6f1; opacity: .8; }
+
+/* The section tabs beside the keyboard, and each section's own label, are small ivory keys too. */
+.oct { width: 25px; padding: 9px 0; color: var(--ink-2); background: #f8f6f1; border: 1px solid #d3cec3; border-left: 0; border-radius: 0 5px 5px 0; box-shadow: inset -3px 0 0 #e3dfd5, 1px 1px 4px rgba(40, 34, 24, .08); transition: color .5s ease, background-color .6s ease, border-color .6s ease, box-shadow .6s var(--ease); }
+.oct:hover { color: var(--felt); border-color: #d3cec3; box-shadow: inset -2px 0 0 #e3dfd5, 0 1px 2px rgba(40, 34, 24, .08); }
+.oct.on, .oct.on:hover { color: #f8f6f1; background: var(--felt); border-color: var(--felt); box-shadow: inset -3px 0 0 #6f271f; }
+.mark:not(.fine) { color: var(--ink-2); background: var(--ivory); border: 0; border-radius: 4px; padding: 1rem .5rem; box-shadow: 0 0 0 1px #d3cec3, inset 0 -3px 0 var(--ink-2); letter-spacing: .18em; }
+
+/* Every info box on the site behaves the same: a black top edge, and when you point at it a felt-red line
+   draws across that edge while the box eases down a touch. */
+.facts-row > div, .now, .case { position: relative; border-top: 2px solid var(--ink); }
+.facts-row > div::before, .now::before, .case::before { content: ""; position: absolute; left: 0; right: 0; top: -2px; height: 2px; background: var(--felt); transform: scaleX(0); transform-origin: left; transition: transform .8s var(--ease); }
+.facts-row > div:hover::before, .now:hover::before, .case:hover::before { transform: scaleX(1); }
+.now, .case { transition: transform .7s var(--ease); }
+.now:hover, .case:hover, .facts-row.anim.in > div:hover, .facts-row > div:hover { transform: translateY(2px); }
+
+/* a link that should look like something to press */
+.btn, .crumb a, .copy {
+  display: inline-flex;
+  align-items: center;
+  gap: .55em;
+  font-family: var(--mono);
+  font-size: .7rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--ivory);
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  padding: .55rem 1rem .5rem;
+  margin: 0;
+  cursor: pointer;
+  transition: background .25s, color .25s, border-color .25s, transform .2s var(--ease);
+}
+.btn::after { content: "\2192"; transition: transform .3s var(--ease); }
+.btn:hover, .crumb a:hover, .copy:hover { background: var(--ink); color: var(--ivory); border-color: var(--ink); }
+.btn:hover::after { transform: translateX(4px); }
+.btn:active, .crumb a:active, .copy:active { transform: translateY(1px); }
+
+/* the small print over a card: a small dot leads it */
+.card .meta > span:first-child::before, .case .meta > span:first-child::before { content: ""; display: inline-block; width: .5em; height: .5em; border-radius: 50%; background: var(--ink-3); margin-right: .6em; vertical-align: .05em; }
+.wip { display: inline-block; width: fit-content; color: var(--felt); background: var(--felt-wash); border-radius: 999px; padding: .08rem .65rem .04rem; }
+.wip-note .wip { margin-bottom: .7rem; }
+.kicker { align-items: center; }
+.kicker .tag { color: var(--ink-2); border: 1px solid currentColor; border-radius: 999px; padding: .12rem .65rem .08rem; }
+
+/* status chips: a dot and a tint. Moss for done, felt for not yet, grey for in between */
+.st { border: 0; border-radius: 999px; padding: .2rem .65rem .16rem; font-size: .64rem; letter-spacing: .05em; background: var(--felt-wash); }
+.st::before { content: ""; display: inline-block; width: .45em; height: .45em; border-radius: 50%; background: currentColor; margin-right: .5em; vertical-align: .1em; }
+.st.hw { color: var(--moss); background: rgba(44, 90, 75, .13); }
+.st.des, .st.sim { color: var(--ink-2); background: rgba(79, 75, 70, .12); }
+.st.todo { color: var(--felt); background: var(--felt-wash); }
+
+/* the sound switch floats over every band, so on wide screens it carries its own scrap of paper */
+@media (min-width: 1200px) {
+  .roll-cap button { background: var(--ivory); padding: .34rem .75rem .28rem; border: 1px solid var(--rule); border-radius: 999px; }
+  .roll-cap button:hover { border-color: var(--felt); }
+  .roll-quiet .roll-cap .roll-sound:not(:hover, :focus-visible) { opacity: .9; }
+}
+
+/* ---------- info blocks arrive a row at a time (js/site.js adds .anim, then .in) ---------- */
+
+.anim .a { opacity: 0; transform: translateY(10px); transition: opacity .6s var(--ease), transform .7s var(--ease), border-color .3s; transition-delay: calc(var(--i, 0) * 90ms + 80ms); }
+.anim.in .a { opacity: 1; transform: none; }
+.anim.in .a:hover { transition-delay: 0s; }
+
+/* ---------- hero ---------- */
+
+.hero-photo img { border-color: var(--ink); padding: 5px; transition: transform .6s var(--ease); }
+.hero-photo:hover img { transform: rotate(-2deg) scale(1.02); }
+.facts-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; max-width: 62rem; border-top: 0; padding-top: 0; font-size: 1.05rem; }
+.facts-row > div { background: var(--ivory); padding: .95rem 1.1rem 1.1rem; box-shadow: 0 1px 0 var(--rule); }
+.facts-row.anim.in > div { transition: opacity .6s var(--ease), transform .7s var(--ease); transition-delay: 0s; }
+.facts-row dt { font-size: .68rem; margin-bottom: .5rem; }
+.links.icons a { transition: color .25s, transform .3s var(--ease); }
+.links.icons a:hover { transform: translateY(-3px); }
+.links.icons a:active { transform: translateY(0); }
+
+/* ---------- work ---------- */
+
+.cards { grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 28rem)); gap: 3.2rem clamp(1.4rem, 2.4vw, 2.4rem); }
+.card-img { position: relative; box-shadow: 0 0 0 1px var(--rule); }
+.card-img::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--felt); transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease); }
+.card:hover .card-img::after, .card:focus-visible .card-img::after { transform: scaleX(1); }
+.card h3 { font-size: 1.46rem; line-height: 1.22; }
+.card > h3::after { content: "\2192"; display: inline-block; margin-left: .4em; color: var(--felt); opacity: 0; transform: translateX(-6px); transition: opacity .3s, transform .3s var(--ease); }
+.card:hover > h3::after, .card:focus-visible > h3::after { opacity: 1; transform: none; }
+
+/* Team and school: each entry is a short procedure. Objective, work done, result, with its key points beside it. */
+.cases { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.6rem; }
+.case { min-width: 0; background: var(--ivory); box-shadow: 0 1px 0 var(--rule); padding: clamp(1.1rem, 2.4vw, 2rem); }
+.case .meta { display: flex; flex-wrap: wrap; gap: .2rem 1rem; }
+.case-h h3 { font-size: clamp(1.6rem, 2.4vw, 2.15rem); font-weight: 300; letter-spacing: -.015em; line-height: 1.15; margin: .45rem 0 1.5rem; }
+.case-grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: 1.6rem clamp(1.6rem, 3vw, 3rem); align-items: start; }
+.steps { position: relative; list-style: none; margin: 0; padding: 0; counter-reset: step; }
+.steps::before { content: ""; position: absolute; left: calc(.85rem - .5px); top: .9rem; bottom: 1.2rem; width: 1px; background: var(--ink-3); transform-origin: top; }
+.steps.anim::before { transform: scaleY(0); transition: transform 1.3s var(--ease) .15s; }
+.steps.anim.in::before { transform: none; }
+.steps > li { position: relative; padding: 0 0 1.5rem 2.9rem; counter-increment: step; }
+.steps > li:last-child { padding-bottom: 0; }
+.steps > li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 1.7rem; height: 1.7rem; border-radius: 50%; display: grid; place-items: center; background: var(--ivory); border: 1px solid var(--ink); font-family: var(--mono); font-size: .68rem; line-height: 1; }
+.steps > li:last-child::before { background: var(--ink); border-color: var(--ink); color: var(--ivory); }
+.steps h4 { font-family: var(--mono); font-size: .7rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 .45rem; padding-top: .32rem; }
+.steps p, .steps ul { margin: 0; font-size: 1rem; line-height: 1.55; max-width: 40rem; }
+.steps ul { padding-left: 1.05rem; }
+.steps ul li + li { margin-top: .4rem; }
+.steps ul li::marker { color: var(--ink-3); }
+.tiles { display: grid; gap: 8px; }
+.tiles > div { background: var(--paper); border-left: 3px solid var(--ink); padding: .8rem 1rem .9rem; }
+.tiles > div:hover { border-left-color: var(--felt); transform: translateX(4px); }
+.tiles b { display: block; font-size: clamp(1.7rem, 2.6vw, 2.3rem); font-weight: 300; line-height: 1.05; letter-spacing: -.02em; }
+.tiles span { display: block; margin-top: .3rem; font-size: .92rem; line-height: 1.4; color: var(--ink-2); }
+.case-photos { display: flex; gap: 8px; margin-top: 1.7rem; padding-bottom: 6px; overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--rule) transparent; scroll-snap-type: x proximity; }
+.case-photos figure { flex: none; margin: 0; height: clamp(150px, 16vw, 220px); overflow: hidden; scroll-snap-align: start; background: var(--rule-2); }
+.case-photos img { display: block; height: 100%; width: auto; max-width: none; transition: transform .9s var(--ease); }
+.case-photos figure:hover img { transform: scale(1.04); }
+.case-more { margin: 1.5rem 0 0; }
+
+/* ---------- about, on ivory ---------- */
+
+.about { align-items: start; }
+.about > div > p:first-child { font-size: clamp(1.35rem, 2vw, 1.7rem); line-height: 1.34; font-weight: 300; letter-spacing: -.008em; }
+.portrait { justify-self: end; max-width: 340px; }
+.portrait img { border-radius: 2px; aspect-ratio: 4 / 5; filter: none; box-shadow: 0 0 0 6px var(--paper), 0 0 0 7px var(--ink-3); }
+.portrait figcaption { margin-top: 1.1rem; }
+.facts { border-top: 2px solid var(--ink); }
+
+/* ---------- photographs, on sand, in their watercolour washes ---------- */
+
+#photographs .rows { --pht: clamp(160px, 18vw, 270px); }
+.ro-t { font-size: 1.05rem; }
+
+/* ---------- the closing section, the one ebony band ---------- */
+
+.foot .email { font-size: clamp(27px, 4.6vw, 76px); font-weight: 280; letter-spacing: -.028em; line-height: 1.05; text-decoration: none; background: linear-gradient(var(--brass), var(--brass)) 0 100% / 0 2px no-repeat; padding-bottom: .1em; transition: background-size .6s var(--ease), color .3s; }
+.foot .email:hover { color: var(--brass); background-size: 100% 2px; }
+.foot .colophon { color: var(--ink-3) !important; }
+.foot .colophon + .colophon { margin-top: .5rem !important; }
+
+/* ---------- project pages ---------- */
+
+.crumb { margin-bottom: 2.6rem; }
+.p-title { font-size: clamp(40px, 5.4vw, 92px); font-weight: 280; letter-spacing: -.03em; line-height: 1; }
+.work-page .sec h2 { font-size: clamp(30px, 2.9vw, 44px); }
+.now { background: var(--ivory); padding: 1.1rem 1.25rem 1.2rem; box-shadow: 0 1px 0 var(--rule); }
+.wip-note { background: var(--ivory); border: 0; border-left: 3px solid var(--felt); }
+.ledger th, .data th { border-bottom-color: var(--ink); }
+.next { border-top: 2px solid var(--ink); }
+.next .t { font-size: clamp(1.25rem, 2.2vw, 1.9rem); font-weight: 300; letter-spacing: -.015em; line-height: 1.15; }
+
+/* ---------- enlarged pictures, on ebony ---------- */
+
+.lb { background: var(--paper); }
+.lb .lb-x { background: #f3f0ea; color: #171614; box-shadow: none; }
+.lb .lb-x:hover { background: var(--brass); color: #171614; }
+
+/* ---------- the home page says each section's name once beside the keys and once as its heading; the third copy is hidden there ---------- */
+
+body:not(.work-page) .page > .sec > .mark:not(.fine) { display: none; }
+.prose li::marker { color: var(--ink-3); }
+
+/* ---------- off the wide layout the sound switch is a small round key in the corner (its words stay for screen readers) ---------- */
+
+@media (max-width: 1199px) {
+  .roll-cap .ctl .roll-sound { position: relative; width: 42px; height: 42px; min-height: 0; padding: 0; border-radius: 50%; font-size: 0; color: var(--ink-3); background: var(--ivory); border: 1px solid #d3cec3; box-shadow: 0 2px 8px rgba(30, 25, 20, .12); transition: color .4s ease, background-color .4s ease, border-color .4s ease; }
+  .roll-cap .ctl .roll-sound::before { content: "\266A"; font-family: var(--serif); font-size: 1.25rem; line-height: 42px; }
+  .roll-cap .ctl .roll-sound::after { content: ""; position: absolute; left: 9px; right: 9px; top: 50%; height: 1.5px; background: currentColor; transform: rotate(-45deg); transition: opacity .4s ease; }
+  .roll-cap .ctl .roll-sound[aria-pressed="true"] { color: var(--ivory); background: var(--felt); border-color: var(--felt); }
+  .roll-cap .ctl .roll-sound[aria-pressed="true"]::after { opacity: 0; }
+}
+
+/* ---------- the resume and not-found pages: no roll there, but the keys still run down the edge ---------- */
+
+body:has(> main.cv)::before, body:has(> main.nf)::before {
+  content: "";
+  position: fixed;
+  z-index: 2;
+  left: 0; top: 0; bottom: 0;
+  width: 46px;
+  border-right: 1px solid #d4d0c8;
+  box-shadow: inset 3px 0 0 var(--felt);
+  background:
+    repeating-linear-gradient(#0000 0 15px, #1d1914 15px 29px, #0000 29px 154px) 3px 0 / 60% 100% no-repeat,
+    repeating-linear-gradient(#0000 0 37px, #1d1914 37px 51px, #0000 51px 154px) 3px 0 / 60% 100% no-repeat,
+    repeating-linear-gradient(#0000 0 81px, #1d1914 81px 95px, #0000 95px 154px) 3px 0 / 60% 100% no-repeat,
+    repeating-linear-gradient(#0000 0 103px, #1d1914 103px 117px, #0000 117px 154px) 3px 0 / 60% 100% no-repeat,
+    repeating-linear-gradient(#0000 0 125px, #1d1914 125px 139px, #0000 139px 154px) 3px 0 / 60% 100% no-repeat,
+    repeating-linear-gradient(#fbfaf6 0 21px, #d4d0c8 21px 22px);
+}
+main.cv, main.nf { padding-left: calc(46px + 18px); }
+main.cv h1::before, main.nf h1::before { content: ""; display: block; width: 2.4rem; height: 3px; background: var(--ink); margin-bottom: 1rem; }
+main.cv .links, main.nf .links { gap: .6rem; align-items: center; }
+.links a.btn { padding: .55rem 1rem .5rem; margin: 0; border: 1px solid var(--ink); }
+.links a.btn:hover { color: var(--ivory); border-color: var(--ink); }
+main.cv .crumb { margin-bottom: 1.6rem !important; }
+.mini-foot { position: relative; z-index: 3; background: var(--ebony); color: #cbc6bc; padding: 2.4rem clamp(24px, 6vw, 84px) 2.6rem calc(46px + clamp(24px, 6vw, 84px)); display: flex; flex-wrap: wrap; gap: .8rem 2rem; align-items: baseline; justify-content: space-between; font-size: .9rem; }
+.mini-foot a { color: #f3f0ea; font-size: clamp(1.15rem, 2.2vw, 1.6rem); font-weight: 300; text-decoration: none; background: linear-gradient(var(--brass), var(--brass)) 0 100% / 0 2px no-repeat; transition: background-size .6s var(--ease), color .3s; overflow-wrap: anywhere; }
+.mini-foot a:hover { color: var(--brass); background-size: 100% 2px; }
+main.nf { min-height: calc(100vh - 8rem); }
+@media (max-width: 759px) {
+  body:has(> main.cv)::before, body:has(> main.nf)::before { width: 30px; background-size: 60% 100%, 60% 100%, 60% 100%, 60% 100%, 60% 100%, auto; }
+  main.cv, main.nf { padding-left: calc(30px + 16px); }
+  .mini-foot { padding-left: calc(30px + 16px); }
+}
+
+/* ---------- narrower ---------- */
+
+@media (max-width: 1100px) {
+  .portrait { justify-self: start; }
+}
+@media (max-width: 980px) {
+  .case-grid { grid-template-columns: minmax(0, 1fr); }
+  .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tiles > div:hover { transform: translateY(-3px); }
+}
+@media (max-width: 900px) {
+  .facts-row { grid-template-columns: minmax(0, 1fr); max-width: 30rem; gap: 8px; }
+}
+@media (max-width: 759px) {
+  :root { --page-r: 16px; --page-l: 38px; }
+  .name { font-size: clamp(40px, 12.5vw, 64px); }
+  .sec h2 { font-size: clamp(30px, 8.6vw, 40px); }
+  .sec-note { font-size: 1.04rem; margin-bottom: 1.8rem; }
+  /* the keys become one row you can swipe along */
+  .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-right: calc(var(--page-r) * -1); padding: 0 var(--page-r) 8px 0; scroll-snap-type: x proximity; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { flex: none; scroll-snap-align: start; white-space: nowrap; min-height: 46px; }
+  .card h3 { font-size: 1.36rem; }
+  .card > h3::after { opacity: 1; transform: none; }
+  .tiles { grid-template-columns: minmax(0, 1fr); }
+  .steps > li { padding-left: 2.5rem; }
+  .case-photos { margin-right: calc(clamp(1.1rem, 2.4vw, 2rem) * -1); }
+  .portrait { max-width: 240px; }
+  #photographs .rows { --pht: 42vw; }
+  .foot .email { font-size: min(6.1vw, 30px); }
+  .now { padding: 1rem; }
+}
+
+/* ---------- audit, second pass ---------- */
+
+/* small print a size up and a shade darker */
+:root { --ink-3: #5d5953; --sand: #e2d8c4; }
+.small { font-size: .74rem; }
+.facts-row dt { font-size: .72rem; }
+.now dt, .facts dt { font-size: .7rem; }
+.fig figcaption, .jrow figcaption, .portrait figcaption { font-size: .74rem; }
+.ledger th, .data th { font-size: .7rem; }
+.st { font-size: .68rem; }
+.ro-m, .lb-cap .m { font-size: .74rem; }
+
+/* the grounds, further apart: cards lift a little off the paper, and the sand is deeper */
+.facts-row > div, .now, .case { box-shadow: 0 1px 0 var(--rule), 0 6px 18px -12px rgba(40, 34, 24, .35); }
+#photographs { --rule: #c4b9a3; --rule-2: #d4cab6; }
+
+/* icon links say what they are */
+.links.icons { gap: .7rem; }
+.links.icons a { display: inline-flex; align-items: center; gap: .55rem; margin: 0; padding: .45rem .9rem .45rem .7rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--paper); font-family: var(--mono); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; transition: color .4s ease, border-color .4s ease, transform .4s var(--ease); }
+.links.icons a:hover { border-color: var(--felt); transform: translateY(-2px); }
+.links.icons svg { width: 20px; height: 20px; }
+.hero .links.icons a { background: var(--ivory); }
+
+/* coursework: this term and the top grades show; the rest opens */
+.term { grid-template-columns: 8.5rem minmax(0, 1fr); }
+.term .o-note { display: inline; margin: 0 0 0 .4em; font-size: .9rem; color: var(--ink-2); }
+.more-terms { margin-top: .1rem; }
+.more-terms summary { list-style: none; cursor: pointer; width: fit-content; }
+.more-terms summary::-webkit-details-marker { display: none; }
+.more-terms summary span { display: inline-flex; align-items: center; gap: .55em; font-family: var(--mono); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--ink); border-radius: 999px; padding: .4rem .9rem .36rem; background: var(--paper); transition: background .3s, color .3s; }
+.more-terms summary span::after { content: "+"; font-size: 1.1em; line-height: 1; transition: transform .4s var(--ease); }
+.more-terms[open] summary span::after { transform: rotate(45deg); }
+.more-terms summary:hover span { background: var(--ink); color: var(--paper); }
+.more-terms .term { margin-top: .75rem; animation: term-in .5s var(--ease) both; }
+.more-terms .term:nth-of-type(2) { animation-delay: .06s; }
+.more-terms .term:nth-of-type(3) { animation-delay: .12s; }
+.more-terms .term:nth-of-type(4) { animation-delay: .18s; }
+@keyframes term-in { from { opacity: 0; transform: translateY(8px); } }
+
+/* tables no wider than their words need */
+.data { max-width: 46rem; }
+.data td:first-child { width: 44%; }
+.ledger { max-width: 50rem; }
+
+@media (max-width: 759px) {
+  .term { grid-template-columns: minmax(0, 1fr); }
+  .links.icons a { padding: .5rem .85rem .5rem .65rem; }
+  .data td:first-child { width: 40%; }
+}
+@media (prefers-reduced-motion: reduce) { .more-terms .term { animation: none; } }
+
+/* ---------- audit, polish ---------- */
+
+/* the tab beside the keys for the part you are reading is a little longer and stands a little further out */
+.oct { transition: color .5s ease, background-color .6s ease, border-color .6s ease, box-shadow .6s var(--ease), padding .6s var(--ease), width .6s var(--ease); }
+.oct.on, .oct.on:hover { width: 29px; padding: 17px 0; }
+
+/* the closing section's label matches the others: small capitals in a box, not sideways italics */
+.mark.fine { padding: 1rem .5rem; border: 0; border-radius: 4px; background: none; box-shadow: 0 0 0 1px var(--rule); color: var(--ink-2); font-family: var(--mono); font-size: .72rem; font-style: normal; letter-spacing: .18em; text-transform: uppercase; text-orientation: sideways; }
+
+/* the work keys stay on one row under their felt at every width; a long row scrolls sideways */
+.tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 8px; scroll-snap-type: x proximity; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs button { flex: none; scroll-snap-align: start; white-space: nowrap; }
+
+/* photographs drift more slowly, and only while they are on screen (js/site.js sets .live) */
+.strip.sliding .track { animation-duration: 130s; }
+.strip.sliding:not(.live) .track { animation-play-state: paused; }
+
+@media (max-width: 759px) {
+  .oct { width: 24px; }
+  .oct.on, .oct.on:hover { width: 27px; padding: 13px 0; }
+  .mark.fine { padding: .5rem .8rem; font-size: .7rem; }
+}
+
+@media print {
+  #about::before, #photographs::before, .foot::before { display: none; }
+  .foot { color: #000; }
+}

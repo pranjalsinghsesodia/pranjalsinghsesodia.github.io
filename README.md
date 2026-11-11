@@ -2,7 +2,7 @@
 
 Live at **https://pranjalsinghsesodia.github.io**. A plain static site: HTML, CSS and a little JavaScript, no build step.
 
-**The idea.** The whole page is a player-piano roll. A player piano plays from punched paper: each hole is a note, its height picks the key, and its length is how long the key is held. The paper is the page's background, an 88-key keyboard runs down the left edge, and the holes drift toward it, so keys light as notes reach them. It carries a short, quiet waltz in D. The roll is sharp on the opening screen; once a visitor scrolls into the work it goes soft (out of focus) and quieter, so the content leads, and it comes back into focus, a little louder, while the cursor is near the keys. On a computer, visitors can punch notes (one click is one note), and each one plays once as it reaches the keys, then leaves the roll. On a phone the roll always stays soft and quiet, only the keys play, and a Sound switch sits in the top corner. Each section has its name on a vertical bar beside it, and on a matching tab by the keys; the tabs jump between sections. Photographs sit in watercolour washes. The site is always light, whatever the device's dark-mode setting.
+**The idea.** The whole page is a player-piano roll. A player piano plays from punched paper: each hole is a note, its height picks the key, and its length is how long the key is held. The paper is the page's background, an 88-key keyboard runs down the left edge, and the holes drift toward it, so keys light as notes reach them. It carries a short, quiet waltz in D. The roll is sharp on the opening screen; once a visitor scrolls into the work it goes soft (out of focus) and quieter, so the content leads, and it comes back into focus, a little louder, while the cursor is near the keys. On a computer, visitors can punch notes (one click is one note), and each one plays once as it reaches the keys, then leaves the roll. On a phone the roll always stays soft and quiet, only the keys play, and a Sound switch sits in the top corner. Each section has its name on a vertical bar beside it, and on a matching tab by the keys; the tabs jump between sections. Sections change ground the way a keyboard does: paper for the opening and the work, ivory for About, sand for the photographs, and matte black for the closing section. The site looks the same whatever the device's dark-mode setting.
 
 ---
 
@@ -139,6 +139,7 @@ Sound stays off until a visitor turns it on or clicks a key. Browsers only start
 
 - `index.html`: the home page. `work/*.html`: one page per project.
 - `css/site.css`: everything visual.
+- `css/refresh.css`: the November 2026 styling pass, loaded after `site.css`. It sets the larger type, the section grounds (ivory for About, sand for the photographs, matte black for the closing section), the key-shaped work tabs, the status chips, and the Team and school entries (`<li class="case">` in `index.html`: objective, work done, result, key points, photos). Its colours are the variables at the top of the file. Removing the file's `<link>` line from a page gives back the older look.
 - `js/roll.js`: the roll, keyboard, octave tabs and sound.
 - `js/site.js`: smooth scrolling (Lenis), entrances and reveals (GSAP), the photo readout, the lightbox.
 - `media/`: images, video clips, photographs, frame masks, the portrait and `og.jpg`.

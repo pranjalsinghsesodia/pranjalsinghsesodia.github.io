@@ -64,6 +64,9 @@
         track.appendChild(copy);
       });
       strip.classList.add('sliding');
+      // it only slides while it is on screen
+      if ('IntersectionObserver' in window) new IntersectionObserver((es) => strip.classList.toggle('live', es[0].isIntersecting)).observe(strip);
+      else strip.classList.add('live');
       // tabbing to a photo scrolls the strip to it; put that back when focus moves on
       strip.addEventListener('focusout', () => { strip.scrollLeft = 0; });
     });
@@ -184,6 +187,8 @@
         panels[k].hidden = !on;
       });
       if (focus) tabs[i].focus();
+      // a long row scrolls sideways: keep the chosen key in view
+      if (bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: tabs[i].getBoundingClientRect().left - bar.getBoundingClientRect().left + bar.scrollLeft - 28, behavior: reduced ? 'auto' : 'smooth' });
       try { sessionStorage.setItem(KEY, tabs[i].id); } catch (e) { /* fine */ }
       if (ST) ST.refresh();
     };
@@ -191,8 +196,6 @@
     try { start = Math.max(0, tabs.findIndex((t) => t.id === sessionStorage.getItem(KEY))); } catch (e) { /* fine */ }
     tabs.forEach((t, i) => {
       t.addEventListener('click', () => pick(i));
-      // with a mouse, pointing at a tab is enough; touch screens still tap
-      t.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse' && t.getAttribute('aria-selected') !== 'true') pick(i); });
       t.addEventListener('keydown', (e) => {
         const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
         if (d) { e.preventDefault(); pick((i + d + tabs.length) % tabs.length, true); }
@@ -204,6 +207,28 @@
     box.classList.add('tabs-on');
     pick(start);
   });
+
+  // ---------- info blocks: their rows arrive one after another as the block comes into view ----------
+  // (the steps and key points of a Team entry, the fact cards, a project page's details panel)
+
+  if (!reduced && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    const groups = [['.steps', ':scope > li'], ['.tiles', ':scope > div'], ['.case-photos', ':scope > figure'], ['.facts-row', ':scope > div'], ['.now', ':scope > dd'], ['.facts', ':scope > dd']];
+    groups.forEach(([box, rows]) => {
+      document.querySelectorAll(box).forEach((el) => {
+        el.querySelectorAll(rows).forEach((row, i) => {
+          row.classList.add('a');
+          row.style.setProperty('--i', Math.min(i, 7));
+          const dt = row.previousElementSibling;
+          if (row.tagName === 'DD' && dt && dt.tagName === 'DT') { dt.classList.add('a'); dt.style.setProperty('--i', Math.min(i, 7)); }
+        });
+        el.classList.add('anim');
+        io.observe(el);
+      });
+    });
+  }
 
   // ---------- copy the citation ----------
 
