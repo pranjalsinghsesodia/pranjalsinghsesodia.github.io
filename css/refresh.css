@@ -362,9 +362,11 @@ main.nf { min-height: calc(100vh - 8rem); }
 
 /* ---------- audit, polish ---------- */
 
-/* the tab beside the keys for the part you are reading is a little longer and stands a little further out */
-.oct { transition: color .5s ease, background-color .6s ease, border-color .6s ease, box-shadow .6s var(--ease), padding .6s var(--ease), width .6s var(--ease); }
-.oct.on, .oct.on:hover { width: 29px; padding: 17px 0; }
+/* The tabs beside the keys are all the same height, one to an octave, so the gaps between them are even.
+   The one for the part you are reading reaches further out sideways; its height does not change. */
+.oct { box-sizing: border-box; height: calc(var(--oct-h, 110px) - 10px); padding: 0; align-items: center; transition: color .5s ease, background-color .6s ease, border-color .6s ease, box-shadow .6s var(--ease), width .6s var(--ease); }
+.oct > span { max-height: calc(var(--oct-h, 110px) - 18px); }
+.oct.on, .oct.on:hover { width: 34px; padding: 0; }
 
 /* the closing section's label matches the others: small capitals in a box, not sideways italics */
 .mark.fine { padding: 1rem .5rem; border: 0; border-radius: 4px; background: none; box-shadow: 0 0 0 1px var(--rule); color: var(--ink-2); font-family: var(--mono); font-size: .72rem; font-style: normal; letter-spacing: .18em; text-transform: uppercase; text-orientation: sideways; }
@@ -380,7 +382,7 @@ main.nf { min-height: calc(100vh - 8rem); }
 
 @media (max-width: 759px) {
   .oct { width: 24px; }
-  .oct.on, .oct.on:hover { width: 27px; padding: 13px 0; }
+  .oct.on, .oct.on:hover { width: 30px; padding: 0; }
   .mark.fine { padding: .5rem .8rem; font-size: .7rem; }
 }
 
