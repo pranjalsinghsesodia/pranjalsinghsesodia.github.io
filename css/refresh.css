@@ -368,6 +368,9 @@ main.nf { min-height: calc(100vh - 8rem); }
 .oct > span { max-height: calc(var(--oct-h, 110px) - 18px); }
 .oct.on, .oct.on:hover { width: 34px; padding: 0; }
 
+/* project pages have more parts than the home page, so their Contact tab is left out and the rest stay evenly spaced */
+body.work-page .oct.fine { display: none; }
+
 /* the closing section's label matches the others: small capitals in a box, not sideways italics */
 .mark.fine { padding: 1rem .5rem; border: 0; border-radius: 4px; background: none; box-shadow: 0 0 0 1px var(--rule); color: var(--ink-2); font-family: var(--mono); font-size: .72rem; font-style: normal; letter-spacing: .18em; text-transform: uppercase; text-orientation: sideways; }
 
