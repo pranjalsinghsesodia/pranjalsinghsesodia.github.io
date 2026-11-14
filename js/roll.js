@@ -26,7 +26,7 @@
   const DRIFT = reduced ? 0 : .18;    // beats a second while it's quiet
   const PEDAL = -1;                   // the sustain pedal's perforation: it's read, not drawn
   const TYPE = { a: 62, s: 64, d: 66, f: 69, g: 71, h: 74, j: 76, k: 78, l: 81, ';': 83 };
-  const MASTER = .12;                 // overall loudness: kept very low, a background murmur even with speakers at full
+  const MASTER = .04;                 // overall loudness: a soft murmur, about -38 dBFS a note in focus, ~9 dB less while reading
   const QUIET = .5;                   // how strongly the soft roll shows once you're reading below the opening screen
   const HUSH = .35;                   // the volume while it's soft, as a share of MASTER
   const NEAR = 70;                    // within this many px of the keys the roll is fully in focus; it fades over 150 more
@@ -649,7 +649,7 @@
 
   // ---------- sound: a soft piano voice, synthesised ----------
 
-  let ac = null, out = null, noise = null, soundOn = false, gainAim = 0, wokeAt = -1e9, spared = false;
+  let ac = null, bus = null, out = null, noise = null, soundOn = false, gainAim = 0, wokeAt = -1e9, spared = false;
   const voices = new Set(), sustained = new Set();
   const playing = () => soundOn && ac && ac.state === 'running';
 
@@ -657,21 +657,25 @@
     if (ac) return ac;
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return null;
-    ac = new AC();
-    // a limiter at the end, so a cluster of notes can never jump out louder than a single one
+    try { ac = new AC({ latencyHint: 'playback' }); } catch (e) { ac = new AC(); }
+    // Voices meet on a bus, go through a gentle compressor so a chord never leaps out above a single note, and
+    // only then through the volume fader. (A compressor adds its own make-up gain, so it must sit before the
+    // fader: after it, it boosted the quiet signal by about 13 dB.)
+    bus = ac.createGain();
     const comp = ac.createDynamicsCompressor();
-    comp.threshold.value = -28; comp.knee.value = 6; comp.ratio.value = 12;
-    comp.attack.value = .003; comp.release.value = .2;
+    comp.threshold.value = -24; comp.knee.value = 12; comp.ratio.value = 4;
+    comp.attack.value = .003; comp.release.value = .25;
     out = ac.createGain();
     out.gain.value = 0;
     const room = ac.createConvolver();
     room.buffer = impulse(2.4, 3.2);
     const wet = ac.createGain();
     wet.gain.value = .3;
-    ac.onstatechange = label;
-    out.connect(comp);
-    out.connect(room); room.connect(wet); wet.connect(comp);
-    comp.connect(ac.destination);
+    ac.onstatechange = () => { label(); if (soundOn && ac.state !== 'running' && ac.state !== 'closed' && !document.hidden) ac.resume().catch(() => {}); };
+    bus.connect(comp);
+    bus.connect(room); room.connect(wet); wet.connect(comp);
+    comp.connect(out);
+    out.connect(ac.destination);
     noise = ac.createBuffer(1, Math.floor(ac.sampleRate * .04), ac.sampleRate);
     const d = noise.getChannelData(0);
     for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
@@ -705,7 +709,7 @@
     tone.frequency.setValueAtTime(Math.min(f * 4.5 + 300, 6000), t);
     tone.frequency.setTargetAtTime(Math.min(f * 1.8 + 200, 3500), t, .4);
     tone.connect(amp);
-    amp.connect(out);
+    amp.connect(bus);
     const oscs = [];
     for (const [n, lvl, cents] of [[1, .75, -3], [1, .75, 3], [2, .26, 0], [3, .07, 1]]) {
       const o = ac.createOscillator(), p = ac.createGain();
@@ -725,7 +729,7 @@
     hb.type = 'bandpass'; hb.frequency.value = Math.min(f * 4, 7000); hb.Q.value = 1.2;
     const hg = ac.createGain();
     hg.gain.value = vel * .025;
-    hn.connect(hb); hb.connect(hg); hg.connect(out);
+    hn.connect(hb); hb.connect(hg); hg.connect(bus);
     hn.start(t);
     const v = { amp, oscs };
     voices.add(v);
@@ -759,12 +763,22 @@
   }
 
   // Browsers let sound start only from a click, tap or key press, and some (iPhone) only when the finger lifts.
-  function wake() {
+  // gesture: called from a click, tap or key press (the only times a browser lets a sleeping context start)
+  function wake(gesture = true) {
     if (!soundOn) return;
     const a = audio();
     if (!a) return;
-    if (a.state !== 'running') { wokeAt = performance.now(); a.resume().catch(() => {}); }
-    if (!gainAim) { gainAim = vAim; out.gain.setTargetAtTime(gainAim, a.currentTime, .1); }
+    // on an iPhone, play even with the ringer switch on silent, as the visitor has asked for sound
+    try { if (navigator.audioSession && navigator.audioSession.type !== 'playback') navigator.audioSession.type = 'playback'; } catch (e) { /* fine */ }
+    if (a.state !== 'running') {
+      if (gesture) {
+        wokeAt = performance.now();
+        // older iPhones only unlock audio once something is played inside the gesture itself
+        try { const s = a.createBufferSource(); s.buffer = a.createBuffer(1, 1, a.sampleRate); s.connect(a.destination); s.start(0); } catch (e) { /* fine */ }
+      }
+      a.resume().catch(() => {});
+    }
+    if (!gainAim) { gainAim = vAim; out.gain.cancelScheduledValues(a.currentTime); out.gain.setTargetAtTime(gainAim, a.currentTime, .1); }
   }
 
   // the volume follows the roll's focus, fading rather than jumping
@@ -783,11 +797,11 @@
   function setSound(on, quietly) {
     soundOn = on;
     if (on && !quietly) {
-      // on an iPhone, play even with the ringer switch on silent, now that the visitor has asked for sound
-      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* fine */ }
       wake();
+      wokeAt = -1e9; // this click was the switch itself, so the next click on it should turn sound off at once
     } else if (!on && ac) {
       gainAim = 0;
+      out.gain.cancelScheduledValues(ac.currentTime);
       out.gain.setTargetAtTime(0, ac.currentTime, .08);
       voices.forEach((v) => release(v, .08));
     }
@@ -810,10 +824,17 @@
   let pref = null;
   try { pref = localStorage.getItem(SOUND); } catch (e) { /* fine */ }
   setSound(pref === '1', true);
-  // A remembered "on" waits for the visitor's first click, tap or key, whichever the browser accepts.
-  for (const type of ['pointerdown', 'pointerup', 'click', 'touchend', 'keydown']) addEventListener(type, wake, { capture: true, passive: true });
-  // coming back to the tab (a phone may have paused the audio): pick up again if the browser allows it
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && ac) wake(); });
+  // A remembered "on" tries to start straight away (browsers that trust this site allow it); otherwise it waits
+  // for the visitor's first click, tap or key, whichever the browser accepts.
+  if (soundOn) {
+    let policy = '';
+    try { policy = navigator.getAutoplayPolicy ? navigator.getAutoplayPolicy('audiocontext') : ''; } catch (e) { /* fine */ }
+    if (policy !== 'disallowed') wake(false);
+  }
+  for (const type of ['pointerdown', 'pointerup', 'click', 'touchend', 'keydown']) addEventListener(type, () => wake(true), { capture: true, passive: true });
+  // coming back to the tab or page (a phone may have paused the audio): pick up again if the browser allows it
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && ac) wake(false); });
+  addEventListener('pageshow', (e) => { if (e.persisted && ac) wake(false); });
 
   // ---------- octave tabs: the keyboard doubles as the page's contents ----------
   // Each section is pinned to a C, the top of the page at the top of the keyboard, and named on a vertical tab:
