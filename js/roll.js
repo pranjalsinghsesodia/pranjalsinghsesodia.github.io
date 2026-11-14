@@ -508,7 +508,10 @@
 
   // ---------- punching the paper ----------
 
-  const onPaper = (el) => !(el instanceof Element) || !el.closest(SOLID);
+  // The bands with their own ground (About, Photographs, Contact) cover the roll: the paper can't be punched there,
+  // though the roll keeps playing underneath.
+  const BANDS = '#about,#photographs,.foot,.mini-foot';
+  const onPaper = (el) => !(el instanceof Element) || !el.closest(SOLID + ',' + BANDS);
 
   function snap(y) {
     const lo = 43 - LOW, hi = 81 - LOW; // nothing boomy, nothing shrill: punched notes stay in the waltz's range
@@ -635,12 +638,17 @@
   });
   keysHit.addEventListener('pointercancel', (e) => { lift('p' + e.pointerId); keyTap = null; });
 
+  // Someone typing isn't playing: a word nearly always has a letter outside a to ;, and once one is pressed the
+  // home row stays silent until the typing has paused for a moment.
+  let typingUntil = 0;
+  const editable = (el) => el instanceof Element && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
   addEventListener('keydown', (e) => {
-    if (!soundOn || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
-    const el = e.target;
-    if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))) return;
+    if (!soundOn || e.repeat || e.ctrlKey || e.metaKey || e.altKey || e.isComposing || e.key === 'Process') return;
+    if (editable(e.target) || editable(document.activeElement) || document.querySelector('dialog[open]')) return;
     const key = e.key.toLowerCase(), m = TYPE[key];
-    if (!m || live.has(key)) return;
+    if (!m) { if (key.length === 1) typingUntil = performance.now() + 1500; return; }
+    if (performance.now() < typingUntil) { typingUntil = performance.now() + 1500; return; }
+    if (live.has(key)) return;
     wake();
     press(key, m - LOW);
   });
