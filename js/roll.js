@@ -800,6 +800,7 @@
   function label() {
     soundBtn.setAttribute('aria-pressed', String(soundOn));
     soundBtn.textContent = !soundOn ? 'Sound off' : playing() ? 'Sound on' : `Sound on · ${coarse ? 'tap' : 'click'} anywhere to start`;
+    soundBtn.title = soundBtn.textContent;
   }
 
   function setSound(on, quietly) {

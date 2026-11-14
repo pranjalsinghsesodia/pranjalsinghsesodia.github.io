@@ -232,15 +232,17 @@
 body:not(.work-page) .page > .sec > .mark:not(.fine) { display: none; }
 .prose li::marker { color: var(--ink-3); }
 
-/* ---------- off the wide layout the sound switch is a small round key in the corner (its words stay for screen readers) ---------- */
+/* ---------- the caption is only the sound switch: a small round key with a music note, struck through while off
+   (its words stay for screen readers and as its tooltip; the hint text is gone at every width) ---------- */
 
-@media (max-width: 1199px) {
-  .roll-cap .ctl .roll-sound { position: relative; width: 42px; height: 42px; min-height: 0; padding: 0; border-radius: 50%; font-size: 0; color: var(--ink-3); background: var(--ivory); border: 1px solid #d3cec3; box-shadow: 0 2px 8px rgba(30, 25, 20, .12); transition: color .4s ease, background-color .4s ease, border-color .4s ease; }
-  .roll-cap .ctl .roll-sound::before { content: "\266A"; font-family: var(--serif); font-size: 1.25rem; line-height: 42px; }
-  .roll-cap .ctl .roll-sound::after { content: ""; position: absolute; left: 9px; right: 9px; top: 50%; height: 1.5px; background: currentColor; transform: rotate(-45deg); transition: opacity .4s ease; }
-  .roll-cap .ctl .roll-sound[aria-pressed="true"] { color: var(--ivory); background: var(--felt); border-color: var(--felt); }
-  .roll-cap .ctl .roll-sound[aria-pressed="true"]::after { opacity: 0; }
-}
+.roll-cap .roll-hint { display: none; }
+.roll-cap .ctl { align-items: center; }
+.roll-cap .ctl .roll-sound { position: relative; width: 42px; height: 42px; min-height: 0; padding: 0; border-radius: 50%; font-size: 0; color: var(--ink-3); background: var(--ivory); border: 1px solid #d3cec3; box-shadow: 0 2px 8px rgba(30, 25, 20, .12); transition: color .4s ease, background-color .4s ease, border-color .4s ease, opacity .25s; }
+.roll-cap .ctl .roll-sound::before { content: "\266A"; font-family: var(--serif); font-size: 1.25rem; line-height: 42px; }
+.roll-cap .ctl .roll-sound::after { content: ""; position: absolute; left: 9px; right: 9px; top: 50%; height: 1.5px; background: currentColor; transform: rotate(-45deg); transition: opacity .4s ease; }
+.roll-cap .ctl .roll-sound:hover { color: var(--felt); border-color: var(--felt); }
+.roll-cap .ctl .roll-sound[aria-pressed="true"] { color: var(--ivory); background: var(--felt); border-color: var(--felt); }
+.roll-cap .ctl .roll-sound[aria-pressed="true"]::after { opacity: 0; }
 
 /* ---------- the resume and not-found pages: no roll there, but the keys still run down the edge ---------- */
 
