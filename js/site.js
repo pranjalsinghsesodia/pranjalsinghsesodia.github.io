@@ -106,15 +106,16 @@
     if (matchMedia('(hover: none)').matches) m.textContent = 'Tap one to see it large.';
     const rest = [t.textContent, m.textContent];
     const show = (title, info) => {
-      if (t.textContent === title) return;
+      if (t.textContent === title && m.textContent === info) return;
       t.textContent = title;
       m.textContent = info;
       if (motion) gsap.fromTo([t, m], { opacity: .2 }, { opacity: 1, duration: .45, ease: 'power1.out', overwrite: true });
     };
     const rows = document.querySelector('.rows');
     rows.querySelectorAll('.ph').forEach((ph) => {
-      ph.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') show(ph.dataset.title, meta(ph)); });
-      ph.addEventListener('focus', () => show(ph.dataset.title, meta(ph)));
+      // no caption on hover: only the exposure line
+      ph.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') show('', meta(ph)); });
+      ph.addEventListener('focus', () => show('', meta(ph)));
     });
     rows.addEventListener('pointerleave', () => show(...rest));
     rows.addEventListener('focusout', (e) => { if (!rows.contains(e.relatedTarget)) show(...rest); });
@@ -134,7 +135,8 @@
       const src = el.dataset.full || el.currentSrc || el.src || el.querySelector('img').currentSrc;
       img.src = src;
       img.alt = (el.querySelector('img') || el).alt || '';
-      title.textContent = el.dataset.title || '';
+      // photographs open without a caption; project images keep theirs
+      title.textContent = el.dataset.group === 'photos' ? '' : (el.dataset.title || '');
       info.textContent = meta(el);
       if (motion) gsap.fromTo(img, { opacity: 0 }, { opacity: 1, duration: .5, ease: 'power1.out' });
     };
